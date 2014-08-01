@@ -12,7 +12,8 @@ var gulp = require('gulp'),
             'bower_components/threejs-stats/Stats.js',
             //src
             'src/js/*.js'
-        ]
+        ],
+        css: ['src/css/*.css']
     };
 
 gulp.task('js', function () {
@@ -23,8 +24,15 @@ gulp.task('js', function () {
         .pipe(gulp.dest('dist'));
 });
 
-gulp.task('watch', function () {
-    gulp.watch(paths.scripts, ['js']);
+gulp.task('css', function () {
+    gulp.src(paths.css)
+        .pipe(concat('style.css'))
+        .pipe(gulp.dest('dist'));
 });
 
-gulp.task('default', ['watch', 'js']);
+gulp.task('watch', function () {
+    gulp.watch(paths.scripts, ['js']);
+    gulp.watch(paths.css, ['css']);
+});
+
+gulp.task('default', ['watch', 'js', 'css']);
