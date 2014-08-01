@@ -144,7 +144,7 @@
                     color: 0x000000,
                     ambient: 0x000000, // should generally match color
                     specular: 0x050505,
-                    shininess: 1000
+                    shininess: 200
 
                 }),
                 dummy = new THREE.Mesh(geom, mat);
@@ -178,7 +178,7 @@
         camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 1, 100000);
         camera.position.y = 150;
         camera.position.x = 20;
-        camera.position.z = 220;
+        camera.position.z = 320;
 
         scene = new THREE.Scene();
 
