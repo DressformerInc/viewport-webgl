@@ -47,9 +47,13 @@
         scene.add(light5);
 
         var directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-        directionalLight.castShadow = true;
         directionalLight.position.x = -100;
         directionalLight.position.y = 150;
+        directionalLight.castShadow = true;
+        directionalLight.shadowBias = 0.0001;
+        directionalLight.shadowDarkness = 0.07;
+        directionalLight.shadowMapWidth = 2048;
+        directionalLight.shadowMapHeight = 2048;
         scene.add(directionalLight);
 
     }
@@ -183,17 +187,18 @@
         loadModels(scene);
 
         //shadow
+        renderer.shadowMapType = THREE.PCFSoftShadowMap;
         renderer.shadowMapEnabled = true;
-        renderer.shadowMapSoft = false;
+        renderer.shadowMapSoft = true;
 
-        renderer.shadowCameraNear = 3;
-        renderer.shadowCameraFar = camera.far;
-        renderer.shadowCameraFov = 50;
-
-        renderer.shadowMapBias = 0.0039;
-        renderer.shadowMapDarkness = 0.5;
-        renderer.shadowMapWidth = 1024;
-        renderer.shadowMapHeight = 1024;
+//        renderer.shadowCameraNear = 3;
+//        renderer.shadowCameraFar = camera.far;
+//        renderer.shadowCameraFov = 50;
+//
+//        renderer.shadowMapBias = 0.0001;
+//        renderer.shadowMapDarkness = 0.01;
+//        renderer.shadowMapWidth = 2048;
+//        renderer.shadowMapHeight = 2048;
 
 
         onWindowResize();
