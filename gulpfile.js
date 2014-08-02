@@ -6,10 +6,11 @@ var gulp = require('gulp'),
     sourcemaps = require('gulp-sourcemaps'),
     paths = {
         scripts: [
-            //webgl
+            //libs
             'bower_components/threejs/build/three.min.js',
             'bower_components/threejs-controls/controls/OrbitControls.js',
             'bower_components/threejs-stats/Stats.js',
+            'bower_components/dat.gui/dat.gui.min.js',
             //src
             'src/js/*.js'
         ],
