@@ -7,7 +7,9 @@
     var container, stats,
         camera, scene, renderer,
         lights = {},
-        controls;
+        controls,
+        floorModel,
+        dummyModel;
 
     function showStats(container) {
         // STATS
@@ -81,7 +83,7 @@
         floor.position.y = 0;
         floor.rotation.x = Math.PI / 2;
         floor.receiveShadow = true;
-        scene.add(floor);
+        scene.add(floorModel = floor);
 
         // SKYBOX/FOG
         var skyBoxGeometry = new THREE.BoxGeometry(100000, 100000, 100000),
@@ -114,9 +116,9 @@
         uniforms[ "tNormal" ].value = THREE.ImageUtils.loadTexture("models/dress/normal.png");
         //uniforms[ "tAO" ].value = THREE.ImageUtils.loadTexture( "textures/normal/ninja/ao.jpg" );
 
-        uniforms[ "tDisplacement" ].value = THREE.ImageUtils.loadTexture("models/dress/disp.png");
-        uniforms[ "uDisplacementBias" ].value = -0.1; //- 0.428408;;
-        uniforms[ "uDisplacementScale" ].value = 0.5;
+//        uniforms[ "tDisplacement" ].value = THREE.ImageUtils.loadTexture("models/dress/disp.png");
+//        uniforms[ "uDisplacementBias" ].value = -0.1; //- 0.428408;;
+//        uniforms[ "uDisplacementScale" ].value = 0.5;
         //uniforms[ "uDisplacementBias" ].value = - 0.428408;
         //uniforms[ "uDisplacementScale" ].value = 2.436143;
 
@@ -153,18 +155,55 @@
     }
 
     function loadModels(scene) {
-        var jsonLoader = new THREE.JSONLoader()
+        /*
+         // material parameters
+
+         var ambient = 0x111111, diffuse = 0xbbbbbb, specular = 0x060606, shininess = 35;
+
+         var shader = THREE.ShaderLib[ "normalmap" ];
+         var uniforms = THREE.UniformsUtils.clone( shader.uniforms );
+
+         uniforms[ "tNormal" ].value = THREE.ImageUtils.loadTexture( "obj/leeperrysmith/Infinite-Level_02_Tangent_SmoothUV.jpg" );
+         uniforms[ "uNormalScale" ].value.set( 0.8, 0.8 );
+
+         uniforms[ "tDiffuse" ].value = THREE.ImageUtils.loadTexture( "obj/leeperrysmith/Map-COL.jpg" );
+         uniforms[ "tSpecular" ].value = THREE.ImageUtils.loadTexture( "obj/leeperrysmith/Map-SPEC.jpg" );
+
+         uniforms[ "enableAO" ].value = false;
+         uniforms[ "enableDiffuse" ].value = true;
+         uniforms[ "enableSpecular" ].value = true;
+
+         uniforms[ "diffuse" ].value.setHex( diffuse );
+         uniforms[ "specular" ].value.setHex( specular );
+         uniforms[ "ambient" ].value.setHex( ambient );
+
+         uniforms[ "shininess" ].value = shininess;
+
+         uniforms[ "wrapRGB" ].value.set( 0.575, 0.5, 0.5 );
+
+         var parameters = { fragmentShader: shader.fragmentShader, vertexShader: shader.vertexShader, uniforms: uniforms, lights: true };
+         var material = new THREE.ShaderMaterial( parameters );
+
+         material.wrapAround = true;
+
+         */
+        var jsonLoader = new THREE.JSONLoader(),
+            cubemap = THREE.ImageUtils.loadTextureCube([
+                'src/assets/cubemap/pos-x.png',
+                'src/assets/cubemap/neg-x.png',
+                'src/assets/cubemap/pos-y.png',
+                'src/assets/cubemap/neg-y.png',
+                'src/assets/cubemap/pos-z.png',
+                'src/assets/cubemap/neg-z.png'
+            ]);
+
+        cubemap.format = THREE.RGBFormat;
+
         jsonLoader.load("models/dummy.js", function (geom, mats) {
-            var matWithCubeMap = new THREE.MeshLambertMaterial({
-                    color: 0xffffff,
-                    envMap: THREE.ImageUtils.loadTextureCube([
-                        'src/assets/cubemap/pos-x.png',
-                        'src/assets/cubemap/neg-x.png',
-                        'src/assets/cubemap/pos-y.png',
-                        'src/assets/cubemap/neg-y.png',
-                        'src/assets/cubemap/pos-z.png',
-                        'src/assets/cubemap/neg-z.png'
-                    ])
+            var matWithCubeMap = new THREE.MeshPhongMaterial({
+                    color: 0x000000,
+                    shininess: 200,
+                    envMap: cubemap
                 }),
                 mat = new THREE.MeshPhongMaterial({
                     color: 0x000000,
@@ -178,7 +217,7 @@
             dummy.castShadow = true;
             dummy.receiveShadow = true;
 
-            scene.add(dummy);
+            scene.add(dummyModel = dummy);
         });
 
         jsonLoader.load("models/dress.js", function (geom, mats) {
@@ -257,9 +296,13 @@
             renderer.shadowMapEnabled = controls.shadow;
         }
 
+        scene.traverse(function(e) {
+            if (e instanceof THREE.Mesh && e != floorModel ) {
+                e.rotation.y+=0.02;
+            }
+        });
 
         renderer.render(scene, camera);
-
     }
 
     function onWindowResize() {
