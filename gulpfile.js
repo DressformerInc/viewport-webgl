@@ -12,6 +12,7 @@ var gulp = require('gulp'),
             'bower_components/threejs-stats/Stats.js',
             'bower_components/dat.gui/dat.gui.min.js',
             //src
+            'src/js/main.js',
             'src/js/*.js'
         ],
         css: ['src/css/*.css']

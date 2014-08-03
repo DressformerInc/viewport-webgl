@@ -2,10 +2,12 @@
  * Created by Miha-ha on 01.08.14.
  */
 //WebGL
-(function (Main, window, document) {
+(function (M, window, document) {
     //private
     var container, stats,
-        camera, scene, renderer;
+        camera, scene, renderer,
+        lights = {},
+        controls;
 
     function showStats(container) {
         // STATS
@@ -17,10 +19,12 @@
     }
 
     function setupLight(scene) {
+
         var light1 = new THREE.AmbientLight(0x444444);
         light1.position.set(100, 130, 100);
 //        light.castShadow = true;
         scene.add(light1);
+        lights['ambientLight'] = light1;
 
         var inte = 0.3
         var light2 = new THREE.PointLight(0xffffff, inte);
@@ -28,6 +32,7 @@
         light2.position.multiplyScalar(50);
 //        light.castShadow = true;
         scene.add(light2);
+        lights['pointLight1'] = light2;
 
         var light3 = new THREE.PointLight(0xffffff, inte);
         light3.position.set(-100, 130, 100);
@@ -55,6 +60,7 @@
         directionalLight.shadowMapWidth = 2048;
         directionalLight.shadowMapHeight = 2048;
         scene.add(directionalLight);
+        lights['directionalLight'] = directionalLight;
 
     }
 
@@ -64,9 +70,11 @@
 //        floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping;
 //        floorTexture.repeat.set(10, 10);
         var floorMaterial = new THREE.MeshBasicMaterial({ /*map: floorTexture,*/
+                color: 0xFFFFFF,
                 side: THREE.DoubleSide,
                 transparent: true,
-                opacity: 0.5 }),
+                opacity: 0.2
+            }),
             floorGeometry = new THREE.PlaneGeometry(1000, 1000, 10, 10),
             floor = new THREE.Mesh(floorGeometry, floorMaterial);
 
@@ -131,7 +139,14 @@
         //uniforms[ "ambient" ].value.convertGammaToLinear();
 
 
-        var parameters = { fragmentShader: shader.fragmentShader, vertexShader: shader.vertexShader, uniforms: uniforms, lights: true, fog: false, side: THREE.DoubleSide, };
+        var parameters = {
+            fragmentShader: shader.fragmentShader,
+            vertexShader: shader.vertexShader,
+            uniforms: uniforms,
+            lights: true,
+            fog: false,
+            side: THREE.DoubleSide
+        };
         var material1 = new THREE.ShaderMaterial(parameters);
         return material1
 
@@ -140,14 +155,25 @@
     function loadModels(scene) {
         var jsonLoader = new THREE.JSONLoader()
         jsonLoader.load("models/dummy.js", function (geom, mats) {
-            var mat = new THREE.MeshPhongMaterial({
+            var matWithCubeMap = new THREE.MeshLambertMaterial({
+                    color: 0xffffff,
+                    envMap: THREE.ImageUtils.loadTextureCube([
+                        'src/assets/cubemap/pos-x.png',
+                        'src/assets/cubemap/neg-x.png',
+                        'src/assets/cubemap/pos-y.png',
+                        'src/assets/cubemap/neg-y.png',
+                        'src/assets/cubemap/pos-z.png',
+                        'src/assets/cubemap/neg-z.png'
+                    ])
+                }),
+                mat = new THREE.MeshPhongMaterial({
                     color: 0x000000,
                     ambient: 0x000000, // should generally match color
                     specular: 0x050505,
                     shininess: 200
 
                 }),
-                dummy = new THREE.Mesh(geom, mat);
+                dummy = new THREE.Mesh(geom, matWithCubeMap);
 
             dummy.castShadow = true;
             dummy.receiveShadow = true;
@@ -225,6 +251,13 @@
         var v = new THREE.Vector3(0, 100, 0);
         camera.lookAt(v);
 
+        //controls
+        if (controls.shadow != renderer.shadowMapEnabled) {
+            console.log('shadow changed:', controls.shadow);
+            renderer.shadowMapEnabled = controls.shadow;
+        }
+
+
         renderer.render(scene, camera);
 
     }
@@ -241,9 +274,19 @@
 
 
     //public
-    return Main.modules.WebGL = {
+    return M.modules.WebGL = {
         init: function () {
             console.log('webgl init');
+            controls = M.modules.Controls.controls;
+            M.modules.Controls.onChange('shadow', function (value) {
+                console.log('shadow change from event:', value);
+                if (value) {
+                    renderer.shadowMapAutoUpdate = true;
+                } else {
+                    renderer.shadowMapAutoUpdate = false;
+                    renderer.clearTarget(lights['directionalLight'].shadowMap);
+                }
+            });
             init();
             animate();
         }
