@@ -6,7 +6,9 @@
     var gui,
         controllers = {},
         controls = {
-            shadow: true
+            shadow: true,
+            bias: 0.0001,
+            darkness: 0.07
         };
 
 //    function controls() {
@@ -15,7 +17,13 @@
 
     function initGUI(controls) {
         gui = new d.GUI();
-        controllers['shadow'] = gui.add(controls, 'shadow');
+        var shadowFolder = gui.addFolder("Shadow");
+        controllers['shadow'] = shadowFolder.add(controls, 'shadow');
+        controllers['bias'] = shadowFolder.add(controls, 'bias');
+        controllers['darkness'] = shadowFolder.add(controls, 'darkness');
+//        directionalLight.shadowBias = 0.0001;
+//        directionalLight.shadowDarkness = 0.07;
+
     }
 
     return M.modules.Controls = {

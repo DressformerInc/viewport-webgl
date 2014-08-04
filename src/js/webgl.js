@@ -234,7 +234,30 @@
         });
     }
 
+
+
+    function initControls() {
+        controls = M.modules.Controls.controls;
+        M.modules.Controls.onChange('shadow', function (value) {
+            console.log('shadow change from event:', value);
+            if (value) {
+                renderer.shadowMapAutoUpdate = true;
+            } else {
+                renderer.shadowMapAutoUpdate = false;
+                renderer.clearTarget(lights['directionalLight'].shadowMap);
+            }
+        });
+
+    }
+    function updateControls(){
+
+        lights['directionalLight'].shadowBias = controls.bias;
+        lights['directionalLight'].shadowDarkness = controls.darkness;
+
+    }
+
     function init() {
+        initControls();
         renderer = new THREE.WebGLRenderer({
             antialias: true,
             alpha: true
@@ -276,7 +299,6 @@
         showStats(container);
     }
 
-
     function animate() {
 
         requestAnimationFrame(animate);
@@ -291,10 +313,7 @@
         camera.lookAt(v);
 
         //controls
-        if (controls.shadow != renderer.shadowMapEnabled) {
-            console.log('shadow changed:', controls.shadow);
-            renderer.shadowMapEnabled = controls.shadow;
-        }
+        updateControls();
 
         scene.traverse(function(e) {
             if (e instanceof THREE.Mesh && e != floorModel ) {
@@ -320,16 +339,6 @@
     return M.modules.WebGL = {
         init: function () {
             console.log('webgl init');
-            controls = M.modules.Controls.controls;
-            M.modules.Controls.onChange('shadow', function (value) {
-                console.log('shadow change from event:', value);
-                if (value) {
-                    renderer.shadowMapAutoUpdate = true;
-                } else {
-                    renderer.shadowMapAutoUpdate = false;
-                    renderer.clearTarget(lights['directionalLight'].shadowMap);
-                }
-            });
             init();
             animate();
         }
