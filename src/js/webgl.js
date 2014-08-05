@@ -4,10 +4,13 @@
 //WebGL
 (function (M, window, document) {
     //private
-    var container, stats,
+    var container, stats, loadingManager,
         camera, scene, renderer,
         lights = {},
+        models = {},
+        loader,
         controls,
+        orbitControl,
         floorModel,
         dummyModel;
 
@@ -22,36 +25,30 @@
 
     function setupLight(scene) {
 
-        var light1 = new THREE.AmbientLight(0x444444);
-        light1.position.set(100, 130, 100);
-//        light.castShadow = true;
-        scene.add(light1);
-        lights['ambientLight'] = light1;
+        var ambientLight = new THREE.AmbientLight(0x444444);
+        ambientLight.position.set(100, 130, 100);
+        scene.add(lights['ambientLight'] = ambientLight);
 
-        var inte = 0.3
-        var light2 = new THREE.PointLight(0xffffff, inte);
-        light2.position.set(100, 130, 100);
-        light2.position.multiplyScalar(50);
-//        light.castShadow = true;
-        scene.add(light2);
-        lights['pointLight1'] = light2;
+        var inte = 0.3,
+            pointLight1 = new THREE.PointLight(0xffffff, inte);
+        pointLight1.position.set(100, 130, 100);
+        pointLight1.position.multiplyScalar(50);
+        scene.add(lights['pointLight1'] = pointLight1);
 
-        var light3 = new THREE.PointLight(0xffffff, inte);
-        light3.position.set(-100, 130, 100);
-        light3.position.multiplyScalar(50);
-        scene.add(light3);
+        var pointLight2 = new THREE.PointLight(0xffffff, inte);
+        pointLight2.position.set(-100, 130, 100);
+        pointLight2.position.multiplyScalar(50);
+        scene.add(lights['pointLight2'] = pointLight2);
 
-        var light4 = new THREE.PointLight(0xffffff, inte);
-//        light.castShadow = true;
-        light4.position.set(100, 0, 100);
-        light4.position.multiplyScalar(50);
-        scene.add(light4);
+        var pointLight3 = new THREE.PointLight(0xffffff, inte);
+        pointLight3.position.set(100, 0, 100);
+        pointLight3.position.multiplyScalar(50);
+        scene.add(lights['pointLight3'] = pointLight3);
 
-        var light5 = new THREE.PointLight(0xffffff, inte);
-//        light.castShadow = true;
-        light5.position.set(-100, 0, 100);
-        light5.position.multiplyScalar(50);
-        scene.add(light5);
+        var pointLight5 = new THREE.PointLight(0xffffff, inte);
+        pointLight5.position.set(-100, 0, 100);
+        pointLight5.position.multiplyScalar(50);
+        scene.add(lights['pointLight5'] = pointLight5);
 
         var directionalLight = new THREE.DirectionalLight(0xffffff, 1);
         directionalLight.position.x = -100;
@@ -61,8 +58,7 @@
         directionalLight.shadowDarkness = 0.07;
         directionalLight.shadowMapWidth = 2048;
         directionalLight.shadowMapHeight = 2048;
-        scene.add(directionalLight);
-        lights['directionalLight'] = directionalLight;
+        scene.add(lights['directionalLight'] = directionalLight);
 
     }
 
@@ -154,6 +150,89 @@
 
     }
 
+    function loadDummyModel() {
+        var loader = new THREE.OBJLoader(loadingManager),
+            cubemap = THREE.ImageUtils.loadTextureCube([
+                'src/assets/cubemap/pos-x.png',
+                'src/assets/cubemap/neg-x.png',
+                'src/assets/cubemap/pos-y.png',
+                'src/assets/cubemap/neg-y.png',
+                'src/assets/cubemap/pos-z.png',
+                'src/assets/cubemap/neg-z.png'
+            ]),
+            matWithCubeMap = new THREE.MeshPhongMaterial({
+                color: 0x000000,
+                shininess: 200,
+                envMap: cubemap
+            });
+
+        loader.load('models/obj/dummy/DummyLP.obj', function (dummy) {
+
+            dummy.traverse(function (child) {
+                if (child instanceof THREE.Mesh) {
+                    child.material = matWithCubeMap;
+                    child.castShadow = true;
+                    child.receiveShadow = true;
+
+                }
+            });
+
+            scene.add(models['dummy'] = dummy);
+
+        });
+    }
+
+    function loadSweaterModel() {
+        function makeSweaterMaterial() {
+            var shininess = 1,
+                shader = THREE.ShaderLib[ "normalmap" ],
+                uniforms = THREE.UniformsUtils.clone(shader.uniforms);
+
+            uniforms[ "enableDisplacement" ].value = false;
+            uniforms[ "enableDiffuse" ].value = true;
+            uniforms[ "enableSpecular" ].value = true;
+
+            uniforms[ "tNormal" ].value = THREE.ImageUtils.loadTexture("models/obj/sweater/BDM_201404_0006_0005_NORMAL.png");
+
+//        uniforms[ "tDisplacement" ].value = THREE.ImageUtils.loadTexture("models/dress/disp.png");
+//        uniforms[ "uDisplacementBias" ].value = -0.1; //- 0.428408;;
+//        uniforms[ "uDisplacementScale" ].value = 0.5;
+            //uniforms[ "uDisplacementBias" ].value = - 0.428408;
+            //uniforms[ "uDisplacementScale" ].value = 2.436143;
+
+            uniforms[ 'tDiffuse'].value = THREE.ImageUtils.loadTexture("models/obj/sweater/BDM_201404_0006_0005_diffuse.png");
+            uniforms[ 'tSpecular'].value = THREE.ImageUtils.loadTexture("models/obj/sweater/BDM_201404_0006_0005_SPECULAR.png");
+
+            uniforms[ "shininess" ].value = shininess;
+
+            return  new THREE.ShaderMaterial({
+                fragmentShader: shader.fragmentShader,
+                vertexShader: shader.vertexShader,
+                uniforms: uniforms,
+                lights: true,
+                fog: false,
+                side: THREE.DoubleSide
+            });
+        }
+
+        var shaderMaterial = makeSweaterMaterial();
+
+        loader.load('models/obj/sweater/BDM_201404_0006_0005.obj', function (sweater) {
+
+            sweater.traverse(function (child) {
+                if (child instanceof THREE.Mesh) {
+                    child.material = shaderMaterial;
+                    child.castShadow = true;
+                    child.receiveShadow = true;
+
+                }
+            });
+
+            scene.add(models['sweater'] = sweater);
+
+        });
+    }
+
     function loadModels(scene) {
         /*
          // material parameters
@@ -199,7 +278,7 @@
 
         cubemap.format = THREE.RGBFormat;
 
-        jsonLoader.load("models/dummy.js", function (geom, mats) {
+        jsonLoader.load("models/json/dummy.js", function (geom, mats) {
             var matWithCubeMap = new THREE.MeshPhongMaterial({
                     color: 0x000000,
                     shininess: 200,
@@ -234,8 +313,6 @@
         });
     }
 
-
-
     function initControls() {
         controls = M.modules.Controls.controls;
         M.modules.Controls.onChange('shadow', function (value) {
@@ -249,7 +326,8 @@
         });
 
     }
-    function updateControls(){
+
+    function updateControls() {
 
         lights['directionalLight'].shadowBias = controls.bias;
         lights['directionalLight'].shadowDarkness = controls.darkness;
@@ -258,66 +336,59 @@
 
     function init() {
         initControls();
+
+        loadingManager = new THREE.LoadingManager();
+        loadingManager.onProgress = function (item, loaded, total) {
+            console.log('loading manager:', item, loaded, total);
+        };
+
+        loader = new THREE.OBJLoader(loadingManager);
+
         renderer = new THREE.WebGLRenderer({
             antialias: true,
             alpha: true
         });
+        renderer.shadowMapEnabled = true;
 
         camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 1, 100000);
-        camera.position.y = 150;
-        camera.position.x = 20;
+        camera.position.y = 100;
         camera.position.z = 320;
 
         scene = new THREE.Scene();
 
         setupLight(scene);
         setupEnvironment(scene);
-        loadModels(scene);
+//        loadModels(scene);
+        loadDummyModel();
+        loadSweaterModel();
 
-        //shadow
-        renderer.shadowMapType = THREE.PCFSoftShadowMap;
-        renderer.shadowMapEnabled = true;
-        renderer.shadowMapSoft = true;
-
-//        renderer.shadowCameraNear = 3;
-//        renderer.shadowCameraFar = camera.far;
-//        renderer.shadowCameraFov = 50;
-//
-//        renderer.shadowMapBias = 0.0001;
-//        renderer.shadowMapDarkness = 0.01;
-//        renderer.shadowMapWidth = 2048;
-//        renderer.shadowMapHeight = 2048;
-
-
-        onWindowResize();
-
-        new THREE.OrbitControls(camera, renderer.domElement);
+        orbitControl = new THREE.OrbitControls(camera, renderer.domElement);
+        orbitControl.target.y = 100;
 
         container = document.getElementById('container');
         container.appendChild(renderer.domElement);
 
         showStats(container);
+
+        window.addEventListener('resize', onWindowResize, false);
+        onWindowResize();
     }
 
-    function animate() {
-
-        requestAnimationFrame(animate);
+    function update() {
+        requestAnimationFrame(update);
         render();
         if (stats) stats.update();
-
     }
 
     function render() {
 
-        var v = new THREE.Vector3(0, 100, 0);
-        camera.lookAt(v);
-
         //controls
         updateControls();
 
-        scene.traverse(function(e) {
-            if (e instanceof THREE.Mesh && e != floorModel ) {
-                e.rotation.y+=0.02;
+        //rotate models
+        scene.traverse(function (e) {
+            if (e instanceof THREE.Mesh && e != floorModel) {
+                e.rotation.y += 0.02;
             }
         });
 
@@ -334,13 +405,11 @@
 
     }
 
-
     //public
     return M.modules.WebGL = {
         init: function () {
-            console.log('webgl init');
             init();
-            animate();
+            update();
         }
     }
 }(Main || {}, window, window.document));

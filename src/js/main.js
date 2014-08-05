@@ -1,12 +1,10 @@
 /**
- * Created by Miha-ha on 01.08.14.
- */
+* Created by Miha-ha on 01.08.14.
+*/
 //Main
 var Main = (function (M, window, document) {
-    console.log('module main was loaded');
-    //private
+    //инициализация модулей
     function init() {
-        //инициализация модулей
         for (var moduleName in M.modules) {
             if (M.modules.hasOwnProperty(moduleName)) {
                 var curModule = M.modules[moduleName];
