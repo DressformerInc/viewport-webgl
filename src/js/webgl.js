@@ -8,7 +8,6 @@
         camera, scene, renderer,
         lights = {},
         models = {},
-        loader,
         controls,
         orbitControl,
         floorModel,
@@ -63,14 +62,15 @@
     }
 
     function setupEnvironment(scene) {
+
         // FLOOR
 //        var floorTexture = new THREE.ImageUtils.loadTexture('textures/checkerboard.jpg');
 //        floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping;
 //        floorTexture.repeat.set(10, 10);
         var floorMaterial = new THREE.MeshBasicMaterial({ /*map: floorTexture,*/
                 color: 0xFFFFFF,
-                side: THREE.DoubleSide,
-                transparent: true,
+                side: THREE.BackSide,//THREE.DoubleSide,
+                transparent: false,
                 opacity: 0.2
             }),
             floorGeometry = new THREE.PlaneGeometry(1000, 1000, 10, 10),
@@ -90,67 +90,42 @@
 
     }
 
-    function makeSMaterial(lambr) {
+    function makeShaderMaterial(normal, diffuse, specular) {
+        var shininess = 1,
+            shader = THREE.ShaderLib[ "normalmap" ],
+            uniforms = THREE.UniformsUtils.clone(shader.uniforms);
 
-        // console.log(lambr);
-        var ambient = new THREE.Color(0.7740, 0.3122, 0.5514),
-            diffuse = new THREE.Color(0.8349, 0.3368, 0.5948),
-            specular = new THREE.Color(0, 0, 0),
-            shininess = 1,
-            scale = 23;
-
-        var shader = THREE.ShaderLib[ "normalmap" ];
-        var uniforms = THREE.UniformsUtils.clone(shader.uniforms);
-
-        //uniforms[ "enableAO" ].value = false;
-        //uniforms[ "enableReflection" ].value = false;
-        uniforms[ "enableDisplacement" ].value = true;
-        uniforms[ "enableDiffuse" ].value = true;
-        uniforms[ "enableSpecular" ].value = true;
-
-
-        uniforms[ "tNormal" ].value = THREE.ImageUtils.loadTexture("models/dress/normal.png");
-        //uniforms[ "tAO" ].value = THREE.ImageUtils.loadTexture( "textures/normal/ninja/ao.jpg" );
-
-//        uniforms[ "tDisplacement" ].value = THREE.ImageUtils.loadTexture("models/dress/disp.png");
-//        uniforms[ "uDisplacementBias" ].value = -0.1; //- 0.428408;;
-//        uniforms[ "uDisplacementScale" ].value = 0.5;
-        //uniforms[ "uDisplacementBias" ].value = - 0.428408;
-        //uniforms[ "uDisplacementScale" ].value = 2.436143;
-
-        uniforms[ 'tDiffuse'].value = THREE.ImageUtils.loadTexture("models/dress/diffuse.png");
-        uniforms[ 'tSpecular'].value = THREE.ImageUtils.loadTexture("models/dress/spec.png");
-
-        // uniforms[ "uNormalScale" ].value.y = 1;
-
-        //uniforms[ "diffuse" ].value = diffuse ;
-        //uniforms[ "specular" ].value = specular
-        //uniforms[ "ambient" ].value = ambient ;
-
+        uniforms[ "enableDisplacement" ].value = false;
         uniforms[ "shininess" ].value = shininess;
 
-        //uniforms[ "tCube" ].value = reflectionCube;
-        //uniforms[ "reflectivity" ].value = 0.1;
+        if (normal) uniforms[ "tNormal" ].value = THREE.ImageUtils.loadTexture(normal);
+        if (diffuse) {
+            uniforms[ "enableDiffuse" ].value = true;
+            uniforms[ 'tDiffuse'].value = THREE.ImageUtils.loadTexture(diffuse);
+        }
+        if (specular) {
+            uniforms[ "enableSpecular" ].value = true;
+            uniforms[ 'tSpecular'].value = THREE.ImageUtils.loadTexture(specular);
+        }
 
-        //uniforms[ "diffuse" ].value.convertGammaToLinear();
-        //uniforms[ "specular" ].value.convertGammaToLinear();
-        //uniforms[ "ambient" ].value.convertGammaToLinear();
 
+//            uniforms[ "tDisplacement" ].value = THREE.ImageUtils.loadTexture("models/obj/sweater/BDM_201404_0006_0005_DISP.png");
+////            uniforms[ "uDisplacementBias" ].value = -0.1; //- 0.428408;;
+////            uniforms[ "uDisplacementScale" ].value = 0.5;
+//            uniforms[ "uDisplacementBias" ].value = - 0.428408;
+//            uniforms[ "uDisplacementScale" ].value = 2.436143;
 
-        var parameters = {
+        return  new THREE.ShaderMaterial({
             fragmentShader: shader.fragmentShader,
             vertexShader: shader.vertexShader,
             uniforms: uniforms,
             lights: true,
             fog: false,
             side: THREE.DoubleSide
-        };
-        var material1 = new THREE.ShaderMaterial(parameters);
-        return material1
-
+        });
     }
 
-    function loadDummyModel() {
+    function loadDummyModel(scene) {
         var loader = new THREE.OBJLoader(loadingManager),
             cubemap = THREE.ImageUtils.loadTextureCube([
                 'src/assets/cubemap/pos-x.png',
@@ -182,90 +157,57 @@
         });
     }
 
-    function loadSweaterModel() {
-        function makeSweaterMaterial() {
-            var shininess = 1,
-                shader = THREE.ShaderLib[ "normalmap" ],
-                uniforms = THREE.UniformsUtils.clone(shader.uniforms);
+    function loadSweaterModel(scene) {
+        var loader = new THREE.OBJMTLLoader(loadingManager),
+            shaderMaterial = makeShaderMaterial(
+                "models/obj/sweater/BDM_201404_0006_0005_NORMAL.png",
+                "models/obj/sweater/BDM_201404_0006_0005_diffuse.png",
+                "models/obj/sweater/BDM_201404_0006_0005_SPECULAR.png"
+            );
 
-            uniforms[ "enableDisplacement" ].value = false;
-            uniforms[ "enableDiffuse" ].value = true;
-            uniforms[ "enableSpecular" ].value = true;
-
-            uniforms[ "tNormal" ].value = THREE.ImageUtils.loadTexture("models/obj/sweater/BDM_201404_0006_0005_NORMAL.png");
-
-//        uniforms[ "tDisplacement" ].value = THREE.ImageUtils.loadTexture("models/dress/disp.png");
-//        uniforms[ "uDisplacementBias" ].value = -0.1; //- 0.428408;;
-//        uniforms[ "uDisplacementScale" ].value = 0.5;
-            //uniforms[ "uDisplacementBias" ].value = - 0.428408;
-            //uniforms[ "uDisplacementScale" ].value = 2.436143;
-
-            uniforms[ 'tDiffuse'].value = THREE.ImageUtils.loadTexture("models/obj/sweater/BDM_201404_0006_0005_diffuse.png");
-            uniforms[ 'tSpecular'].value = THREE.ImageUtils.loadTexture("models/obj/sweater/BDM_201404_0006_0005_SPECULAR.png");
-
-            uniforms[ "shininess" ].value = shininess;
-
-            return  new THREE.ShaderMaterial({
-                fragmentShader: shader.fragmentShader,
-                vertexShader: shader.vertexShader,
-                uniforms: uniforms,
-                lights: true,
-                fog: false,
-                side: THREE.DoubleSide
-            });
-        }
-
-        var shaderMaterial = makeSweaterMaterial();
-
-        loader.load('models/obj/sweater/BDM_201404_0006_0005.obj', function (sweater) {
+        loader.load('models/obj/sweater/BDM_201404_0006_0005.obj', 'models/obj/sweater/BDM_201404_0006_0005.mtl', function (sweater) {
 
             sweater.traverse(function (child) {
                 if (child instanceof THREE.Mesh) {
+                    child.geometry.computeTangents();
                     child.material = shaderMaterial;
                     child.castShadow = true;
                     child.receiveShadow = true;
-
                 }
             });
 
             scene.add(models['sweater'] = sweater);
+        });
+    }
+
+    function loadPantsModel(scene) {
+
+        var loader = new THREE.OBJLoader(loadingManager),
+            shaderMaterial = makeShaderMaterial(
+                "models/obj/pants/KPL_201407_0010_0008_normal.jpg",
+                "models/obj/pants/KPL_201407_0010_0008_diffuse.jpg"
+            );
+
+        loader.load('models/obj/pants/KPL_201407_0010_0008.obj', function (pants) {
+            console.log('pants:', pants);
+
+            pants.traverse(function (child) {
+                if (child instanceof THREE.Mesh) {
+//                    child.geometry.computeTangents();
+//                    child.material = shaderMaterial;
+                    child.castShadow = true;
+                    child.receiveShadow = true;
+                }
+            });
+            var scale = 0.04;
+            pants.scale.set(scale, scale, scale);
+//            pants.position.set(0,0,0);
+            scene.add(models['pants'] = pants);
 
         });
     }
 
     function loadModels(scene) {
-        /*
-         // material parameters
-
-         var ambient = 0x111111, diffuse = 0xbbbbbb, specular = 0x060606, shininess = 35;
-
-         var shader = THREE.ShaderLib[ "normalmap" ];
-         var uniforms = THREE.UniformsUtils.clone( shader.uniforms );
-
-         uniforms[ "tNormal" ].value = THREE.ImageUtils.loadTexture( "obj/leeperrysmith/Infinite-Level_02_Tangent_SmoothUV.jpg" );
-         uniforms[ "uNormalScale" ].value.set( 0.8, 0.8 );
-
-         uniforms[ "tDiffuse" ].value = THREE.ImageUtils.loadTexture( "obj/leeperrysmith/Map-COL.jpg" );
-         uniforms[ "tSpecular" ].value = THREE.ImageUtils.loadTexture( "obj/leeperrysmith/Map-SPEC.jpg" );
-
-         uniforms[ "enableAO" ].value = false;
-         uniforms[ "enableDiffuse" ].value = true;
-         uniforms[ "enableSpecular" ].value = true;
-
-         uniforms[ "diffuse" ].value.setHex( diffuse );
-         uniforms[ "specular" ].value.setHex( specular );
-         uniforms[ "ambient" ].value.setHex( ambient );
-
-         uniforms[ "shininess" ].value = shininess;
-
-         uniforms[ "wrapRGB" ].value.set( 0.575, 0.5, 0.5 );
-
-         var parameters = { fragmentShader: shader.fragmentShader, vertexShader: shader.vertexShader, uniforms: uniforms, lights: true };
-         var material = new THREE.ShaderMaterial( parameters );
-
-         material.wrapAround = true;
-
-         */
         var jsonLoader = new THREE.JSONLoader(),
             cubemap = THREE.ImageUtils.loadTextureCube([
                 'src/assets/cubemap/pos-x.png',
@@ -342,8 +284,6 @@
             console.log('loading manager:', item, loaded, total);
         };
 
-        loader = new THREE.OBJLoader(loadingManager);
-
         renderer = new THREE.WebGLRenderer({
             antialias: true,
             alpha: true
@@ -359,8 +299,9 @@
         setupLight(scene);
         setupEnvironment(scene);
 //        loadModels(scene);
-        loadDummyModel();
-        loadSweaterModel();
+        loadDummyModel(scene);
+//        loadPantsModel(scene);
+        loadSweaterModel(scene);
 
         orbitControl = new THREE.OrbitControls(camera, renderer.domElement);
         orbitControl.target.y = 100;
@@ -388,7 +329,7 @@
         //rotate models
         scene.traverse(function (e) {
             if (e instanceof THREE.Mesh && e != floorModel) {
-                e.rotation.y += 0.02;
+//                e.rotation.y += 0.02;
             }
         });
 
