@@ -44,7 +44,7 @@ gulp.task('css', function () {
 
 gulp.task('dist', ['js', 'css'], function(){
     gulp.src([
-        'src/assets/**/*.*',
+//        'src/assets/**/*.*',
         'src/js/viewport-webgl.js',
         'src/css/style.css',
         'src/index.html'
