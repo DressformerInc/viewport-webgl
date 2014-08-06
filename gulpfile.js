@@ -125,7 +125,6 @@ gulp.task('github-release', require('./github/release').createAndUpload);
 gulp.task('default', ['js', 'css', 'watch']);
 gulp.task('release', function (cb) {
     sequence(
-        'rimraf',
         'bump',
         'git',
         'zip',
