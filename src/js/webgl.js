@@ -216,11 +216,16 @@
                 'src/assets/cubemap/neg-y.png',
                 'src/assets/cubemap/pos-z.png',
                 'src/assets/cubemap/neg-z.png'
-            ]);
+            ]),
+            sweaterMat = makeShaderMaterial(
+                "models/json/dress/normal.png",
+                "models/json/dress/diffuse.png",
+                "models/json/dress/spec.png"
+            );
 
         cubemap.format = THREE.RGBFormat;
 
-        jsonLoader.load("models/json/dummy.js", function (geom, mats) {
+        jsonLoader.load("models/json/dummy_converted.js", function (geom, mats) {
             var matWithCubeMap = new THREE.MeshPhongMaterial({
                     color: 0x000000,
                     shininess: 200,
@@ -241,9 +246,9 @@
             scene.add(dummyModel = dummy);
         });
 
-        jsonLoader.load("models/dress.js", function (geom, mats) {
-            var smat = makeSMaterial(mats[0]),
-                dress = new THREE.Mesh(geom, smat);
+        jsonLoader.load("models/json/dress/dress.js", function (geom, mats) {
+            console.log('sweater mat from callback:', mats);
+            var dress = new THREE.Mesh(geom, sweaterMat);
 
             geom.computeTangents();
 
@@ -298,10 +303,10 @@
 
         setupLight(scene);
         setupEnvironment(scene);
-//        loadModels(scene);
-        loadDummyModel(scene);
+        loadModels(scene);
+//        loadDummyModel(scene);
 //        loadPantsModel(scene);
-        loadSweaterModel(scene);
+//        loadSweaterModel(scene);
 
         orbitControl = new THREE.OrbitControls(camera, renderer.domElement);
         orbitControl.target.y = 100;
