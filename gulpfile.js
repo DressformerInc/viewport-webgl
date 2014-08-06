@@ -2,6 +2,7 @@
  * Created by Miha-ha on 01.08.14.
  */
 var gulp = require('gulp'),
+    sequence = require('run-sequence'),
     concat = require('gulp-concat'),
     sourcemaps = require('gulp-sourcemaps'),
     bump = require('gulp-bump'),
@@ -120,6 +121,16 @@ gulp.task('log', function () {
 
 gulp.task('github-release', require('./github/release').createAndUpload);
 
-// release end
-
+//combo tasks
 gulp.task('default', ['js', 'css', 'watch']);
+gulp.task('release', function (cb) {
+    sequence(
+        'bump',
+        'git',
+        'zip',
+        'github-release',
+//        'deploy-test',
+//        'deploy-release',
+        'rimraf',
+        cb);
+});

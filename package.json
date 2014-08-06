@@ -1,13 +1,12 @@
 {
     "name": "viewport-webgl",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "description": "WebGL view port for plugin dressformer",
     "main": "",
-    "dependencies": {
-
-    },
+    "dependencies": {},
     "devDependencies": {
         "gulp": "^3.8.6",
+        "run-sequence": "^0.3.6",
         "gulp-concat": "^2.3.4",
         "gulp-sourcemaps": "^1.1.0",
         "gulp-bump": "^0.1.6",
