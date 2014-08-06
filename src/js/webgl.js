@@ -9,9 +9,7 @@
         lights = {},
         models = {},
         controls,
-        orbitControl,
-        floorModel,
-        dummyModel;
+        orbitControl;
 
     function showStats(container) {
         // STATS
@@ -27,6 +25,7 @@
         var ambientLight = new THREE.AmbientLight(0x444444);
         ambientLight.position.set(100, 130, 100);
         scene.add(lights['ambientLight'] = ambientLight);
+
 
         var inte = 0.3,
             pointLight1 = new THREE.PointLight(0xffffff, inte);
@@ -49,12 +48,13 @@
         pointLight5.position.multiplyScalar(50);
         scene.add(lights['pointLight5'] = pointLight5);
 
+
         var directionalLight = new THREE.DirectionalLight(0xffffff, 1);
         directionalLight.position.x = -100;
         directionalLight.position.y = 150;
         directionalLight.castShadow = true;
         directionalLight.shadowBias = 0.0001;
-        directionalLight.shadowDarkness = 0.07;
+        directionalLight.shadowDarkness = 0.1;
         directionalLight.shadowMapWidth = 2048;
         directionalLight.shadowMapHeight = 2048;
         scene.add(lights['directionalLight'] = directionalLight);
@@ -69,9 +69,7 @@
 //        floorTexture.repeat.set(10, 10);
         var floorMaterial = new THREE.MeshBasicMaterial({ /*map: floorTexture,*/
                 color: 0xFFFFFF,
-                side: THREE.BackSide,//THREE.DoubleSide,
-                transparent: false,
-                opacity: 0.2
+                side: THREE.BackSide
             }),
             floorGeometry = new THREE.PlaneGeometry(1000, 1000, 10, 10),
             floor = new THREE.Mesh(floorGeometry, floorMaterial);
@@ -79,7 +77,7 @@
         floor.position.y = 0;
         floor.rotation.x = Math.PI / 2;
         floor.receiveShadow = true;
-        scene.add(floorModel = floor);
+        scene.add(models['floor']=floor);
 
         // SKYBOX/FOG
         var skyBoxGeometry = new THREE.BoxGeometry(100000, 100000, 100000),
@@ -243,7 +241,7 @@
             dummy.castShadow = true;
             dummy.receiveShadow = true;
 
-            scene.add(dummyModel = dummy);
+            scene.add(models['dummy'] = dummy);
         });
 
         jsonLoader.load("assets/models/json/dress/dress.js", function (geom, mats) {
@@ -333,7 +331,7 @@
 
         //rotate models
         scene.traverse(function (e) {
-            if (e instanceof THREE.Mesh && e != floorModel) {
+            if (e instanceof THREE.Mesh && e != models['floor']) {
 //                e.rotation.y += 0.02;
             }
         });

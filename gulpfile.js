@@ -16,9 +16,10 @@ var gulp = require('gulp'),
             'node_modules/dat.gui/dat.gui.min.js',
             //src
             'src/js/main.js',
-            'src/js/*.js'
+            'src/js/*.js',
+            '!src/js/viewport-webgl.js'
         ],
-        css: ['src/css/*.css'],
+        css: ['src/css/*.css', '!src/css/style.css'],
         compiled: {
             script: ['src/js/viewport_webgl.js'],
             css: ['src/css/style.css']
@@ -40,7 +41,7 @@ gulp.task('css', function () {
         .pipe(gulp.dest('src/css'));
 });
 
-gulp.task('dist', ['rimraf', 'js', 'css'], function(){
+gulp.task('dist', ['js', 'css'], function(){
     gulp.src([
         'src/assets/**/*.*',
         'src/js/viewport-webgl.js',
@@ -84,7 +85,7 @@ gulp.task('git', function () {
 //        .pipe(exec('git push origin --tags'));
 });
 
-gulp.task('zip', ['dist'], function () {
+gulp.task('zip', ['rimraf', 'dist'], function () {
     return gulp.src('').pipe(exec('cd dist && zip -r ../release.zip ./ && cd ..', {
         silent: true,
         continueOnError: true
@@ -121,4 +122,4 @@ gulp.task('github-release', require('./github/release').createAndUpload);
 
 // release end
 
-gulp.task('default', ['watch', 'dist']);
+gulp.task('default', ['js', 'css', 'watch']);
