@@ -1,7 +1,9 @@
 .idea/
+.DS_Store/
 bower_components/
 node_modules/
 dist/
 npm-debug.log
 src/js/viewport-webgl.js
 src/css/style.css
+github/github.json
