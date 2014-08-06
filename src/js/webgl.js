@@ -223,7 +223,7 @@
 
         cubemap.format = THREE.RGBFormat;
 
-        jsonLoader.load("assets/models/json/dummy_converted.js", function (geom, mats) {
+        jsonLoader.load("assets/models/json/dummy.js", function (geom, mats) {
             var matWithCubeMap = new THREE.MeshPhongMaterial({
                     color: 0x000000,
                     shininess: 200,

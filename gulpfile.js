@@ -86,7 +86,7 @@ gulp.task('git', function () {
 //        .pipe(exec('git push origin --tags'));
 });
 
-gulp.task('zip', ['rimraf', 'dist'], function () {
+gulp.task('zip', ['dist'], function () {
     return gulp.src('').pipe(exec('cd dist && zip -r ../release.zip ./ && cd ..', {
         silent: true,
         continueOnError: true
@@ -125,10 +125,11 @@ gulp.task('github-release', require('./github/release').createAndUpload);
 gulp.task('default', ['js', 'css', 'watch']);
 gulp.task('release', function (cb) {
     sequence(
+        'rimraf',
         'bump',
         'git',
         'zip',
-//        'github-release',
+        'github-release',
 //        'deploy-test',
 //        'deploy-release',
 //        'rimraf',
