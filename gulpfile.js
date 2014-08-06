@@ -131,6 +131,6 @@ gulp.task('release', function (cb) {
         'github-release',
 //        'deploy-test',
 //        'deploy-release',
-//        'rimraf',
+        'rimraf',
         cb);
 });
