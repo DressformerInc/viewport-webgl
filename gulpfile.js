@@ -128,9 +128,9 @@ gulp.task('release', function (cb) {
         'bump',
         'git',
         'zip',
-        'github-release',
+//        'github-release',
 //        'deploy-test',
 //        'deploy-release',
-        'rimraf',
+//        'rimraf',
         cb);
 });
