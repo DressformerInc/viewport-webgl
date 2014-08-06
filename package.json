@@ -7,11 +7,14 @@
 
     },
     "devDependencies": {
-        "browserify": "latest",
-        "watchify": "latest",
         "gulp": "^3.8.6",
         "gulp-concat": "^2.3.4",
         "gulp-sourcemaps": "^1.1.0",
+        "gulp-bump": "^0.1.6",
+        "gulp-rimraf": "latest",
+        "gulp-exec": "^1.0.4",
+        "q": "^1.0.0",
+        "request": "^2.34.0",
         "napa": "^0.4.1"
     },
     "scripts": {

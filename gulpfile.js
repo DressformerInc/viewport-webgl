@@ -4,6 +4,9 @@
 var gulp = require('gulp'),
     concat = require('gulp-concat'),
     sourcemaps = require('gulp-sourcemaps'),
+    bump = require('gulp-bump'),
+    exec = require('gulp-exec'),
+    rimraf = require('gulp-rimraf'),
     paths = {
         scripts: [
             //libs
@@ -32,9 +35,78 @@ gulp.task('css', function () {
         .pipe(gulp.dest('dist'));
 });
 
+gulp.task('dist', ['js', 'css']);
+
 gulp.task('watch', function () {
     gulp.watch(paths.scripts, ['js']);
     gulp.watch(paths.css, ['css']);
 });
 
-gulp.task('default', ['watch', 'js', 'css']);
+/**
+ * RELEASE
+ */
+
+gulp.task('rimraf', function () {
+    return gulp.src(['dist/*', 'release.zip'], { read: false })
+        .pipe(rimraf());
+});
+
+gulp.task('bump', function () {
+    return gulp.src(['./package.json'])
+        .pipe(bump())
+        .pipe(gulp.dest('./'));
+});
+
+gulp.task('git', function () {
+    var v = 'v' + require('./package.json').version,
+        options = {
+            silent: true,
+            v: v,
+            msg: 'Release ' + v
+        };
+
+    return gulp.src('')
+        .pipe(exec('git commit -am "<%=options.msg%>"', options))
+        .pipe(exec('git tag -a <%=options.v%> -m "<%=options.msg%>"', options))
+        .pipe(exec('git push origin --follow-tags')); //отправляю изменения и тэги вместе
+//        .pipe(exec('git push origin --tags'));
+});
+
+gulp.task('zip', ['dist'], function () {
+    return gulp.src('').pipe(exec('cd dist && zip -r ../release.zip ./ && cd ..', {
+        silent: true,
+        continueOnError: true
+    }));
+});
+
+gulp.task('deploy-test', function () {
+    var v = require('./package.json').version;
+
+    return gulp.src('').pipe(
+        exec('ssh deploy@192.168.10.10 site-v2 test v' + v, {
+            silent: false,
+            continueOnError: false
+        }));
+});
+
+gulp.task('deploy-release', function () {
+    var v = require('./package.json').version;
+
+    return gulp.src('').pipe(
+        exec('ssh deploy@192.168.10.10 site-v2 deploy v' + v, {
+            silent: false,
+            continueOnError: false
+        }));
+});
+
+gulp.task('log', function () {
+    return gulp.src('').pipe(
+        exec('ssh deploy@192.168.10.10 tail site-v2.log', {silent: false})
+    );
+});
+
+gulp.task('github-release', require('./github/release').createAndUpload);
+
+// release end
+
+gulp.task('default', ['watch', 'dist']);
