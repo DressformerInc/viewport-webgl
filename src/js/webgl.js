@@ -141,7 +141,7 @@
                 envMap: cubemap
             });
 
-        loader.load('models/obj/dummy/DummyLP.obj', function (dummy) {
+        loader.load('assets/models/obj/dummy/DummyLP.obj', function (dummy) {
 
             dummy.traverse(function (child) {
                 if (child instanceof THREE.Mesh) {
@@ -160,12 +160,12 @@
     function loadSweaterModel(scene) {
         var loader = new THREE.OBJMTLLoader(loadingManager),
             shaderMaterial = makeShaderMaterial(
-                "models/obj/sweater/BDM_201404_0006_0005_NORMAL.png",
-                "models/obj/sweater/BDM_201404_0006_0005_diffuse.png",
-                "models/obj/sweater/BDM_201404_0006_0005_SPECULAR.png"
+                "assets/models/obj/sweater/BDM_201404_0006_0005_NORMAL.png",
+                "assets/models/obj/sweater/BDM_201404_0006_0005_diffuse.png",
+                "assets/models/obj/sweater/BDM_201404_0006_0005_SPECULAR.png"
             );
 
-        loader.load('models/obj/sweater/BDM_201404_0006_0005.obj', 'models/obj/sweater/BDM_201404_0006_0005.mtl', function (sweater) {
+        loader.load('assets/models/obj/sweater/BDM_201404_0006_0005.obj', 'assets/models/obj/sweater/BDM_201404_0006_0005.mtl', function (sweater) {
 
             sweater.traverse(function (child) {
                 if (child instanceof THREE.Mesh) {
@@ -184,11 +184,11 @@
 
         var loader = new THREE.OBJLoader(loadingManager),
             shaderMaterial = makeShaderMaterial(
-                "models/obj/pants/KPL_201407_0010_0008_normal.jpg",
-                "models/obj/pants/KPL_201407_0010_0008_diffuse.jpg"
+                "assets/models/obj/pants/KPL_201407_0010_0008_normal.jpg",
+                "assets/models/obj/pants/KPL_201407_0010_0008_diffuse.jpg"
             );
 
-        loader.load('models/obj/pants/KPL_201407_0010_0008.obj', function (pants) {
+        loader.load('assets/models/obj/pants/KPL_201407_0010_0008.obj', function (pants) {
             console.log('pants:', pants);
 
             pants.traverse(function (child) {
@@ -210,22 +210,22 @@
     function loadModels(scene) {
         var jsonLoader = new THREE.JSONLoader(),
             cubemap = THREE.ImageUtils.loadTextureCube([
-                'src/assets/cubemap/pos-x.png',
-                'src/assets/cubemap/neg-x.png',
-                'src/assets/cubemap/pos-y.png',
-                'src/assets/cubemap/neg-y.png',
-                'src/assets/cubemap/pos-z.png',
-                'src/assets/cubemap/neg-z.png'
+                'assets/cubemap/pos-x.png',
+                'assets/cubemap/neg-x.png',
+                'assets/cubemap/pos-y.png',
+                'assets/cubemap/neg-y.png',
+                'assets/cubemap/pos-z.png',
+                'assets/cubemap/neg-z.png'
             ]),
             sweaterMat = makeShaderMaterial(
-                "models/json/dress/normal.png",
-                "models/json/dress/diffuse.png",
-                "models/json/dress/spec.png"
+                "assets/models/json/dress/normal.png",
+                "assets/models/json/dress/diffuse.png",
+                "assets/models/json/dress/spec.png"
             );
 
         cubemap.format = THREE.RGBFormat;
 
-        jsonLoader.load("models/json/dummy_converted.js", function (geom, mats) {
+        jsonLoader.load("assets/models/json/dummy_converted.js", function (geom, mats) {
             var matWithCubeMap = new THREE.MeshPhongMaterial({
                     color: 0x000000,
                     shininess: 200,
@@ -246,7 +246,7 @@
             scene.add(dummyModel = dummy);
         });
 
-        jsonLoader.load("models/json/dress/dress.js", function (geom, mats) {
+        jsonLoader.load("assets/models/json/dress/dress.js", function (geom, mats) {
             console.log('sweater mat from callback:', mats);
             var dress = new THREE.Mesh(geom, sweaterMat);
 

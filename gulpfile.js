@@ -10,15 +10,20 @@ var gulp = require('gulp'),
     paths = {
         scripts: [
             //libs
-            'bower_components/threejs/build/three.min.js',
-            'bower_components/threejs-controls/controls/OrbitControls.js',
-            'bower_components/threejs-stats/Stats.js',
-            'bower_components/dat.gui/dat.gui.min.js',
+            'node_modules/threejs/build/three.min.js',
+            'node_modules/threejs-controls/controls/OrbitControls.js',
+            'node_modules/threejs-stats/Stats.js',
+            'node_modules/dat.gui/dat.gui.min.js',
             //src
             'src/js/main.js',
             'src/js/*.js'
         ],
-        css: ['src/css/*.css']
+        css: ['src/css/*.css'],
+        compiled: {
+            script: ['src/js/viewport_webgl.js'],
+            css: ['src/css/style.css']
+        },
+        assets: ['src/assets/**/*']
     };
 
 gulp.task('js', function () {
@@ -26,16 +31,23 @@ gulp.task('js', function () {
         .pipe(sourcemaps.init())
         .pipe(concat('viewport-webgl.js'))
         .pipe(sourcemaps.write())
-        .pipe(gulp.dest('dist'));
+        .pipe(gulp.dest('src/js/'));
 });
 
 gulp.task('css', function () {
     gulp.src(paths.css)
         .pipe(concat('style.css'))
-        .pipe(gulp.dest('dist'));
+        .pipe(gulp.dest('src/css'));
 });
 
-gulp.task('dist', ['js', 'css']);
+gulp.task('dist', ['rimraf', 'js', 'css'], function(){
+    gulp.src([
+        'src/assets/**/*.*',
+        'src/js/viewport-webgl.js',
+        'src/css/style.css',
+        'src/index.html'
+    ], { base: './src' }).pipe(gulp.dest('dist'));
+});
 
 gulp.task('watch', function () {
     gulp.watch(paths.scripts, ['js']);
