@@ -126,12 +126,12 @@
     function loadDummyModel(scene) {
         var loader = new THREE.OBJLoader(loadingManager),
             cubemap = THREE.ImageUtils.loadTextureCube([
-                'src/assets/cubemap/pos-x.png',
-                'src/assets/cubemap/neg-x.png',
-                'src/assets/cubemap/pos-y.png',
-                'src/assets/cubemap/neg-y.png',
-                'src/assets/cubemap/pos-z.png',
-                'src/assets/cubemap/neg-z.png'
+                'assets/cubemap/pos-x.png',
+                'assets/cubemap/neg-x.png',
+                'assets/cubemap/pos-y.png',
+                'assets/cubemap/neg-y.png',
+                'assets/cubemap/pos-z.png',
+                'assets/cubemap/neg-z.png'
             ]),
             matWithCubeMap = new THREE.MeshPhongMaterial({
                 color: 0x000000,
@@ -220,7 +220,7 @@
                 "assets/models/json/dress/diffuse.png",
                 "assets/models/json/dress/spec.png"
             );
-
+        jsonLoader.imageLoader = new THREE.ImageLoader(loadingManager);
         cubemap.format = THREE.RGBFormat;
 
         jsonLoader.load("assets/models/json/dummy.js", function (geom, mats) {
@@ -245,7 +245,6 @@
         });
 
         jsonLoader.load("assets/models/json/dress/dress.js", function (geom, mats) {
-            console.log('sweater mat from callback:', mats);
             var dress = new THREE.Mesh(geom, sweaterMat);
 
             geom.computeTangents();
@@ -287,6 +286,7 @@
             console.log('loading manager:', item, loaded, total);
         };
 
+
         renderer = new THREE.WebGLRenderer({
             antialias: true,
             alpha: true
@@ -301,10 +301,10 @@
 
         setupLight(scene);
         setupEnvironment(scene);
-        loadModels(scene);
-//        loadDummyModel(scene);
+//        loadModels(scene);
+        loadDummyModel(scene);
 //        loadPantsModel(scene);
-//        loadSweaterModel(scene);
+        loadSweaterModel(scene);
 
         orbitControl = new THREE.OrbitControls(camera, renderer.domElement);
         orbitControl.target.y = 100;

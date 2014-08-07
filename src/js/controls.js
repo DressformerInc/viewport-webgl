@@ -6,9 +6,13 @@
     var gui,
         controllers = {},
         controls = {
+            //shadow
             shadow: true,
             bias: 0.0001,
-            darkness: 0.07
+            darkness: 0.07,
+            //rotate
+            rotate: true,
+            speed: 0.02
         };
 
 //    function controls() {
@@ -21,8 +25,9 @@
         controllers['shadow'] = shadowFolder.add(controls, 'shadow');
         controllers['bias'] = shadowFolder.add(controls, 'bias');
         controllers['darkness'] = shadowFolder.add(controls, 'darkness');
-//        directionalLight.shadowBias = 0.0001;
-//        directionalLight.shadowDarkness = 0.07;
+        var rotateFolder = gui.addFolder("Rotate");
+        controllers['rotate'] = rotateFolder.add(controls, 'rotate');
+        controllers['speed'] = rotateFolder.add(controls, 'speed');
 
     }
 

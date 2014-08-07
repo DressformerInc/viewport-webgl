@@ -777,7 +777,9 @@
          * @author angelxuanchang
          */
 
-        THREE.OBJMTLLoader = function () {};
+        THREE.OBJMTLLoader = function (manager) {
+            this.manager = ( manager !== undefined ) ? manager : THREE.DefaultLoadingManager;
+        };
 
         THREE.OBJMTLLoader.prototype = {
 
