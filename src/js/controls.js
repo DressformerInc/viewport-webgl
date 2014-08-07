@@ -11,7 +11,7 @@
             bias: 0.0001,
             darkness: 0.07,
             //rotate
-            rotate: true,
+            rotate: false,
             speed: 0.02
         };
 
@@ -24,9 +24,9 @@
         var shadowFolder = gui.addFolder("Shadow");
         controllers['shadow'] = shadowFolder.add(controls, 'shadow');
         controllers['bias'] = shadowFolder.add(controls, 'bias');
-        controllers['darkness'] = shadowFolder.add(controls, 'darkness');
+        controllers['darknss'] = shadowFolder.add(controls, 'darkness');
         var rotateFolder = gui.addFolder("Rotate");
-        controllers['rotate'] = rotateFolder.add(controls, 'rotate');
+        controllers['rotate'] = rotateFolder.add(controls, 'rotate').listen();
         controllers['speed'] = rotateFolder.add(controls, 'speed');
 
     }

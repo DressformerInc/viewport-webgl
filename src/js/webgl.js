@@ -273,8 +273,19 @@
 
     function updateControls() {
 
+        //shadow
         lights['directionalLight'].shadowBias = controls.bias;
         lights['directionalLight'].shadowDarkness = controls.darkness;
+
+        //rotate models
+        scene.traverse(function (e) {
+            if (e instanceof THREE.Mesh && e != models['floor']) {
+                if (controls.rotate){
+                    e.rotation.y += controls.speed;
+                }
+            }
+        });
+
 
     }
 
@@ -284,6 +295,9 @@
         loadingManager = new THREE.LoadingManager();
         loadingManager.onProgress = function (item, loaded, total) {
             console.log('loading manager:', item, loaded, total);
+            if (total > 1 && loaded === total){
+                controls.rotate = true;
+            }
         };
 
 
@@ -328,13 +342,6 @@
 
         //controls
         updateControls();
-
-        //rotate models
-        scene.traverse(function (e) {
-            if (e instanceof THREE.Mesh && e != models['floor']) {
-//                e.rotation.y += 0.02;
-            }
-        });
 
         renderer.render(scene, camera);
     }
