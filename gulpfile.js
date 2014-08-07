@@ -103,15 +103,15 @@ gulp.task('deploy-test', function () {
         }));
 });
 
-gulp.task('deploy-release', function () {
-    var v = require('./package.json').version;
-
-    return gulp.src('').pipe(
-        exec('ssh deploy@192.168.10.10 site-v2 deploy v' + v, {
-            silent: false,
-            continueOnError: false
-        }));
-});
+//gulp.task('deploy-release', function () {
+//    var v = require('./package.json').version;
+//
+//    return gulp.src('').pipe(
+//        exec('ssh deploy@192.168.10.10 site-v2 deploy v' + v, {
+//            silent: false,
+//            continueOnError: false
+//        }));
+//});
 
 gulp.task('log', function () {
     return gulp.src('').pipe(
