@@ -62,11 +62,7 @@
     }
 
     function setupEnvironment(scene) {
-
         // FLOOR
-//        var floorTexture = new THREE.ImageUtils.loadTexture('textures/checkerboard.jpg');
-//        floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping;
-//        floorTexture.repeat.set(10, 10);
         var floorMaterial = new THREE.MeshBasicMaterial({ /*map: floorTexture,*/
                 color: 0xFFFFFF,
                 side: THREE.BackSide
@@ -78,14 +74,6 @@
         floor.rotation.x = Math.PI / 2;
         floor.receiveShadow = true;
         scene.add(models['floor']=floor);
-
-        // SKYBOX/FOG
-        var skyBoxGeometry = new THREE.BoxGeometry(100000, 100000, 100000),
-            skyBoxMaterial = new THREE.MeshBasicMaterial({ color: 0xFFFFFF, side: THREE.BackSide }),
-            skyBox = new THREE.Mesh(skyBoxGeometry, skyBoxMaterial);
-        scene.add(skyBox);
-//        scene.fog = new THREE.FogExp2(0x9999ff, 0.00025);
-
     }
 
     function makeShaderMaterial(normal, diffuse, specular) {
@@ -305,6 +293,7 @@
             antialias: true,
             alpha: true
         });
+        renderer.setClearColor( 0xffffff );
         renderer.shadowMapEnabled = true;
 
         camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 1, 100000);
