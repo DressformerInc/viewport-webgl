@@ -8,6 +8,7 @@ var gulp = require('gulp'),
     bump = require('gulp-bump'),
     exec = require('gulp-exec'),
     rimraf = require('gulp-rimraf'),
+    replace = require('gulp-replace'),
     paths = {
         scripts: [
             //libs
@@ -29,7 +30,7 @@ var gulp = require('gulp'),
     };
 
 gulp.task('js', function () {
-   return gulp.src(paths.scripts)
+    return gulp.src(paths.scripts)
         .pipe(sourcemaps.init())
         .pipe(concat('viewport-webgl.js'))
         .pipe(sourcemaps.write())
@@ -42,7 +43,14 @@ gulp.task('css', function () {
         .pipe(gulp.dest('src/css'));
 });
 
-gulp.task('dist', ['js', 'css'], function(){
+gulp.task('html', function () {
+    var v = require('./package.json').version;
+    return gulp.src(['src/index.html'])
+        .pipe(replace(/(\?v=\d+\.\d+\.\d+)/g, '?v=' + v))
+        .pipe(gulp.dest('src/'));
+});
+
+gulp.task('dist', ['js', 'css', 'html'], function () {
     return gulp.src([
 //        'src/assets/**/*.*',
         'src/js/viewport-webgl.js',

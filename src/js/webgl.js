@@ -73,7 +73,7 @@
         floor.position.y = 0;
         floor.rotation.x = Math.PI / 2;
         floor.receiveShadow = true;
-        scene.add(models['floor']=floor);
+        scene.add(models['floor'] = floor);
     }
 
     function makeShaderMaterial(normal, diffuse, specular) {
@@ -140,6 +140,35 @@
 
             scene.add(models['dummy'] = dummy);
 
+        });
+    }
+
+    function loadModel(name, cb) {
+        var basePath = "assets/models/obj/" + name + "/",
+            objPath = basePath + name + ".obj",
+            mtlPath = basePath + name + ".mtl",
+            normalPath = basePath  + name +"_normal.jpg",
+            diffusePath = basePath +  name + "_diffuse.jpg",
+            loader = new THREE.OBJMTLLoader(loadingManager),
+            shaderMaterial = makeShaderMaterial(
+                normalPath,
+                diffusePath
+            );
+
+        loader.load(objPath, mtlPath, function (model) {
+
+            model.traverse(function (child) {
+                if (child instanceof THREE.Mesh) {
+                    child.geometry.computeTangents();
+                    child.material = shaderMaterial;
+                    child.castShadow = true;
+                    child.receiveShadow = true;
+                }
+            });
+            var scale = 0.1023;
+            model.scale.set(scale, scale, scale);
+            model.position.set(0,0,0);
+            cb(model);
         });
     }
 
@@ -268,7 +297,7 @@
         //rotate models
         scene.traverse(function (e) {
             if (e instanceof THREE.Mesh && e != models['floor']) {
-                if (controls.rotate){
+                if (controls.rotate) {
                     e.rotation.y += controls.speed;
                 }
             }
@@ -283,7 +312,7 @@
         loadingManager = new THREE.LoadingManager();
         loadingManager.onProgress = function (item, loaded, total) {
             console.log('loading manager:', item, loaded, total);
-            if (total > 1 && loaded === total){
+            if (total > 1 && loaded === total) {
                 controls.rotate = true;
             }
         };
@@ -293,7 +322,7 @@
             antialias: true,
             alpha: true
         });
-        renderer.setClearColor( 0xffffff );
+        renderer.setClearColor(0xffffff);
         renderer.shadowMapEnabled = true;
 
         camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 1, 100000);
@@ -308,6 +337,10 @@
         loadDummyModel(scene);
 //        loadPantsModel(scene);
         loadSweaterModel(scene);
+//        loadModel('ADS_201407_0005_0001', function (model) {
+//            console.log('model loaded:', model);
+//            scene.add(model);
+//        });
 
         orbitControl = new THREE.OrbitControls(camera, renderer.domElement);
         orbitControl.target.y = 100;

@@ -1,41 +1,42 @@
 {
-    "name": "viewport-webgl",
-    "version": "0.0.15",
-    "description": "WebGL view port for plugin dressformer",
-    "main": "",
-    "dependencies": {},
-    "devDependencies": {
-        "gulp": "^3.8.6",
-        "run-sequence": "^0.3.6",
-        "gulp-concat": "^2.3.4",
-        "gulp-sourcemaps": "^1.1.0",
-        "gulp-bump": "^0.1.6",
-        "gulp-rimraf": "latest",
-        "gulp-exec": "^1.0.4",
-        "q": "^1.0.0",
-        "request": "^2.34.0",
-        "napa": "^0.4.1"
-    },
-    "scripts": {
-        "install": "napa",
-        "build-js": "browserify src/js/main.js > dist/viewport-webgl.js -d",
-        "watch-js": "watchify src/js/main.js -o dist/viewport-webgl.js -dv",
-        "test": "echo \"Error: no test specified\" && exit 1"
-    },
-    "napa": {
-        "threejs": "mrdoob/three.js.git",
-        "threejs-controls": "Tomesch/threejs-controls",
-        "threejs-stats": "jiyinyiyong/threejs-stats",
-        "dat.gui": "xinming/bower-dat-gui"
-    },
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/DressformerInc/viewport-webgl.git"
-    },
-    "author": "Miha-ha",
-    "license": "ISC",
-    "bugs": {
-        "url": "https://github.com/DressformerInc/viewport-webgl/issues"
-    },
-    "homepage": "https://github.com/DressformerInc/viewport-webgl"
+  "name": "viewport-webgl",
+  "version": "0.0.15",
+  "description": "WebGL view port for plugin dressformer",
+  "main": "",
+  "dependencies": {},
+  "devDependencies": {
+    "gulp": "^3.8.6",
+    "gulp-bump": "^0.1.6",
+    "gulp-concat": "^2.3.4",
+    "gulp-exec": "^1.0.4",
+    "gulp-replace": "^0.4.0",
+    "gulp-rimraf": "latest",
+    "gulp-sourcemaps": "^1.1.0",
+    "napa": "^0.4.1",
+    "q": "^1.0.0",
+    "request": "^2.34.0",
+    "run-sequence": "^0.3.6"
+  },
+  "scripts": {
+    "install": "napa",
+    "build-js": "browserify src/js/main.js > dist/viewport-webgl.js -d",
+    "watch-js": "watchify src/js/main.js -o dist/viewport-webgl.js -dv",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "napa": {
+    "threejs": "mrdoob/three.js.git",
+    "threejs-controls": "Tomesch/threejs-controls",
+    "threejs-stats": "jiyinyiyong/threejs-stats",
+    "dat.gui": "xinming/bower-dat-gui"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DressformerInc/viewport-webgl.git"
+  },
+  "author": "Miha-ha",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DressformerInc/viewport-webgl/issues"
+  },
+  "homepage": "https://github.com/DressformerInc/viewport-webgl"
 }
