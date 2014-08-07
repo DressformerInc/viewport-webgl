@@ -97,7 +97,7 @@ gulp.task('deploy-test', function () {
     var v = require('./package.json').version;
 
     return gulp.src('').pipe(
-        exec('ssh deploy@192.168.10.10 site-v2 test v' + v, {
+        exec('ssh deploy@95.163.87.227 test viewport-webgl v' + v, {
             silent: false,
             continueOnError: false
         }));
@@ -129,8 +129,8 @@ gulp.task('release', function (cb) {
         'git',
         'zip',
         'github-release',
-//        'deploy-test',
+        'deploy-test',
 //        'deploy-release',
-//        'rimraf',
+        'rimraf',
         cb);
 });
