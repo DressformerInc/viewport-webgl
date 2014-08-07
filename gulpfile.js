@@ -134,8 +134,8 @@ gulp.task('default', ['js', 'css', 'watch']);
 gulp.task('release', function (cb) {
     sequence(
         'bump',
-        'git',
         'dist',
+        'git',
         'zip',
         'github-release',
         'deploy-test',

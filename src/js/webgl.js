@@ -84,14 +84,15 @@
         uniforms[ "enableDisplacement" ].value = false;
         uniforms[ "shininess" ].value = shininess;
 
-        if (normal) uniforms[ "tNormal" ].value = THREE.ImageUtils.loadTexture(normal);
+        if (normal) uniforms[ "tNormal" ].value = THREE.ImageUtils.loadTexture(normal, null, render);
+
         if (diffuse) {
             uniforms[ "enableDiffuse" ].value = true;
-            uniforms[ 'tDiffuse'].value = THREE.ImageUtils.loadTexture(diffuse);
+            uniforms[ 'tDiffuse'].value = THREE.ImageUtils.loadTexture(diffuse, null, render);
         }
         if (specular) {
             uniforms[ "enableSpecular" ].value = true;
-            uniforms[ 'tSpecular'].value = THREE.ImageUtils.loadTexture(specular);
+            uniforms[ 'tSpecular'].value = THREE.ImageUtils.loadTexture(specular, null, render);
         }
 
 
@@ -124,6 +125,7 @@
             matWithCubeMap = new THREE.MeshPhongMaterial({
                 color: 0x000000,
                 shininess: 200,
+                reflectivity: 1,
                 envMap: cubemap
             });
 
@@ -143,12 +145,80 @@
         });
     }
 
+    function loadModelFromWeb(name, cb) {
+//        assets/df-models/garment/APT_201307_0045_0001
+        //http://test.webgl.dressformer.com/assets/df-models/garment/APT_201307_0045_0001_diffuse_01.png
+
+        var basePath = "http://test.webgl.dressformer.com/assets/df-models/garment/",
+//            objPath = basePath + name + ".obj",
+            objPath = basePath + "KPL_201307_0125_0005_M_v1401430780137.obj",
+//            mtlPath = basePath + name + ".mtl",
+//            normalPath = basePath  + name +"_normal.jpg",
+//            diffusePath = basePath + name + "_diffuse_01.jpg",
+            diffusePath = basePath + "KPL_201307_0125_0005_M_diffuse_0_v1401430780137.png",
+            loader = new THREE.OBJLoader(loadingManager),
+            shaderMaterial = makeShaderMaterial(
+                null,
+                diffusePath
+            );
+
+        loader.load(objPath, function (model) {
+
+            model.traverse(function (child) {
+                if (child instanceof THREE.Mesh) {
+                    child.geometry.computeVertexNormals(true);
+                    child.geometry.computeTangents();
+                    child.material = shaderMaterial;
+                    child.castShadow = true;
+                    child.receiveShadow = true;
+                }
+            });
+//            var scale = 0.1023;
+//            model.scale.set(scale, scale, scale);
+            model.position.set(0, 0, 0);
+            cb(model);
+        });
+    }
+
     function loadModel(name, cb) {
         var basePath = "assets/models/obj/" + name + "/",
             objPath = basePath + name + ".obj",
+            normalPath = basePath + name + "_normal.jpg",
+            diffusePath = basePath + name + "_diffuse.jpg",
+            loader = new THREE.OBJLoader(loadingManager),
+            shaderMaterial = makeShaderMaterial(
+                normalPath,
+                diffusePath
+            );
+
+        loader.load(objPath, function (model) {
+
+            model.traverse(function (child) {
+                if (child instanceof THREE.Mesh) {
+//                    child.geometry.computeVertexNormals(true);
+//                    child.geometry.computeFaceNormals(true);
+                    child.geometry.computeVertexNormals(true);
+                    child.geometry.computeTangents();
+                    child.material = shaderMaterial;
+                    child.material.needsUpdate = true;
+                    child.geometry.buffersNeedUpdate = true;
+                    child.geometry.uvsNeedUpdate = true;
+                    child.castShadow = true;
+                    child.receiveShadow = true;
+                }
+            });
+            model.name= name;
+            model.position.set(0, 0, 0);
+            cb(model);
+        });
+    }
+
+    function loadModelWithMTL(name, cb) {
+        var basePath = "assets/models/obj/" + name + "/",
+            objPath = basePath + name + ".obj",
             mtlPath = basePath + name + ".mtl",
-            normalPath = basePath  + name +"_normal.jpg",
-            diffusePath = basePath +  name + "_diffuse.jpg",
+            normalPath = basePath + name + "_normal.jpg",
+            diffusePath = basePath + name + "_diffuse.jpg",
             loader = new THREE.OBJMTLLoader(loadingManager),
             shaderMaterial = makeShaderMaterial(
                 normalPath,
@@ -167,7 +237,7 @@
             });
             var scale = 0.1023;
             model.scale.set(scale, scale, scale);
-            model.position.set(0,0,0);
+            model.position.set(0, 0, 0);
             cb(model);
         });
     }
@@ -237,7 +307,6 @@
                 "assets/models/json/dress/diffuse.png",
                 "assets/models/json/dress/spec.png"
             );
-        jsonLoader.imageLoader = new THREE.ImageLoader(loadingManager);
         cubemap.format = THREE.RGBFormat;
 
         jsonLoader.load("assets/models/json/dummy.js", function (geom, mats) {
@@ -275,8 +344,10 @@
     }
 
     function initControls() {
-        controls = M.modules.Controls.controls;
-        M.modules.Controls.onChange('shadow', function (value) {
+        var Ctrl = M.modules.Controls;
+        controls = Ctrl.controls;
+
+        Ctrl.onChange('shadow', function (value) {
             console.log('shadow change from event:', value);
             if (value) {
                 renderer.shadowMapAutoUpdate = true;
@@ -286,6 +357,16 @@
             }
         });
 
+        Ctrl.onChange('garment', function (value) {
+            console.log('garment changed:', arguments);
+            scene.remove(models['garment']);
+            controls.rotate = false;
+            models['dummy'].rotation.set(0, 0, 0);
+            loadModel(value, function (model) {
+                models['garment'] = model;
+                scene.add(model);
+            })
+        });
     }
 
     function updateControls() {
@@ -298,7 +379,7 @@
         scene.traverse(function (e) {
             if (e instanceof THREE.Mesh && e != models['floor']) {
                 if (controls.rotate) {
-                    e.rotation.y += controls.speed;
+//                    e.rotation.y += controls.speed;
                 }
             }
         });
@@ -307,6 +388,7 @@
     }
 
     function init() {
+        THREE.ImageUtils.crossOrigin = "anonymous";
         initControls();
 
         loadingManager = new THREE.LoadingManager();
@@ -315,6 +397,7 @@
             if (total > 1 && loaded === total) {
                 controls.rotate = true;
             }
+            render();
         };
 
 
@@ -324,6 +407,7 @@
         });
         renderer.setClearColor(0xffffff);
         renderer.shadowMapEnabled = true;
+        renderer.shadowMapType = THREE.PCFSoftShadowMap;
 
         camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 1, 100000);
         camera.position.y = 100;
@@ -336,14 +420,23 @@
 //        loadModels(scene);
         loadDummyModel(scene);
 //        loadPantsModel(scene);
-        loadSweaterModel(scene);
-//        loadModel('ADS_201407_0005_0001', function (model) {
-//            console.log('model loaded:', model);
+//        loadSweaterModel(scene);
+        //ADS_201407_0005_0001
+        loadModel('KPL_201407_0020_0001', function (model) {
+            console.log('model loaded:', model);
+            models['garment'] = model;
+            scene.add(model);
+            render();
+        });
+//        loadModelFromWeb('KPL_201307_0125_0023_M', function (model) {
+//            console.log('model loaded from web:', model);
 //            scene.add(model);
 //        });
 
         orbitControl = new THREE.OrbitControls(camera, renderer.domElement);
         orbitControl.target.y = 100;
+        orbitControl.autoRotate = true;
+        orbitControl.addEventListener( 'change', render );
 
         container = document.getElementById('container');
         container.appendChild(renderer.domElement);
@@ -352,20 +445,23 @@
 
         window.addEventListener('resize', onWindowResize, false);
         onWindowResize();
+
+        update();
     }
 
     function update() {
         requestAnimationFrame(update);
-        render();
-        if (stats) stats.update();
+//        render();
+        //controls
+        updateControls();
     }
 
     function render() {
 
-        //controls
-        updateControls();
+
 
         renderer.render(scene, camera);
+        if (stats) stats.update();
     }
 
     function onWindowResize() {
@@ -382,7 +478,8 @@
     return M.modules.WebGL = {
         init: function () {
             init();
-            update();
+//            update();
+            render();
         }
     }
 }(Main || {}, window, window.document));

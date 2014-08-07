@@ -6,6 +6,7 @@
     var gui,
         controllers = {},
         controls = {
+            garment:[],
             //shadow
             shadow: true,
             bias: 0.0001,
@@ -21,6 +22,18 @@
 
     function initGUI(controls) {
         gui = new d.GUI();
+        controllers['garment'] = gui.add(controls, 'garment', [
+            'KPL_201407_0020_0001',
+            'KPL_201407_0020_0002',
+            'KPL_201407_0020_0003',
+            'KPL_201407_0020_0004',
+            'KPL_201407_0020_0005',
+            'KPL_201407_0020_0006',
+            'KPL_201407_0020_0007',
+            'KPL_201407_0020_0008',
+            'KPL_201407_0020_0009',
+            'KPL_201407_0020_0010'
+        ]);
         var shadowFolder = gui.addFolder("Shadow");
         controllers['shadow'] = shadowFolder.add(controls, 'shadow');
         controllers['bias'] = shadowFolder.add(controls, 'bias');
