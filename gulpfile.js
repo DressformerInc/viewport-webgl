@@ -29,7 +29,7 @@ var gulp = require('gulp'),
     };
 
 gulp.task('js', function () {
-    gulp.src(paths.scripts)
+   return gulp.src(paths.scripts)
         .pipe(sourcemaps.init())
         .pipe(concat('viewport-webgl.js'))
         .pipe(sourcemaps.write())
@@ -37,13 +37,13 @@ gulp.task('js', function () {
 });
 
 gulp.task('css', function () {
-    gulp.src(paths.css)
+    return gulp.src(paths.css)
         .pipe(concat('style.css'))
         .pipe(gulp.dest('src/css'));
 });
 
 gulp.task('dist', ['js', 'css'], function(){
-    gulp.src([
+    return gulp.src([
 //        'src/assets/**/*.*',
         'src/js/viewport-webgl.js',
         'src/css/style.css',

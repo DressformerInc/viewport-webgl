@@ -139,7 +139,7 @@
                 envMap: cubemap
             });
 
-        loader.load('assets/models/obj/dummy/DummyLP.obj', function (dummy) {
+        loader.load('assets/models/obj/dummy/DummyLP.OBJ', function (dummy) {
 
             dummy.traverse(function (child) {
                 if (child instanceof THREE.Mesh) {
