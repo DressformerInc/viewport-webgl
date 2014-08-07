@@ -60,7 +60,7 @@ gulp.task('watch', function () {
  * RELEASE
  */
 
-gulp.task('rimraf', function () {
+gulp.task('clear', function () {
     return gulp.src(['dist/*', 'release.zip'], { read: false })
         .pipe(rimraf());
 });
@@ -86,7 +86,7 @@ gulp.task('git', function () {
 //        .pipe(exec('git push origin --tags'));
 });
 
-gulp.task('zip', ['dist'], function () {
+gulp.task('zip', function () {
     return gulp.src('').pipe(exec('cd dist && zip -r ../release.zip ./ && cd ..', {
         silent: true,
         continueOnError: true
@@ -127,10 +127,11 @@ gulp.task('release', function (cb) {
     sequence(
         'bump',
         'git',
+        'dist',
         'zip',
         'github-release',
         'deploy-test',
 //        'deploy-release',
-        'rimraf',
+        'clear',
         cb);
 });
