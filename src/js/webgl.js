@@ -471,7 +471,7 @@
 
 
         renderer.setSize(window.innerWidth, window.innerHeight);
-
+        render();
     }
 
     //public

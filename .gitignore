@@ -4,6 +4,7 @@ bower_components/
 node_modules/
 dist/
 npm-debug.log
+src/assets
 src/js/viewport-webgl.js
 src/css/style.css
 github/github.json
