@@ -27,7 +27,7 @@
         ambientLight.position.set(100, 130, 100);
         scene.add(lights['ambientLight'] = ambientLight);
 
-
+        /*
         var inte = 0.3,
             pointLight1 = new THREE.PointLight(0xffffff, inte);
         pointLight1.position.set(100, 130, 100);
@@ -49,6 +49,7 @@
         pointLight5.position.multiplyScalar(50);
         scene.add(lights['pointLight5'] = pointLight5);
 
+        */
 
         var directionalLight = new THREE.DirectionalLight(0xffffff, 1);
         directionalLight.position.x = -100;
@@ -87,14 +88,14 @@
 
         if (normal) uniforms[ "tNormal" ].value = THREE.ImageUtils.loadTexture(normal, null, render);
 
-        if (diffuse) {
-            uniforms[ "enableDiffuse" ].value = true;
-            uniforms[ 'tDiffuse'].value = THREE.ImageUtils.loadTexture(diffuse, null, render);
-        }
-        if (specular) {
-            uniforms[ "enableSpecular" ].value = true;
-            uniforms[ 'tSpecular'].value = THREE.ImageUtils.loadTexture(specular, null, render);
-        }
+//        if (diffuse) {
+//            uniforms[ "enableDiffuse" ].value = true;
+//            uniforms[ 'tDiffuse'].value = THREE.ImageUtils.loadTexture(diffuse, null, render);
+//        }
+//        if (specular) {
+//            uniforms[ "enableSpecular" ].value = true;
+//            uniforms[ 'tSpecular'].value = THREE.ImageUtils.loadTexture(specular, null, render);
+//        }
 
 
 //            uniforms[ "tDisplacement" ].value = THREE.ImageUtils.loadTexture("models/obj/sweater/BDM_201404_0006_0005_DISP.png");
