@@ -10,7 +10,7 @@
         models = {},
         controls,
         orbitControl,
-        orbitControlsChangeStart;
+        renderStart;
 
     function showStats(container) {
         // STATS
@@ -355,6 +355,7 @@
                 renderer.shadowMapAutoUpdate = false;
                 renderer.clearTarget(lights['directionalLight'].shadowMap);
             }
+            renderStart = Date.now();
         });
 
         Ctrl.onChange('garment', function (value) {
@@ -437,7 +438,7 @@
         orbitControl.target.y = 100;
         orbitControl.autoRotate = true;
         orbitControl.addEventListener( 'change', function () {
-            orbitControlsChangeStart = Date.now();
+            renderStart = Date.now();
 //            render();
         });
 
@@ -455,7 +456,7 @@
     function update() {
         requestAnimationFrame(update);
 
-        if (Date.now()-orbitControlsChangeStart < 700) {
+        if (Date.now()-renderStart < 700) {
             render();
         }
         //controls
