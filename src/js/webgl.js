@@ -9,7 +9,8 @@
         lights = {},
         models = {},
         controls,
-        orbitControl;
+        orbitControl,
+        orbitControlsChangeStart;
 
     function showStats(container) {
         // STATS
@@ -348,7 +349,6 @@
         controls = Ctrl.controls;
 
         Ctrl.onChange('shadow', function (value) {
-            console.log('shadow change from event:', value);
             if (value) {
                 renderer.shadowMapAutoUpdate = true;
             } else {
@@ -376,13 +376,14 @@
         lights['directionalLight'].shadowDarkness = controls.darkness;
 
         //rotate models
-        scene.traverse(function (e) {
-            if (e instanceof THREE.Mesh && e != models['floor']) {
-                if (controls.rotate) {
+//        scene.traverse(function (e) {
+//            if (e instanceof THREE.Mesh && e != models['floor']) {
+//                if (controls.rotate) {
 //                    e.rotation.y += controls.speed;
-                }
-            }
-        });
+//                    render();
+//                }
+//            }
+//        });
 
 
     }
@@ -423,7 +424,6 @@
 //        loadSweaterModel(scene);
         //ADS_201407_0005_0001
         loadModel('KPL_201407_0020_0001', function (model) {
-            console.log('model loaded:', model);
             models['garment'] = model;
             scene.add(model);
             render();
@@ -436,7 +436,10 @@
         orbitControl = new THREE.OrbitControls(camera, renderer.domElement);
         orbitControl.target.y = 100;
         orbitControl.autoRotate = true;
-        orbitControl.addEventListener( 'change', render );
+        orbitControl.addEventListener( 'change', function () {
+            orbitControlsChangeStart = Date.now();
+//            render();
+        });
 
         container = document.getElementById('container');
         container.appendChild(renderer.domElement);
@@ -451,17 +454,20 @@
 
     function update() {
         requestAnimationFrame(update);
-//        render();
+
+        if (Date.now()-orbitControlsChangeStart < 700) {
+            render();
+        }
         //controls
         updateControls();
+
+        if (stats) stats.update();
     }
 
     function render() {
 
-
-
         renderer.render(scene, camera);
-        if (stats) stats.update();
+
     }
 
     function onWindowResize() {
