@@ -84,9 +84,9 @@
             uniforms = THREE.UniformsUtils.clone(shader.uniforms);
 
         uniforms[ "enableDisplacement" ].value = false;
-        uniforms[ "shininess" ].value = shininess;
+//        uniforms[ "shininess" ].value = shininess;
 
-        if (normal) uniforms[ "tNormal" ].value = THREE.ImageUtils.loadTexture(normal, null, render);
+//        if (normal) uniforms[ "tNormal" ].value = THREE.ImageUtils.loadTexture(normal, null, render);
 
 //        if (diffuse) {
 //            uniforms[ "enableDiffuse" ].value = true;
