@@ -151,10 +151,11 @@ function makeShaderMaterial(normal, diffuse, specular) {
         uniforms[ "enableDiffuse" ].value = true;
         uniforms[ 'tDiffuse'].value = THREE.ImageUtils.loadTexture(diffuse, null, render);
     }
-//        if (specular) {
-//            uniforms[ "enableSpecular" ].value = true;
-//            uniforms[ 'tSpecular'].value = THREE.ImageUtils.loadTexture(specular, null, render);
-//        }
+
+    if (specular) {
+        uniforms[ "enableSpecular" ].value = true;
+        uniforms[ 'tSpecular'].value = THREE.ImageUtils.loadTexture(specular, null, render);
+    }
 
 
 //            uniforms[ "tDisplacement" ].value = THREE.ImageUtils.loadTexture("models/obj/sweater/BDM_201404_0006_0005_DISP.png");
@@ -178,7 +179,7 @@ function loadDummyModel(scene) {
         matWithCubeMap = new THREE.MeshPhongMaterial({
             color: 0x000000,
             shininess: 200,
-            reflectivity: 1,
+            reflectivity: 0.7,
             envMap: cubemap
         });
 
@@ -490,7 +491,9 @@ function init() {
 
     orbitControl = new THREE.OrbitControls(camera, renderer.domElement);
     orbitControl.target.y = 100;
-    orbitControl.autoRotate = true;
+//    orbitControl.autoRotate = true;
+    orbitControl.minPolarAngle = Math.PI/6; // radians
+    orbitControl.maxPolarAngle = Math.PI/1.6; // radians
     orbitControl.addEventListener('change', function () {
         renderStart = Date.now();
 //            render();
