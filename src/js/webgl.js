@@ -10,7 +10,23 @@
         models = {},
         controls,
         orbitControl,
-        renderStart;
+        renderStart,
+        cubemap = THREE.ImageUtils.loadTextureCube([
+            'assets/cubemap/pos-x.png',
+            'assets/cubemap/neg-x.png',
+            'assets/cubemap/pos-y.png',
+            'assets/cubemap/neg-y.png',
+            'assets/cubemap/pos-z.png',
+            'assets/cubemap/neg-z.png'
+        ]);
+
+    var shader = glslify({
+        vertex: '../shaders/clipdepth/vert.glsl',
+        fragment: '../shaders/clipdepth/frag.glsl',
+        sourceOnly: true
+    });
+
+    console.log('shader:', shader);
 
     function showStats(container) {
         // STATS
@@ -22,6 +38,7 @@
     }
 
     function setupLight(scene) {
+
 
         var ambientLight = new THREE.AmbientLight(0x444444);
         ambientLight.position.set(100, 130, 100);
@@ -51,9 +68,11 @@
 
         */
 
+
         var directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-        directionalLight.position.x = -100;
-        directionalLight.position.y = 150;
+        directionalLight.position.x = 300;
+        directionalLight.position.z = 500;
+        directionalLight.position.y = 1000;
         directionalLight.castShadow = true;
         directionalLight.shadowBias = 0.0001;
         directionalLight.shadowDarkness = 0.1;
@@ -61,6 +80,27 @@
         directionalLight.shadowMapHeight = 2048;
         scene.add(lights['directionalLight'] = directionalLight);
 
+//        var dirLight = new THREE.DirectionalLight( 0xffffff, 1 );
+//        dirLight.color.setHSL( 0.1, 1, 0.95 );
+//        dirLight.position.set( -1, 1.75, 1 );
+//        dirLight.position.multiplyScalar( 50 );
+//        scene.add(lights['directionalLight'] = dirLight );
+//
+//        dirLight.castShadow = true;
+//
+//        dirLight.shadowMapWidth = 2048;
+//        dirLight.shadowMapHeight = 2048;
+//
+//        var d = 300;
+//
+////        dirLight.shadowCameraLeft = -d;
+////        dirLight.shadowCameraRight = d;
+////        dirLight.shadowCameraTop = d;
+////        dirLight.shadowCameraBottom = -d;
+//
+////        dirLight.shadowCameraFar = 3500;
+//        dirLight.shadowBias = -0.0001;
+//        dirLight.shadowDarkness = 0.35;
     }
 
     function setupEnvironment(scene) {
@@ -78,20 +118,37 @@
         scene.add(models['floor'] = floor);
     }
 
+    function makePhongMaterial(normalMap, diffuseMap){
+        var ambient = 0x050505, diffuse = 0x331100, specular = 0xffffff, shininess = -1, scale = 23;
+        return  new THREE.MeshPhongMaterial( {
+            color: diffuse,
+            specular: specular,
+            ambient: ambient,
+            shininess: shininess,
+//            map: THREE.ImageUtils.loadTexture(diffuseMap, null, render),
+            normalMap: THREE.ImageUtils.loadTexture(normalMap, null, render),
+//            normalScale: -1,
+            envMap: cubemap,
+            combine: THREE.MixOperation,
+            reflectivity: 0.1
+        } );
+    }
+
     function makeShaderMaterial(normal, diffuse, specular) {
-        var shininess = 1,
+        var shininess = 0.5,
             shader = THREE.ShaderLib[ "normalmap" ],
             uniforms = THREE.UniformsUtils.clone(shader.uniforms);
 
         uniforms[ "enableDisplacement" ].value = false;
-//        uniforms[ "shininess" ].value = shininess;
+        uniforms[ "shininess" ].value = shininess;
+//        uniforms[ "uNormalScale" ].value.y = -1;
 
-//        if (normal) uniforms[ "tNormal" ].value = THREE.ImageUtils.loadTexture(normal, null, render);
+        if (normal) uniforms[ "tNormal" ].value = THREE.ImageUtils.loadTexture(normal, null, render);
 
-//        if (diffuse) {
-//            uniforms[ "enableDiffuse" ].value = true;
-//            uniforms[ 'tDiffuse'].value = THREE.ImageUtils.loadTexture(diffuse, null, render);
-//        }
+        if (diffuse) {
+            uniforms[ "enableDiffuse" ].value = true;
+            uniforms[ 'tDiffuse'].value = THREE.ImageUtils.loadTexture(diffuse, null, render);
+        }
 //        if (specular) {
 //            uniforms[ "enableSpecular" ].value = true;
 //            uniforms[ 'tSpecular'].value = THREE.ImageUtils.loadTexture(specular, null, render);
@@ -116,14 +173,6 @@
 
     function loadDummyModel(scene) {
         var loader = new THREE.OBJLoader(loadingManager),
-            cubemap = THREE.ImageUtils.loadTextureCube([
-                'assets/cubemap/pos-x.png',
-                'assets/cubemap/neg-x.png',
-                'assets/cubemap/pos-y.png',
-                'assets/cubemap/neg-y.png',
-                'assets/cubemap/pos-z.png',
-                'assets/cubemap/neg-z.png'
-            ]),
             matWithCubeMap = new THREE.MeshPhongMaterial({
                 color: 0x000000,
                 shininess: 200,
@@ -202,9 +251,9 @@
                     child.geometry.computeVertexNormals(true);
                     child.geometry.computeTangents();
                     child.material = shaderMaterial;
-                    child.material.needsUpdate = true;
-                    child.geometry.buffersNeedUpdate = true;
-                    child.geometry.uvsNeedUpdate = true;
+//                    child.material.needsUpdate = true;
+//                    child.geometry.buffersNeedUpdate = true;
+//                    child.geometry.uvsNeedUpdate = true;
                     child.castShadow = true;
                     child.receiveShadow = true;
                 }
@@ -374,8 +423,8 @@
     function updateControls() {
 
         //shadow
-        lights['directionalLight'].shadowBias = controls.bias;
-        lights['directionalLight'].shadowDarkness = controls.darkness;
+//        lights['directionalLight'].shadowBias = controls.bias;
+//        lights['directionalLight'].shadowDarkness = controls.darkness;
 
         //rotate models
 //        scene.traverse(function (e) {
@@ -411,6 +460,8 @@
         renderer.setClearColor(0xffffff);
         renderer.shadowMapEnabled = true;
         renderer.shadowMapType = THREE.PCFSoftShadowMap;
+        renderer.shadowMapCullFace = THREE.CullFaceBack;
+
 
         camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 1, 100000);
         camera.position.y = 100;
