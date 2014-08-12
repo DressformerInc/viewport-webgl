@@ -1,6 +1,6 @@
 {
     "name": "viewport-webgl",
-    "version": "0.0.21",
+    "version": "0.0.22",
     "description": "WebGL view port for plugin dressformer",
     "main": "",
     "dependencies": {},
@@ -21,7 +21,9 @@
         "glslify": "latest"
     },
     "browserify": {
-        "transform": ["glslify"]
+        "transform": [
+            "glslify"
+        ]
     },
     "scripts": {
         "install": "napa",
