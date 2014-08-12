@@ -12,6 +12,8 @@
         "gulp-replace": "^0.4.0",
         "gulp-rimraf": "latest",
         "gulp-sourcemaps": "^1.1.0",
+        "gulp-browserify": "latest",
+        "gulp-rename": "latest",
         "napa": "^0.4.1",
         "q": "^1.0.0",
         "request": "^2.34.0",
@@ -28,9 +30,8 @@
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "napa": {
-        "threejs": "mrdoob/three.js.git",
-        "threejs-controls": "Tomesch/threejs-controls",
-        "threejs-stats": "jiyinyiyong/threejs-stats",
+        "threejs": "mrdoob/three.js",
+        "threejs-stats": "mrdoob/stats.js",
         "dat.gui": "xinming/bower-dat-gui"
     },
     "repository": {

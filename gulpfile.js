@@ -3,7 +3,9 @@
  */
 var gulp = require('gulp'),
     sequence = require('run-sequence'),
+    browserify = require('gulp-browserify'),
     concat = require('gulp-concat'),
+    rename = require("gulp-rename"),
     sourcemaps = require('gulp-sourcemaps'),
     bump = require('gulp-bump'),
     exec = require('gulp-exec'),
@@ -29,13 +31,25 @@ var gulp = require('gulp'),
         assets: ['src/assets/**/*']
     };
 
-gulp.task('js', function () {
-    return gulp.src(paths.scripts)
-        .pipe(sourcemaps.init())
-        .pipe(concat('viewport-webgl.js'))
-        .pipe(sourcemaps.write())
-        .pipe(gulp.dest('src/js/'));
+
+// Basic usage
+gulp.task('js', function() {
+    gulp.src('src/js/main.js')
+        .pipe(browserify({
+            insertGlobals : true,
+            debug : !gulp.env.production
+        }))
+        .pipe(rename("viewport-webgl.js"))
+        .pipe(gulp.dest('src/js'))
 });
+
+//gulp.task('js', function () {
+//    return gulp.src(paths.scripts)
+//        .pipe(sourcemaps.init())
+//        .pipe(concat('viewport-webgl.js'))
+//        .pipe(sourcemaps.write())
+//        .pipe(gulp.dest('src/js/'));
+//});
 
 gulp.task('css', function () {
     return gulp.src(paths.css)

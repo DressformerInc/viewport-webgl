@@ -2,8 +2,8 @@
  * Created by Miha-ha on 02.08.14.
  */
 //Controls
-var d = require("dat.gui/dat.gui.js"),
-    gui,
+require("dat.gui/dat.gui.js");
+var gui,
     controllers = {},
     controls = {
         garment: [],
@@ -21,7 +21,7 @@ var d = require("dat.gui/dat.gui.js"),
 //    }
 
 function initGUI(controls) {
-    gui = new d.GUI();
+    gui = new global.dat.GUI();
     controllers['garment'] = gui.add(controls, 'garment', [
         'KPL_201407_0020_0001',
         'KPL_201407_0020_0002',

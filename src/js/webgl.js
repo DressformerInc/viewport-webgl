@@ -2,8 +2,13 @@
  * Created by Miha-ha on 01.08.14.
  */
 //WebGL
-var THREE = require('threejs/build/three'),
+var THREE = require('threejs/build/three.min'),
     glslify = require('glslify');
+
+require('./utils/objLoader');
+require('./utils/orbitControls');
+require('./utils/shaderDeferred');
+
 //private
 var container, stats, loadingManager,
     camera, scene, renderer,
@@ -31,7 +36,7 @@ console.log('shader:', shader);
 
 function showStats(container) {
     // STATS
-    var Stats = require('threejs-stats/Stats.js');
+    var Stats = require('threejs-stats/build/stats.min');
     stats = new Stats();
     stats.domElement.style.position = 'absolute';
     stats.domElement.style.bottom = '0px';
