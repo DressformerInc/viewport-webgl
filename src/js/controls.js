@@ -48,9 +48,9 @@ function initGUI(controls) {
     controllers['speed'] = rotateFolder.add(controls, 'speed');
     var dof = gui.addFolder("DOF");
     controllers['dof'] = dof.add(controls, 'dof');
-    controllers['focus'] = dof.add(controls, 'focus');
-    controllers['aperture'] = dof.add(controls, 'aperture');
-    controllers['maxblur'] = dof.add(controls, 'maxblur');
+    controllers['focus'] = dof.add(controls, 'focus', 0.0, 3.0, 0.025);
+    controllers['aperture'] = dof.add(controls, 'aperture', 0.001, 0.2, 0.001 );
+    controllers['maxblur'] = dof.add(controls, 'maxblur', 0.0, 3.0, 0.025);
 
 }
 
