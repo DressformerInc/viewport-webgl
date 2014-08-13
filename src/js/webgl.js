@@ -10,7 +10,8 @@ require('threejs/examples/js/controls/OrbitControls');
 //require('./utils/shaderDeferred');
 
 //private
-var container, stats, loadingManager,
+var screenWidth = global.innerWidth, screenHeight = global.innerHeight,
+    container, stats, loadingManager, objLoader,
     camera, scene, renderer,
     lights = {},
     models = {},
@@ -257,13 +258,12 @@ function loadModel(name, cb) {
         objPath = basePath + name + ".obj",
         normalPath = basePath + name + "_normal.jpg",
         diffusePath = basePath + name + "_diffuse.jpg",
-        loader = new THREE.OBJLoader(loadingManager),
         shaderMaterial = makeShaderMaterial(
             normalPath,
             diffusePath
         );
 
-    loader.load(objPath, function (model) {
+    objLoader.load(objPath, function (model) {
 
         model.traverse(function (child) {
             if (child instanceof THREE.Mesh) {
@@ -470,7 +470,7 @@ function init() {
         }
         renderStart = Date.now();
     };
-
+    objLoader = new THREE.OBJLoader(loadingManager);
 
     renderer = new THREE.WebGLRenderer({
         antialias: true,
@@ -484,7 +484,7 @@ function init() {
     renderer.shadowMapCullFace = THREE.CullFaceBack;
 
 
-    camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 1, 100000);
+    camera = new THREE.PerspectiveCamera(40, screenWidth / screenHeight, 1, 100000);
     camera.position.y = 100;
     camera.position.z = 320;
 
@@ -492,20 +492,13 @@ function init() {
 
     setupLight(scene);
     setupEnvironment(scene);
-//        loadModels(scene);
     loadDummyModel(scene);
-//        loadPantsModel(scene);
-//        loadSweaterModel(scene);
-    //ADS_201407_0005_0001
     loadModel(controls.garment, function (model) {
         models['garment'] = model;
         scene.add(model);
         render();
     });
-//        loadModelFromWeb('KPL_201307_0125_0023_M', function (model) {
-//            console.log('model loaded from web:', model);
-//            scene.add(model);
-//        });
+
 
     orbitControl = new THREE.OrbitControls(camera, renderer.domElement);
     orbitControl.target.y = 100;
@@ -517,20 +510,19 @@ function init() {
     });
     orbitControl.update();
 
-    container = document.getElementById('container');
+    container = global.document.getElementById('container');
     container.appendChild(renderer.domElement);
 
     showStats(container);
 
-    window.addEventListener('resize', onWindowResize, false);
+    global.addEventListener('resize', onWindowResize, false);
     onWindowResize();
-
     update();
 }
 
 function update() {
     if (Date.now() - renderStart < 700) {
-        render();
+        renderer.render(scene, camera);
     }
     //controls
     updateControls();
@@ -541,18 +533,16 @@ function update() {
 }
 
 function render() {
-
-    renderer.render(scene, camera);
-
+    renderStart = Date.now();
 }
 
 function onWindowResize() {
-
-    camera.aspect = window.innerWidth / window.innerHeight;
+    screenWidth = global.innerWidth;
+    screenHeight = global.innerHeight;
+    camera.aspect = screenWidth / screenHeight;
     camera.updateProjectionMatrix();
 
-
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setSize(screenWidth, screenHeight);
     render();
 }
 
