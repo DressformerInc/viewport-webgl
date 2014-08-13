@@ -7,12 +7,27 @@ var THREE = global.THREE = require('threejs/build/three.min'),
 
 require('threejs/examples/js/loaders/OBJLoader');
 require('threejs/examples/js/controls/OrbitControls');
-//require('./utils/shaderDeferred');
+
+require('threejs/examples/js/shaders/CopyShader');
+require('threejs/examples/js/shaders/BokehShader');
+require('threejs/examples/js/shaders/FXAAShader');
+
+
+require('threejs/examples/js/postprocessing/EffectComposer');
+require('threejs/examples/js/postprocessing/RenderPass');
+require('threejs/examples/js/postprocessing/ShaderPass');
+require('threejs/examples/js/postprocessing/MaskPass');
+require('threejs/examples/js/postprocessing/BokehPass');
 
 //private
-var screenWidth = global.innerWidth, screenHeight = global.innerHeight,
+var screenWidth = global.innerWidth,
+    screenHeight = global.innerHeight,
+    DPR = global.devicePixelRatio || 1,
+    screenWidthDPR = screenWidth*DPR,
+    screenHeightDPR = screenHeight*DPR,
     container, stats, loadingManager, objLoader,
     camera, scene, renderer,
+    postprocessing = {},
     lights = {},
     models = {},
     controls,
@@ -77,7 +92,7 @@ function setupLight(scene) {
      */
 
 
-    var directionalLight = new THREE.DirectionalLight(0xffffff, 0.7);
+    var directionalLight = new THREE.DirectionalLight(0xffffff, 1);
 //    directionalLight.onlyShadow = true;
     directionalLight.position.x = 300;
     directionalLight.position.z = 500;
@@ -139,22 +154,6 @@ function setupEnvironment(scene) {
     scene.add(models['floor'] = floor);
 }
 
-function makePhongMaterial(normalMap, diffuseMap) {
-    var ambient = 0x050505, diffuse = 0x331100, specular = 0xffffff, shininess = -1, scale = 23;
-    return  new THREE.MeshPhongMaterial({
-        color: diffuse,
-        specular: specular,
-        ambient: ambient,
-        shininess: shininess,
-//            map: THREE.ImageUtils.loadTexture(diffuseMap, null, render),
-        normalMap: THREE.ImageUtils.loadTexture(normalMap, null, render),
-//            normalScale: -1,
-        envMap: cubemap,
-        combine: THREE.MixOperation,
-        reflectivity: 0.1
-    });
-}
-
 function makeShaderMaterial(normal, diffuse, specular) {
     var shininess = 0.5,
         shader = THREE.ShaderLib[ "normalmap" ],
@@ -197,9 +196,10 @@ function loadDummyModel(scene) {
     var loader = new THREE.OBJLoader(loadingManager),
         matWithCubeMap = new THREE.MeshPhongMaterial({
             color: 0x000000,
-            shininess: 200,
+            shininess: 100,
             reflectivity: 0.7,
-            envMap: cubemap
+            envMap: cubemap,
+            shading: THREE.SmoothShading
         });
 
     loader.load('assets/models/obj/dummy/DummyLP.OBJ', function (dummy) {
@@ -419,8 +419,6 @@ function initControls() {
     var Ctrl = require("./controls").init();
     controls = Ctrl.controls;
 
-    console.log('garment:', controls.garment);
-
     Ctrl.onChange('shadow', function (value) {
         if (value) {
             renderer.shadowMapAutoUpdate = true;
@@ -441,6 +439,20 @@ function initControls() {
             scene.add(model);
         })
     });
+
+    function dofChanged(){
+        postprocessing.bokeh.enabled = controls.dof;
+        renderer.autoClear = !controls.dof;
+        postprocessing.bokeh.uniforms[ "focus" ].value = controls.focus;
+        postprocessing.bokeh.uniforms[ "aperture" ].value = controls.aperture;
+        postprocessing.bokeh.uniforms[ "maxblur" ].value = controls.maxblur;
+        startRender();
+    }
+
+    Ctrl.onChange('dof', dofChanged);
+    Ctrl.onChange('focus', dofChanged);
+    Ctrl.onChange('aperture', dofChanged);
+    Ctrl.onChange('maxblur', dofChanged);
 }
 
 function updateControls() {
@@ -455,6 +467,35 @@ function updateControls() {
         models['garment'].rotation.y += controls.speed;
         renderStart = Date.now();
     }
+
+}
+
+function initPostprocessing() {
+    var renderPass = new THREE.RenderPass(scene, camera),
+        bokehPass = new THREE.BokehPass(scene, camera, {
+            focus: 1.0,
+            aperture: 0.025,
+            maxblur: 1.0,
+
+            width: screenWidthDPR,
+            height: screenHeightDPR
+        }),
+        FXAA = new THREE.ShaderPass( THREE.FXAAShader),
+        composer = new THREE.EffectComposer(renderer);
+
+    // FXAA
+    FXAA.uniforms[ 'resolution' ].value.set( 1 / screenHeightDPR, 1 / screenHeightDPR );
+    FXAA.renderToScreen = true;
+
+    bokehPass.renderToScreen = true;
+
+    composer.addPass(renderPass);
+    composer.addPass(bokehPass);
+//    composer.addPass(FXAA);
+
+    postprocessing.composer = composer;
+    postprocessing.bokeh = bokehPass;
+    postprocessing.fxaa = FXAA;
 
 }
 
@@ -473,11 +514,14 @@ function init() {
     objLoader = new THREE.OBJLoader(loadingManager);
 
     renderer = new THREE.WebGLRenderer({
-        antialias: true,
-        alpha: true
+        antialias: false,
+        alpha: false
     });
     renderer.setClearColor(0xffffff);
     renderer.autoClear = true;
+    renderer.gammaInput = true;
+    renderer.gammaOutput = true;
+    renderer.sortObjects = false;
     renderer.shadowMapEnabled = true;
     renderer.shadowMapAutoUpdate = true;
     renderer.shadowMapType = THREE.PCFSoftShadowMap;
@@ -489,6 +533,10 @@ function init() {
     camera.position.z = 320;
 
     scene = new THREE.Scene();
+
+    scene.matrixAutoUpdate = false;
+    initPostprocessing();
+    renderer.autoClear = false;
 
     setupLight(scene);
     setupEnvironment(scene);
@@ -522,7 +570,7 @@ function init() {
 
 function update() {
     if (Date.now() - renderStart < 700) {
-        renderer.render(scene, camera);
+        render();
     }
     //controls
     updateControls();
@@ -533,6 +581,11 @@ function update() {
 }
 
 function render() {
+    postprocessing.composer.render(0.1);
+    renderer.render(scene, camera);
+}
+
+function startRender() {
     renderStart = Date.now();
 }
 
@@ -542,8 +595,9 @@ function onWindowResize() {
     camera.aspect = screenWidth / screenHeight;
     camera.updateProjectionMatrix();
 
-    renderer.setSize(screenWidth, screenHeight);
-    render();
+    renderer.setSize(screenWidth, screenHeight, true);
+    postprocessing.composer.setSize( screenWidthDPR, screenHeightDPR);
+    startRender();
 }
 
 

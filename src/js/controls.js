@@ -13,7 +13,12 @@ var gui,
         darkness: 0.07,
         //rotate
         rotate: false,
-        speed: 0.02
+        speed: 0.02,
+        //dof
+        dof: true,
+        focus: 1.0,
+        aperture: 0.025,
+        maxblur: 1.0
     };
 
 //    function controls() {
@@ -41,6 +46,11 @@ function initGUI(controls) {
     var rotateFolder = gui.addFolder("Rotate");
     controllers['rotate'] = rotateFolder.add(controls, 'rotate').listen();
     controllers['speed'] = rotateFolder.add(controls, 'speed');
+    var dof = gui.addFolder("DOF");
+    controllers['dof'] = dof.add(controls, 'dof');
+    controllers['focus'] = dof.add(controls, 'focus');
+    controllers['aperture'] = dof.add(controls, 'aperture');
+    controllers['maxblur'] = dof.add(controls, 'maxblur');
 
 }
 
