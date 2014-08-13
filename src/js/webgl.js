@@ -2,12 +2,12 @@
  * Created by Miha-ha on 01.08.14.
  */
 //WebGL
-var THREE = require('threejs/build/three.min'),
+var THREE = global.THREE = require('threejs/build/three.min'),
     glslify = require('glslify');
 
-require('./utils/objLoader');
-require('./utils/orbitControls');
-require('./utils/shaderDeferred');
+require('threejs/examples/js/loaders/OBJLoader');
+require('threejs/examples/js/controls/OrbitControls');
+//require('./utils/shaderDeferred');
 
 //private
 var container, stats, loadingManager,
@@ -26,13 +26,13 @@ var container, stats, loadingManager,
         'assets/cubemap/neg-z.png'
     ]);
 
-var shader = glslify({
-    vertex: '../shaders/clipdepth/vert.glsl',
-    fragment: '../shaders/clipdepth/frag.glsl',
-    sourceOnly: true
-});
-
-console.log('shader:', shader);
+//var shader = glslify({
+//    vertex: '../shaders/clipdepth/vert.glsl',
+//    fragment: '../shaders/clipdepth/frag.glsl',
+//    sourceOnly: true
+//});
+//
+//console.log('shader:', shader);
 
 function showStats(container) {
     // STATS
@@ -76,7 +76,8 @@ function setupLight(scene) {
      */
 
 
-    var directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+    var directionalLight = new THREE.DirectionalLight(0xffffff, 0.7);
+//    directionalLight.onlyShadow = true;
     directionalLight.position.x = 300;
     directionalLight.position.z = 500;
     directionalLight.position.y = 1000;
@@ -86,6 +87,18 @@ function setupLight(scene) {
     directionalLight.shadowMapWidth = 2048;
     directionalLight.shadowMapHeight = 2048;
     scene.add(lights['directionalLight'] = directionalLight);
+
+    var directionalLight2 = new THREE.DirectionalLight(0xffffff, 0.5);
+//    directionalLight.onlyShadow = true;
+    directionalLight2.position.x = -500;
+    directionalLight2.position.z = 300;
+    directionalLight2.position.y = 800;
+    directionalLight2.castShadow = true;
+    directionalLight2.shadowBias = 0.0001;
+    directionalLight2.shadowDarkness = 0.01;
+    directionalLight2.shadowMapWidth = 2048;
+    directionalLight2.shadowMapHeight = 2048;
+    scene.add(lights['directionalLight2'] = directionalLight2);
 
 //        var dirLight = new THREE.DirectionalLight( 0xffffff, 1 );
 //        dirLight.color.setHSL( 0.1, 1, 0.95 );
@@ -417,11 +430,11 @@ function initControls() {
     });
 
     Ctrl.onChange('garment', function (value) {
-        console.log('garment changed:', arguments);
         scene.remove(models['garment']);
         controls.rotate = false;
-        models['dummy'].rotation.set(0, 0, 0);
+        var dummyRotation = models['dummy'].rotation;
         loadModel(value, function (model) {
+            model.rotation.set(dummyRotation.x, dummyRotation.y, dummyRotation.z, 'XYZ');
             models['garment'] = model;
             scene.add(model);
         })
@@ -431,19 +444,15 @@ function initControls() {
 function updateControls() {
 
     //shadow
-//        lights['directionalLight'].shadowBias = controls.bias;
-//        lights['directionalLight'].shadowDarkness = controls.darkness;
+    lights['directionalLight'].shadowBias = controls.bias;
+    lights['directionalLight'].shadowDarkness = controls.darkness;
 
     //rotate models
-//        scene.traverse(function (e) {
-//            if (e instanceof THREE.Mesh && e != models['floor']) {
-//                if (controls.rotate) {
-//                    e.rotation.y += controls.speed;
-//                    render();
-//                }
-//            }
-//        });
-
+    if (controls.rotate) {
+        models['dummy'].rotation.y += controls.speed;
+        models['garment'].rotation.y += controls.speed;
+        renderStart = Date.now();
+    }
 
 }
 
@@ -455,9 +464,9 @@ function init() {
     loadingManager.onProgress = function (item, loaded, total) {
         console.log('loading manager:', item, loaded, total);
         if (total > 1 && loaded === total) {
-            controls.rotate = true;
+//            controls.rotate = true;
         }
-        render();
+        renderStart = Date.now();
     };
 
 
@@ -466,7 +475,9 @@ function init() {
         alpha: true
     });
     renderer.setClearColor(0xffffff);
+    renderer.autoClear = true;
     renderer.shadowMapEnabled = true;
+    renderer.shadowMapAutoUpdate = true;
     renderer.shadowMapType = THREE.PCFSoftShadowMap;
     renderer.shadowMapCullFace = THREE.CullFaceBack;
 
@@ -497,12 +508,13 @@ function init() {
     orbitControl = new THREE.OrbitControls(camera, renderer.domElement);
     orbitControl.target.y = 100;
 //    orbitControl.autoRotate = true;
-    orbitControl.minPolarAngle = Math.PI/6; // radians
-    orbitControl.maxPolarAngle = Math.PI/1.6; // radians
+    orbitControl.minPolarAngle = Math.PI / 6; // radians
+    orbitControl.maxPolarAngle = Math.PI / 1.6; // radians
     orbitControl.addEventListener('change', function () {
         renderStart = Date.now();
-//            render();
+//        console.log('orbit control change:', arguments, orbitControl.rotateDelta);
     });
+    orbitControl.update();
 
     container = document.getElementById('container');
     container.appendChild(renderer.domElement);
@@ -516,15 +528,15 @@ function init() {
 }
 
 function update() {
-    requestAnimationFrame(update);
-
     if (Date.now() - renderStart < 700) {
         render();
     }
     //controls
     updateControls();
-
+//    orbitControl.update();
     if (stats) stats.update();
+
+    requestAnimationFrame(update);
 }
 
 function render() {
