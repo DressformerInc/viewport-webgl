@@ -6,7 +6,7 @@ require("dat.gui/dat.gui.js");
 var gui,
     controllers = {},
     controls = {
-        garment: [],
+        garment: 'KPL_201407_0020_0005',
         //shadow
         shadow: true,
         bias: 0.0001,

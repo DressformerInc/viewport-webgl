@@ -419,6 +419,8 @@ function initControls() {
     var Ctrl = require("./controls").init();
     controls = Ctrl.controls;
 
+    console.log('garment:', controls.garment);
+
     Ctrl.onChange('shadow', function (value) {
         if (value) {
             renderer.shadowMapAutoUpdate = true;
@@ -495,7 +497,7 @@ function init() {
 //        loadPantsModel(scene);
 //        loadSweaterModel(scene);
     //ADS_201407_0005_0001
-    loadModel('KPL_201407_0020_0001', function (model) {
+    loadModel(controls.garment, function (model) {
         models['garment'] = model;
         scene.add(model);
         render();
@@ -512,7 +514,6 @@ function init() {
     orbitControl.maxPolarAngle = Math.PI / 1.6; // radians
     orbitControl.addEventListener('change', function () {
         renderStart = Date.now();
-//        console.log('orbit control change:', arguments, orbitControl.rotateDelta);
     });
     orbitControl.update();
 
