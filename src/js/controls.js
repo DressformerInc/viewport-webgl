@@ -3,10 +3,15 @@
  */
 //Controls
 require("dat.gui/dat.gui.js");
+require('dat.gui/dat.color.js');
 var gui,
     controllers = {},
     controls = {
         garment: 'KPL_201407_0020_0005',
+        //dummy
+        dummy: {
+            color: '#000000'
+        },
         //light1
         light1: {
             enable: true,
@@ -57,6 +62,9 @@ function initGUI(controls) {
         'KPL_201407_0020_0009',
         'KPL_201407_0020_0010'
     ]);
+    var dummyFolder = gui.addFolder('dummy');
+    controllers['dummy.color'] = dummyFolder.add(controls.dummy, 'color');
+
     var light1Folder = gui.addFolder('Light1');
     controllers['light1.enable'] = light1Folder.add(controls.light1, 'enable');
     controllers['light1.intensity'] = light1Folder.add(controls.light1, 'intensity', 0, 1, 0.01);

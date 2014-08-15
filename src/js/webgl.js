@@ -431,6 +431,22 @@ function initControls() {
         }
     }
 
+    function dofChanged(){
+        postprocessing.bokeh.enabled = controls.dof;
+        renderer.autoClear = !controls.dof;
+        renderer.antialias = !controls.dof;
+        postprocessing.bokeh.uniforms[ "focus" ].value = controls.focus;
+        postprocessing.bokeh.uniforms[ "aperture" ].value = controls.aperture;
+        postprocessing.bokeh.uniforms[ "maxblur" ].value = controls.maxblur;
+        startRender();
+    }
+
+    Ctrl.onChange('dummy.color', function (value) {
+        var newColor = '0x'+value.substring(1, value.length);
+        console.log('dummy.color changed:', value, newColor, models['dummy']);
+        models['dummy'].children[0].material.color.setHex(newColor);
+    });
+
     Ctrl.onChange('light1.enable', lightChanged('light1'));
     Ctrl.onChange('light1.intensity', lightChanged('light1'));
     Ctrl.onChange('light1.x', lightChanged('light1'));
@@ -449,7 +465,6 @@ function initControls() {
     Ctrl.onChange('light2.bias', lightChanged('light2'));
     Ctrl.onChange('light2.darkness', lightChanged('light2'));
 
-
     Ctrl.onChange('garment', function (value) {
         scene.remove(models['garment']);
         controls.rotate = false;
@@ -460,16 +475,6 @@ function initControls() {
             scene.add(model);
         })
     });
-
-    function dofChanged(){
-        postprocessing.bokeh.enabled = controls.dof;
-        renderer.autoClear = !controls.dof;
-        renderer.antialias = !controls.dof;
-        postprocessing.bokeh.uniforms[ "focus" ].value = controls.focus;
-        postprocessing.bokeh.uniforms[ "aperture" ].value = controls.aperture;
-        postprocessing.bokeh.uniforms[ "maxblur" ].value = controls.maxblur;
-        startRender();
-    }
 
     Ctrl.onChange('dof', dofChanged);
     Ctrl.onChange('focus', dofChanged);
