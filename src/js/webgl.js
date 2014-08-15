@@ -92,7 +92,8 @@ function setupLight(scene) {
      */
 
 
-    var light1 = new THREE.DirectionalLight(0xffffff, 1);
+//    var light1 = new THREE.DirectionalLight(0xffffff, 1);
+    var light1 = new THREE.SpotLight(0xffffff, 1);
 //    directionalLight.onlyShadow = true;
     light1.position.x = controls.light1.x;
     light1.position.z = controls.light1.z;
@@ -104,7 +105,7 @@ function setupLight(scene) {
     light1.shadowMapHeight = 2048;
     scene.add(lights['light1'] = light1);
 
-    var light2 = new THREE.DirectionalLight(0xffffff, 0.5);
+    var light2 = new THREE.SpotLight(0xffffff, 0.5);
 //    directionalLight.onlyShadow = true;
     light2.position.x = -500;
     light2.position.z = 300;
