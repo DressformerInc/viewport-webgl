@@ -10,17 +10,25 @@ var gui,
         //light1
         light1: {
             enable: true,
+            intensity: 1,
             x:300,
             y:500,
             z:100,
             shadow: true,
             bias: 0.0001,
-            darkness: 0.07
+            darkness: 0.1
         },
-        //shadow
-        shadow: true,
-        bias: 0.0001,
-        darkness: 0.07,
+        //light2
+        light2: {
+            enable: true,
+            intensity: 0.5,
+            x:-500,
+            y:800,
+            z:300,
+            shadow: true,
+            bias: 0.0001,
+            darkness: 0.01
+        },
         //rotate
         rotate: false,
         speed: 0.02,
@@ -51,20 +59,29 @@ function initGUI(controls) {
     ]);
     var light1Folder = gui.addFolder('Light1');
     controllers['light1.enable'] = light1Folder.add(controls.light1, 'enable');
-    controllers['light1.x'] = light1Folder.add(controls.light1, 'x');
-    controllers['light1.y'] = light1Folder.add(controls.light1, 'y');
-    controllers['light1.z'] = light1Folder.add(controls.light1, 'z');
+    controllers['light1.intensity'] = light1Folder.add(controls.light1, 'intensity', 0, 1, 0.01);
+    controllers['light1.x'] = light1Folder.add(controls.light1, 'x', -1000, 1000, 10);
+    controllers['light1.y'] = light1Folder.add(controls.light1, 'y', -1000, 1000, 10);
+    controllers['light1.z'] = light1Folder.add(controls.light1, 'z', -1000, 1000, 10);
     controllers['light1.shadow'] = light1Folder.add(controls.light1, 'shadow');
     controllers['light1.bias'] = light1Folder.add(controls.light1, 'bias');
-    controllers['light1.darkness'] = light1Folder.add(controls.light1, 'darkness');
+    controllers['light1.darkness'] = light1Folder.add(controls.light1, 'darkness', 0, 1, 0.01);
 
-    var shadowFolder = gui.addFolder("Shadow");
-    controllers['shadow'] = shadowFolder.add(controls, 'shadow');
-    controllers['bias'] = shadowFolder.add(controls, 'bias');
-    controllers['darknss'] = shadowFolder.add(controls, 'darkness');
+    var light2Folder = gui.addFolder('Light2');
+    controllers['light2.enable'] = light2Folder.add(controls.light2, 'enable');
+    controllers['light2.intensity'] = light2Folder.add(controls.light2, 'intensity', 0, 1, 0.01);
+    controllers['light2.x'] = light2Folder.add(controls.light2, 'x', -1000, 1000, 10);
+    controllers['light2.y'] = light2Folder.add(controls.light2, 'y', -1000, 1000, 10);
+    controllers['light2.z'] = light2Folder.add(controls.light2, 'z', -1000, 1000, 10);
+    controllers['light2.shadow'] = light2Folder.add(controls.light2, 'shadow');
+    controllers['light2.bias'] = light2Folder.add(controls.light2, 'bias');
+    controllers['light2.darkness'] = light2Folder.add(controls.light2, 'darkness', 0, 1, 0.01);
+
+
     var rotateFolder = gui.addFolder("Rotate");
     controllers['rotate'] = rotateFolder.add(controls, 'rotate').listen();
     controllers['speed'] = rotateFolder.add(controls, 'speed');
+
     var dof = gui.addFolder("DOF");
     controllers['dof'] = dof.add(controls, 'dof');
     controllers['focus'] = dof.add(controls, 'focus', 0.0, 3.0, 0.025);

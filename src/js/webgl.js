@@ -92,51 +92,30 @@ function setupLight(scene) {
      */
 
 
-    var dirLight1 = new THREE.DirectionalLight(0xffffff, 1);
+    var light1 = new THREE.DirectionalLight(0xffffff, 1);
 //    directionalLight.onlyShadow = true;
-    dirLight1.position.x = controls.light1.x;
-    dirLight1.position.z = controls.light1.z;
-    dirLight1.position.y = controls.light1.y;
-    dirLight1.castShadow = true;
-    dirLight1.shadowBias = 0.0001;
-    dirLight1.shadowDarkness = 0.1;
-    dirLight1.shadowMapWidth = 2048;
-    dirLight1.shadowMapHeight = 2048;
-    scene.add(lights['directionalLight'] = dirLight1);
+    light1.position.x = controls.light1.x;
+    light1.position.z = controls.light1.z;
+    light1.position.y = controls.light1.y;
+    light1.castShadow = true;
+    light1.shadowBias = 0.0001;
+    light1.shadowDarkness = 0.1;
+    light1.shadowMapWidth = 2048;
+    light1.shadowMapHeight = 2048;
+    scene.add(lights['light1'] = light1);
 
-    var directionalLight2 = new THREE.DirectionalLight(0xffffff, 0.5);
+    var light2 = new THREE.DirectionalLight(0xffffff, 0.5);
 //    directionalLight.onlyShadow = true;
-    directionalLight2.position.x = -500;
-    directionalLight2.position.z = 300;
-    directionalLight2.position.y = 800;
-    directionalLight2.castShadow = true;
-    directionalLight2.shadowBias = 0.0001;
-    directionalLight2.shadowDarkness = 0.01;
-    directionalLight2.shadowMapWidth = 2048;
-    directionalLight2.shadowMapHeight = 2048;
-    scene.add(lights['directionalLight2'] = directionalLight2);
+    light2.position.x = -500;
+    light2.position.z = 300;
+    light2.position.y = 800;
+    light2.castShadow = true;
+    light2.shadowBias = 0.0001;
+    light2.shadowDarkness = 0.01;
+    light2.shadowMapWidth = 2048;
+    light2.shadowMapHeight = 2048;
+    scene.add(lights['light2'] = light2);
 
-//        var dirLight = new THREE.DirectionalLight( 0xffffff, 1 );
-//        dirLight.color.setHSL( 0.1, 1, 0.95 );
-//        dirLight.position.set( -1, 1.75, 1 );
-//        dirLight.position.multiplyScalar( 50 );
-//        scene.add(lights['directionalLight'] = dirLight );
-//
-//        dirLight.castShadow = true;
-//
-//        dirLight.shadowMapWidth = 2048;
-//        dirLight.shadowMapHeight = 2048;
-//
-//        var d = 300;
-//
-////        dirLight.shadowCameraLeft = -d;
-////        dirLight.shadowCameraRight = d;
-////        dirLight.shadowCameraTop = d;
-////        dirLight.shadowCameraBottom = -d;
-//
-////        dirLight.shadowCameraFar = 3500;
-//        dirLight.shadowBias = -0.0001;
-//        dirLight.shadowDarkness = 0.35;
 }
 
 function setupEnvironment(scene) {
@@ -421,7 +400,6 @@ function initControls() {
     controls = Ctrl.controls;
 
     function shadowEnable(light, flag) {
-        console.log('shadow enable:', flag);
         if (flag) {
             renderer.shadowMapAutoUpdate = true;
         } else {
@@ -430,30 +408,45 @@ function initControls() {
         }
     }
 
-    function light1Changed() {
-        var light1 = lights['directionalLight'];
-        light1.visible = controls.light1.enable;
-        light1.position.x = controls.light1.x;
-        light1.position.y = controls.light1.y;
-        light1.position.z = controls.light1.z;
-        light1.shadowBias = controls.light1.bias;
-        light1.shadowDarkness = controls.light1.darkness;
+    function lightChanged(name) {
+        return function () {
+            var ctrl = controls[name],
+                light = lights[name];
 
-        if (!light1.visible){
-            shadowEnable(light1, false);
-        }else {
-            shadowEnable(light1, controls.light1.shadow);
+            light.visible = ctrl.enable;
+            light.intensity = ctrl.intensity;
+            light.position.x = ctrl.x;
+            light.position.y = ctrl.y;
+            light.position.z = ctrl.z;
+            light.shadowBias = ctrl.bias;
+            light.shadowDarkness = ctrl.darkness;
+
+            if (!light.visible){
+                shadowEnable(light, false);
+            }else {
+                shadowEnable(light, ctrl.shadow);
+            }
+
         }
-
     }
 
-    Ctrl.onChange('light1.enable', light1Changed);
-    Ctrl.onChange('light1.x', light1Changed);
-    Ctrl.onChange('light1.y', light1Changed);
-    Ctrl.onChange('light1.z', light1Changed);
-    Ctrl.onChange('light1.shadow', light1Changed);
-    Ctrl.onChange('light1.bias', light1Changed);
-    Ctrl.onChange('light1.darkness', light1Changed);
+    Ctrl.onChange('light1.enable', lightChanged('light1'));
+    Ctrl.onChange('light1.intensity', lightChanged('light1'));
+    Ctrl.onChange('light1.x', lightChanged('light1'));
+    Ctrl.onChange('light1.y', lightChanged('light1'));
+    Ctrl.onChange('light1.z', lightChanged('light1'));
+    Ctrl.onChange('light1.shadow', lightChanged('light1'));
+    Ctrl.onChange('light1.bias', lightChanged('light1'));
+    Ctrl.onChange('light1.darkness', lightChanged('light1'));
+
+    Ctrl.onChange('light2.enable', lightChanged('light2'));
+    Ctrl.onChange('light2.intensity', lightChanged('light2'));
+    Ctrl.onChange('light2.x', lightChanged('light2'));
+    Ctrl.onChange('light2.y', lightChanged('light2'));
+    Ctrl.onChange('light2.z', lightChanged('light2'));
+    Ctrl.onChange('light2.shadow', lightChanged('light2'));
+    Ctrl.onChange('light2.bias', lightChanged('light2'));
+    Ctrl.onChange('light2.darkness', lightChanged('light2'));
 
 
     Ctrl.onChange('garment', function (value) {
@@ -470,6 +463,7 @@ function initControls() {
     function dofChanged(){
         postprocessing.bokeh.enabled = controls.dof;
         renderer.autoClear = !controls.dof;
+        renderer.antialias = !controls.dof;
         postprocessing.bokeh.uniforms[ "focus" ].value = controls.focus;
         postprocessing.bokeh.uniforms[ "aperture" ].value = controls.aperture;
         postprocessing.bokeh.uniforms[ "maxblur" ].value = controls.maxblur;
@@ -531,7 +525,7 @@ function init() {
     objLoader = new THREE.OBJLoader(loadingManager);
 
     renderer = new THREE.WebGLRenderer({
-        antialias: false,
+        antialias: true,
         alpha: false
     });
     renderer.setClearColor(0xffffff);
@@ -553,7 +547,7 @@ function init() {
 
     scene.matrixAutoUpdate = false;
     initPostprocessing();
-    renderer.autoClear = false;
+//    renderer.autoClear = false;
 
     setupLight(scene);
     setupEnvironment(scene);
@@ -604,8 +598,8 @@ function update() {
 }
 
 function render() {
-    postprocessing.composer.render(0.1);
     renderer.render(scene, camera);
+//    postprocessing.composer.render(0.1);
 }
 
 function startRender() {
