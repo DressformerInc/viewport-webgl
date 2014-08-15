@@ -92,17 +92,17 @@ function setupLight(scene) {
      */
 
 
-    var directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+    var dirLight1 = new THREE.DirectionalLight(0xffffff, 1);
 //    directionalLight.onlyShadow = true;
-    directionalLight.position.x = 300;
-    directionalLight.position.z = 500;
-    directionalLight.position.y = 1000;
-    directionalLight.castShadow = true;
-    directionalLight.shadowBias = 0.0001;
-    directionalLight.shadowDarkness = 0.1;
-    directionalLight.shadowMapWidth = 2048;
-    directionalLight.shadowMapHeight = 2048;
-    scene.add(lights['directionalLight'] = directionalLight);
+    dirLight1.position.x = controls.light1.x;
+    dirLight1.position.z = controls.light1.z;
+    dirLight1.position.y = controls.light1.y;
+    dirLight1.castShadow = true;
+    dirLight1.shadowBias = 0.0001;
+    dirLight1.shadowDarkness = 0.1;
+    dirLight1.shadowMapWidth = 2048;
+    dirLight1.shadowMapHeight = 2048;
+    scene.add(lights['directionalLight'] = dirLight1);
 
     var directionalLight2 = new THREE.DirectionalLight(0xffffff, 0.5);
 //    directionalLight.onlyShadow = true;
@@ -272,6 +272,7 @@ function loadModel(name, cb) {
                 child.geometry.computeVertexNormals(true);
                 child.geometry.computeTangents();
                 child.material = shaderMaterial;
+                child.material.needsUpdate = true;
 //                    child.material.needsUpdate = true;
 //                    child.geometry.buffersNeedUpdate = true;
 //                    child.geometry.uvsNeedUpdate = true;
@@ -419,15 +420,41 @@ function initControls() {
     var Ctrl = require("./controls").init();
     controls = Ctrl.controls;
 
-    Ctrl.onChange('shadow', function (value) {
-        if (value) {
+    function shadowEnable(light, flag) {
+        console.log('shadow enable:', flag);
+        if (flag) {
             renderer.shadowMapAutoUpdate = true;
         } else {
             renderer.shadowMapAutoUpdate = false;
-            renderer.clearTarget(lights['directionalLight'].shadowMap);
+            renderer.clearTarget(light.shadowMap);
         }
-        renderStart = Date.now();
-    });
+    }
+
+    function light1Changed() {
+        var light1 = lights['directionalLight'];
+        light1.visible = controls.light1.enable;
+        light1.position.x = controls.light1.x;
+        light1.position.y = controls.light1.y;
+        light1.position.z = controls.light1.z;
+        light1.shadowBias = controls.light1.bias;
+        light1.shadowDarkness = controls.light1.darkness;
+
+        if (!light1.visible){
+            shadowEnable(light1, false);
+        }else {
+            shadowEnable(light1, controls.light1.shadow);
+        }
+
+    }
+
+    Ctrl.onChange('light1.enable', light1Changed);
+    Ctrl.onChange('light1.x', light1Changed);
+    Ctrl.onChange('light1.y', light1Changed);
+    Ctrl.onChange('light1.z', light1Changed);
+    Ctrl.onChange('light1.shadow', light1Changed);
+    Ctrl.onChange('light1.bias', light1Changed);
+    Ctrl.onChange('light1.darkness', light1Changed);
+
 
     Ctrl.onChange('garment', function (value) {
         scene.remove(models['garment']);
@@ -453,21 +480,11 @@ function initControls() {
     Ctrl.onChange('focus', dofChanged);
     Ctrl.onChange('aperture', dofChanged);
     Ctrl.onChange('maxblur', dofChanged);
-}
 
-function updateControls() {
-
-    //shadow
-    lights['directionalLight'].shadowBias = controls.bias;
-    lights['directionalLight'].shadowDarkness = controls.darkness;
-
-    //rotate models
-    if (controls.rotate) {
-        models['dummy'].rotation.y += controls.speed;
-        models['garment'].rotation.y += controls.speed;
-        renderStart = Date.now();
-    }
-
+    Ctrl.onChangeAll(function(){
+        console.log('on change all', arguments);
+        startRender();
+    });
 }
 
 function initPostprocessing() {
@@ -572,8 +589,14 @@ function update() {
     if (Date.now() - renderStart < 700) {
         render();
     }
-    //controls
-    updateControls();
+
+    //rotate models
+    if (controls && controls.rotate) {
+        models['dummy'].rotation.y += controls.speed;
+        models['garment'].rotation.y += controls.speed;
+        renderStart = Date.now();
+    }
+
 //    orbitControl.update();
     if (stats) stats.update();
 

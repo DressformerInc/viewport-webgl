@@ -7,6 +7,16 @@ var gui,
     controllers = {},
     controls = {
         garment: 'KPL_201407_0020_0005',
+        //light1
+        light1: {
+            enable: true,
+            x:300,
+            y:500,
+            z:100,
+            shadow: true,
+            bias: 0.0001,
+            darkness: 0.07
+        },
         //shadow
         shadow: true,
         bias: 0.0001,
@@ -39,6 +49,15 @@ function initGUI(controls) {
         'KPL_201407_0020_0009',
         'KPL_201407_0020_0010'
     ]);
+    var light1Folder = gui.addFolder('Light1');
+    controllers['light1.enable'] = light1Folder.add(controls.light1, 'enable');
+    controllers['light1.x'] = light1Folder.add(controls.light1, 'x');
+    controllers['light1.y'] = light1Folder.add(controls.light1, 'y');
+    controllers['light1.z'] = light1Folder.add(controls.light1, 'z');
+    controllers['light1.shadow'] = light1Folder.add(controls.light1, 'shadow');
+    controllers['light1.bias'] = light1Folder.add(controls.light1, 'bias');
+    controllers['light1.darkness'] = light1Folder.add(controls.light1, 'darkness');
+
     var shadowFolder = gui.addFolder("Shadow");
     controllers['shadow'] = shadowFolder.add(controls, 'shadow');
     controllers['bias'] = shadowFolder.add(controls, 'bias');
@@ -63,5 +82,12 @@ module.exports = {
     },
     onChange: function (control, callback) {
         controllers[control].onChange(callback);
+    },
+    onChangeAll: function(callback){
+        for(var ctrl in controllers){
+            if (controllers.hasOwnProperty(ctrl)){
+                controllers[ctrl].onFinishChange(callback);
+            }
+        }
     }
 };
