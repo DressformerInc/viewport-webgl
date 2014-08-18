@@ -560,11 +560,11 @@ function init() {
     setupLight(scene);
     setupEnvironment(scene);
     loadDummyModel(scene);
-//    loadModel('lenin', function (model) {
-//        models['garment'] = model;
-//        scene.add(model);
-//        render();
-//    });
+    loadModel(controls.garment, function (model) {
+        models['garment'] = model;
+        scene.add(model);
+        render();
+    });
 
     orbitControl = new THREE.OrbitControls(camera, renderer.domElement);
     orbitControl.target.y = 100;
