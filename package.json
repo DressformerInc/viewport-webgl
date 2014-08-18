@@ -18,11 +18,17 @@
         "q": "^1.0.0",
         "request": "^2.34.0",
         "run-sequence": "^0.3.6",
-        "glslify": "latest"
+        "glslify": "latest",
+        "browserify-shim": "~3.2.0"
+    },
+    "browserify-shim": {
+        "jquery": "$",
+        "three": "global:THREE"
     },
     "browserify": {
         "transform": [
-            "glslify"
+            "glslify",
+            "browserify-shim"
         ]
     },
     "scripts": {
@@ -34,7 +40,8 @@
     "napa": {
         "threejs": "mrdoob/three.js",
         "threejs-stats": "mrdoob/stats.js",
-        "dat.gui": "xinming/bower-dat-gui"
+        "dat.gui": "xinming/bower-dat-gui",
+        "jquery": "jquery/jquery"
     },
     "repository": {
         "type": "git",

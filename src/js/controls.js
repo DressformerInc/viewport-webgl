@@ -2,9 +2,8 @@
  * Created by Miha-ha on 02.08.14.
  */
 //Controls
-require("dat.gui/dat.gui.js");
-require('dat.gui/dat.color.js');
-var gui,
+var dat = require("../../libs/dat.gui.js"),
+    gui,
     controllers = {},
     controls = {
         garment: 'KPL_201407_0020_0005',
@@ -49,7 +48,7 @@ var gui,
 //    }
 
 function initGUI(controls) {
-    gui = new global.dat.GUI();
+    gui = new dat.GUI();
     controllers['garment'] = gui.add(controls, 'garment', [
         'KPL_201407_0020_0001',
         'KPL_201407_0020_0002',

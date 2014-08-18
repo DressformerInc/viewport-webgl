@@ -33,13 +33,13 @@ var screenWidth = global.innerWidth,
     controls,
     orbitControl,
     renderStart,
-    cubemap = THREE.ImageUtils.loadTextureCube([
-        'assets/cubemap/pos-x.png',
-        'assets/cubemap/neg-x.png',
-        'assets/cubemap/pos-y.png',
-        'assets/cubemap/neg-y.png',
-        'assets/cubemap/pos-z.png',
-        'assets/cubemap/neg-z.png'
+    envMap = THREE.ImageUtils.loadTextureCube([
+        'assets/envMap/pos-x-l.png',
+        'assets/envMap/neg-x-l.png',
+        'assets/envMap/pos-y-l.png',
+        'assets/envMap/neg-y-l.png',
+        'assets/envMap/pos-z-l.png',
+        'assets/envMap/neg-z-l.png'
     ]);
 
 //var shader = glslify({
@@ -177,12 +177,13 @@ function loadDummyModel(scene) {
         matWithCubeMap = new THREE.MeshPhongMaterial({
             color: 0x000000,
             shininess: 100,
-            reflectivity: 0.7,
-            envMap: cubemap,
+            reflectivity: 0.8,
+            envMap: envMap,
             shading: THREE.SmoothShading
         });
 
     loader.load('assets/models/obj/dummy/DummyLP.OBJ', function (dummy) {
+//    loader.load('assets/models/obj/lenin/lenin.obj', function (dummy) {
 
         dummy.traverse(function (child) {
             if (child instanceof THREE.Mesh) {
@@ -558,11 +559,11 @@ function init() {
     setupLight(scene);
     setupEnvironment(scene);
     loadDummyModel(scene);
-    loadModel(controls.garment, function (model) {
-        models['garment'] = model;
-        scene.add(model);
-        render();
-    });
+//    loadModel('lenin', function (model) {
+//        models['garment'] = model;
+//        scene.add(model);
+//        render();
+//    });
 
 
     orbitControl = new THREE.OrbitControls(camera, renderer.domElement);
