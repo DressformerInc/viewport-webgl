@@ -39,9 +39,7 @@
     },
     "napa": {
         "threejs": "mrdoob/three.js",
-        "threejs-stats": "mrdoob/stats.js",
-        "dat.gui": "xinming/bower-dat-gui",
-        "jquery": "jquery/jquery"
+        "threejs-stats": "mrdoob/stats.js"
     },
     "repository": {
         "type": "git",

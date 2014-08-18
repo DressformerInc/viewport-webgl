@@ -3,7 +3,8 @@
  */
 //WebGL
 var THREE = global.THREE = require('threejs/build/three.min'),
-    glslify = require('glslify');
+    glslify = require('glslify'),
+    utils = require('./utils');
 
 require('threejs/examples/js/loaders/OBJLoader');
 require('threejs/examples/js/controls/OrbitControls');
@@ -23,9 +24,10 @@ require('threejs/examples/js/postprocessing/BokehPass');
 var screenWidth = global.innerWidth,
     screenHeight = global.innerHeight,
     DPR = global.devicePixelRatio || 1,
-    screenWidthDPR = screenWidth*DPR,
-    screenHeightDPR = screenHeight*DPR,
+    screenWidthDPR = screenWidth * DPR,
+    screenHeightDPR = screenHeight * DPR,
     container, stats, loadingManager, objLoader,
+    isFullscreen = false,
     camera, scene, renderer,
     postprocessing = {},
     lights = {},
@@ -177,7 +179,7 @@ function loadDummyModel(scene) {
         matWithCubeMap = new THREE.MeshPhongMaterial({
             color: 0x000000,
             shininess: 100,
-            reflectivity: 0.8,
+            reflectivity: 0.6,
             envMap: envMap,
             shading: THREE.SmoothShading
         });
@@ -190,7 +192,6 @@ function loadDummyModel(scene) {
                 child.material = matWithCubeMap;
                 child.castShadow = true;
                 child.receiveShadow = true;
-
             }
         });
 
@@ -423,16 +424,16 @@ function initControls() {
             light.shadowBias = ctrl.bias;
             light.shadowDarkness = ctrl.darkness;
 
-            if (!light.visible){
+            if (!light.visible) {
                 shadowEnable(light, false);
-            }else {
+            } else {
                 shadowEnable(light, ctrl.shadow);
             }
 
         }
     }
 
-    function dofChanged(){
+    function dofChanged() {
         postprocessing.bokeh.enabled = controls.dof;
         renderer.autoClear = !controls.dof;
         renderer.antialias = !controls.dof;
@@ -443,7 +444,7 @@ function initControls() {
     }
 
     Ctrl.onChange('dummy.color', function (value) {
-        var newColor = '0x'+value.substring(1, value.length);
+        var newColor = '0x' + value.substring(1, value.length);
         console.log('dummy.color changed:', value, newColor, models['dummy']);
         models['dummy'].children[0].material.color.setHex(newColor);
     });
@@ -482,7 +483,7 @@ function initControls() {
     Ctrl.onChange('aperture', dofChanged);
     Ctrl.onChange('maxblur', dofChanged);
 
-    Ctrl.onChangeAll(function(){
+    Ctrl.onChangeAll(function () {
         console.log('on change all', arguments);
         startRender();
     });
@@ -498,11 +499,11 @@ function initPostprocessing() {
             width: screenWidthDPR,
             height: screenHeightDPR
         }),
-        FXAA = new THREE.ShaderPass( THREE.FXAAShader),
+        FXAA = new THREE.ShaderPass(THREE.FXAAShader),
         composer = new THREE.EffectComposer(renderer);
 
     // FXAA
-    FXAA.uniforms[ 'resolution' ].value.set( 1 / screenHeightDPR, 1 / screenHeightDPR );
+    FXAA.uniforms[ 'resolution' ].value.set(1 / screenHeightDPR, 1 / screenHeightDPR);
     FXAA.renderToScreen = true;
 
     bokehPass.renderToScreen = true;
@@ -565,15 +566,17 @@ function init() {
 //        render();
 //    });
 
-
     orbitControl = new THREE.OrbitControls(camera, renderer.domElement);
     orbitControl.target.y = 100;
+    orbitControl.target0.y = 100;
 //    orbitControl.autoRotate = true;
     orbitControl.minPolarAngle = Math.PI / 6; // radians
     orbitControl.maxPolarAngle = Math.PI / 1.6; // radians
-    orbitControl.addEventListener('change', function () {
-        renderStart = Date.now();
-    });
+    orbitControl.minDistance = 100;
+    orbitControl.maxDistance = 500;
+
+
+    orbitControl.addEventListener('change', startRender);
     orbitControl.update();
 
     container = global.document.getElementById('container');
@@ -586,16 +589,32 @@ function init() {
     update();
 }
 
+function rotate(speed, horisontal) {
+    var curModel;
+    speed = speed || 0.02;
+    for (var model in models) {
+        if (models.hasOwnProperty(model) && 'floor' !== model) {
+            curModel = models[model];
+            if (horisontal) {
+                curModel.rotation.y += speed;
+            } else {
+                orbitControl.rotateUp(speed);
+                orbitControl.update();
+            }
+        }
+    }
+
+    startRender();
+}
+
 function update() {
     if (Date.now() - renderStart < 700) {
         render();
     }
 
     //rotate models
-    if (controls && controls.rotate) {
-        models['dummy'].rotation.y += controls.speed;
-        models['garment'].rotation.y += controls.speed;
-        renderStart = Date.now();
+    if (controls && controls.rotate && controls.rotate.auto) {
+        rotate(controls.rotate.speed, true);
     }
 
 //    orbitControl.update();
@@ -620,7 +639,7 @@ function onWindowResize() {
     camera.updateProjectionMatrix();
 
     renderer.setSize(screenWidth, screenHeight, true);
-    postprocessing.composer.setSize( screenWidthDPR, screenHeightDPR);
+    postprocessing.composer.setSize(screenWidthDPR, screenHeightDPR);
     startRender();
 }
 
@@ -628,8 +647,73 @@ function onWindowResize() {
 module.exports = {
     init: function () {
         init();
-//            update();
         render();
         return this;
+    },
+    //controls
+    rotateLeft: function () {
+        rotate(-controls.rotate.speed, true);
+    },
+    rotateRight: function () {
+        rotate(controls.rotate.speed, true);
+    },
+    rotateUp: function () {
+        rotate(-controls.rotate.speed, false);
+    },
+    rotateDown: function () {
+        rotate(controls.rotate.speed, false);
+    },
+    resetRotation: function () {
+        orbitControl.reset();
+        orbitControl.update();
+    },
+    zoomIn: function () {
+        orbitControl.dollyIn();
+        orbitControl.update();
+    },
+    zoomOut: function () {
+        orbitControl.dollyIn();
+        orbitControl.update();
+    },
+    toggleFullscreen: function () {
+        var canvas = renderer.domElement;
+        console.log('fullscreen', canvas);
+//        if (isFullscreen) {
+//            if(document.requestFullscreen) {
+//                document.requestFullscreen();
+//            } else if(document.webkitRequestFullscreen ) {
+//                document.webkitRequestFullscreen();
+//            } else if(document.mozRequestFullscreen) {
+//                document.mozRequestFullScreen();
+//            }
+//        } else {
+//            if (canvas.requestFullscreen) {
+//                canvas.requestFullscreen();
+//            } else if (canvas.webkitrequestFullscreen) {
+//                canvas.webkitRequestFullscreen();
+//            } else if (canvas.mozRequestFullscreen) {
+//                canvas.mozRequestFullScreen();
+//            }
+//        }
+        if (!document.fullscreenElement &&    // alternative standard method
+            !document.mozFullScreenElement && !document.webkitFullscreenElement) {  // current working methods
+            if (document.documentElement.requestFullscreen) {
+                document.documentElement.requestFullscreen();
+            } else if (document.documentElement.mozRequestFullScreen) {
+                document.documentElement.mozRequestFullScreen();
+            } else if (document.documentElement.webkitRequestFullscreen) {
+                document.documentElement.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+            }
+        } else {
+            if (document.cancelFullScreen) {
+                document.cancelFullScreen();
+            } else if (document.mozCancelFullScreen) {
+                document.mozCancelFullScreen();
+            } else if (document.webkitCancelFullScreen) {
+                document.webkitCancelFullScreen();
+            }
+        }
+
+        isFullscreen = !isFullscreen;
     }
 };

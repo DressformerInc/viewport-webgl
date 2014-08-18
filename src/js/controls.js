@@ -2,7 +2,8 @@
  * Created by Miha-ha on 02.08.14.
  */
 //Controls
-var dat = require("../../libs/dat.gui.js"),
+var dat = require('../../libs/dat.gui.js'),
+    webgl = require('./webgl'),
     gui,
     controllers = {},
     controls = {
@@ -34,8 +35,18 @@ var dat = require("../../libs/dat.gui.js"),
             darkness: 0.01
         },
         //rotate
-        rotate: false,
-        speed: 0.02,
+        rotate: {
+            auto: false,
+            speed: 0.02,
+            left: webgl.rotateLeft,
+            right: webgl.rotateRight,
+            up: webgl.rotateUp,
+            down: webgl.rotateDown,
+            reset: webgl.resetRotation,
+            zoomIn: webgl.zoomIn,
+            zoomOut: webgl.zoomOut,
+            fullscreen: webgl.toggleFullscreen
+        },
         //dof
         dof: true,
         focus: 1.0,
@@ -86,14 +97,24 @@ function initGUI(controls) {
 
 
     var rotateFolder = gui.addFolder("Rotate");
-    controllers['rotate'] = rotateFolder.add(controls, 'rotate').listen();
-    controllers['speed'] = rotateFolder.add(controls, 'speed');
+    controllers['rotate.auto'] = rotateFolder.add(controls.rotate, 'auto').listen();
+    controllers['rotate.speed'] = rotateFolder.add(controls.rotate, 'speed');
+    controllers['rotate.left'] = rotateFolder.add(controls.rotate, 'left');
+    controllers['rotate.right'] = rotateFolder.add(controls.rotate, 'right');
+    controllers['rotate.up'] = rotateFolder.add(controls.rotate, 'up');
+    controllers['rotate.down'] = rotateFolder.add(controls.rotate, 'down');
+    controllers['rotate.reset'] = rotateFolder.add(controls.rotate, 'reset');
+    controllers['rotate.zoomIn'] = rotateFolder.add(controls.rotate, 'zoomIn');
+    controllers['rotate.zoomOut'] = rotateFolder.add(controls.rotate, 'zoomOut');
+    controllers['rotate.fullscreen'] = rotateFolder.add(controls.rotate, 'fullscreen');
 
     var dof = gui.addFolder("DOF");
     controllers['dof'] = dof.add(controls, 'dof');
     controllers['focus'] = dof.add(controls, 'focus', 0.0, 3.0, 0.025);
     controllers['aperture'] = dof.add(controls, 'aperture', 0.001, 0.2, 0.001 );
     controllers['maxblur'] = dof.add(controls, 'maxblur', 0.0, 3.0, 0.025);
+
+
 
 }
 
