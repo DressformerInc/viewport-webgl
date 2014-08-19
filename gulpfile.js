@@ -69,6 +69,7 @@ gulp.task('dist', ['js', 'css', 'html'], function () {
 //        'src/assets/**/*.*',
         'src/js/viewport-webgl.js',
         'src/css/style.css',
+        'src/fonts/*',
         'src/index.html'
     ], { base: './src' }).pipe(gulp.dest('dist'));
 });
