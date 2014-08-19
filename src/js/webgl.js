@@ -4,7 +4,9 @@
 //WebGL
 var THREE = global.THREE = require('threejs/build/three.min'),
     glslify = require('glslify'),
-    utils = require('./utils');
+    utils = require('./utils'),
+    EventEmitter = require('events').EventEmitter,
+    ee = new EventEmitter();
 
 require('threejs/examples/js/loaders/OBJLoader');
 require('threejs/examples/js/controls/OrbitControls');
@@ -32,6 +34,7 @@ var screenWidth = global.innerWidth,
     postprocessing = {},
     lights = {},
     models = {},
+    events = {},
     controls,
     orbitControl,
     renderStart,
@@ -566,7 +569,10 @@ function init() {
         render();
     });
 
-    orbitControl = new THREE.OrbitControls(camera, renderer.domElement);
+    container = global.document.getElementById('viewport');
+    container.appendChild(renderer.domElement);
+
+    orbitControl = new THREE.OrbitControls(camera, container);
     orbitControl.target.y = 100;
     orbitControl.target0.y = 100;
 //    orbitControl.autoRotate = true;
@@ -579,8 +585,7 @@ function init() {
     orbitControl.addEventListener('change', startRender);
     orbitControl.update();
 
-    container = global.document.getElementById('container');
-    container.appendChild(renderer.domElement);
+
 
     showStats(container);
 
@@ -620,6 +625,8 @@ function update() {
 //    orbitControl.update();
     if (stats) stats.update();
 
+    ee.emit('update');
+
     requestAnimationFrame(update);
 }
 
@@ -645,6 +652,7 @@ function onWindowResize() {
 
 
 module.exports = {
+    ee: ee,
     init: function () {
         init();
         render();
@@ -668,7 +676,7 @@ module.exports = {
         orbitControl.update();
     },
     zoomIn: function () {
-        orbitControl.dollyIn();
+        orbitControl.dollyOut();
         orbitControl.update();
     },
     zoomOut: function () {
@@ -676,25 +684,6 @@ module.exports = {
         orbitControl.update();
     },
     toggleFullscreen: function () {
-        var canvas = renderer.domElement;
-        console.log('fullscreen', canvas);
-//        if (isFullscreen) {
-//            if(document.requestFullscreen) {
-//                document.requestFullscreen();
-//            } else if(document.webkitRequestFullscreen ) {
-//                document.webkitRequestFullscreen();
-//            } else if(document.mozRequestFullscreen) {
-//                document.mozRequestFullScreen();
-//            }
-//        } else {
-//            if (canvas.requestFullscreen) {
-//                canvas.requestFullscreen();
-//            } else if (canvas.webkitrequestFullscreen) {
-//                canvas.webkitRequestFullscreen();
-//            } else if (canvas.mozRequestFullscreen) {
-//                canvas.mozRequestFullScreen();
-//            }
-//        }
         if (!document.fullscreenElement &&    // alternative standard method
             !document.mozFullScreenElement && !document.webkitFullscreenElement) {  // current working methods
             if (document.documentElement.requestFullscreen) {
@@ -713,7 +702,5 @@ module.exports = {
                 document.webkitCancelFullScreen();
             }
         }
-
-        isFullscreen = !isFullscreen;
     }
 };

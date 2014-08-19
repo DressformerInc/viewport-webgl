@@ -4,13 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 
-    <title>viewport-webgl plugin</title>
+    <title>Dressformer webgl widget</title>
+    <link href='http://fonts.googleapis.com/css?family=Dosis:500' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="css/style.css"/>
 
 </head>
 <body>
-<div id="container"></div>
-<!--<script>Main.init();</script>-->
+<div id="viewport">
+    <div class="viewport_controls">
+        <div class="camera_control">
+            <div class="cc_btn animation" id="cc_up">&#xf077;</div>
+            <div class="cc_btn animation" id="cc_down">&#xf078;</div>
+            <div class="cc_btn animation" id="cc_left">&#xf053;</div>
+            <div class="cc_btn animation" id="cc_right">&#xf054;</div>
+            <div class="cc_btn animation" id="cc_default">&#xf192;</div>
+        </div>
+        <div class="vprt_full" id="vprt_full">&#xf065;</div>
+        <div class="zoom_control">
+            <div class="zc_btn animation" id="zc_in">&#xf067;</div>
+            <div class="zc_btn animation" id="zc_out">&#xf068;</div>
+        </div>
+        <div class="sizer">
+            <div class="size_itm animation">XS</div>
+            <div class="size_itm animation">S</div>
+            <div class="size_itm animation best_fit"><div class="s_recomended">&#xf14a;&nbsp;&nbsp; Best Fit</div>M</div>
+            <div class="size_itm animation">L</div>
+            <div class="size_itm animation">XL</div>
+        </div>
+    </div>
+</div>
+
+
 <script src="js/viewport-webgl.js?v=0.0.28"></script>
 </body>
 </html>

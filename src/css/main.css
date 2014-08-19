@@ -1,27 +1,10 @@
+@charset "utf-8";
+@font-face {
+    font-family: 'IconFont';
+    src: url('../fonts/iconfont.ttf');
+}
 body {
-    color: #ffffff;
-    font-family: Monospace;
-    font-size: 13px;
-    text-align: center;
-    font-weight: bold;
-
-    background-color: #000000;
     margin: 0;
-    overflow: hidden;
-}
-
-#info {
-    position: absolute;
-    top: 0;
-    width: 100%;
-    padding: 5px;
-}
-
-a {
-
-    color: #ffffff;
-}
-
-#oldie a {
-    color: #da0
+    padding: 0;
+    font-family: 'Dosis','IconFont' sans-serif;
 }
