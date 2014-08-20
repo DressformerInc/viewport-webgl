@@ -64,13 +64,26 @@ gulp.task('css', function () {
 //        .pipe(gulp.dest('src/'));
 //});
 
-gulp.task('dist', ['js', 'css'], function () {
+gulp.task('modules', function () {
     return gulp.src([
-//        'src/assets/**/*.*',
+        'node_modules/express/**',
+        'node_modules/lusca/**',
+        'node_modules/ejs/**',
+        'node_modules/ejs-locals/**',
+        'node_modules/morgan/**',
+        'node_modules/body-parser/**',
+        'node_modules/method-override/**'
+    ], {base: './'}).pipe(gulp.dest('dist/'));
+});
+
+gulp.task('dist', ['js', 'css', 'modules'], function () {
+    return gulp.src([
+        //client
         'src/client/js/viewport-webgl.js',
         'src/client/css/style.css',
         'src/client/fonts/*',
         'src/client/index.html',
+        //server
         '!src/server/config.json',
         'src/server/**'
     ], { base: './src' }).pipe(gulp.dest('dist'));
