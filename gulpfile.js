@@ -66,6 +66,7 @@ gulp.task('css', function () {
 
 gulp.task('modules', function () {
     return gulp.src([
+        'package.json',
         'node_modules/express/**',
         'node_modules/lusca/**',
         'node_modules/ejs/**',
@@ -153,7 +154,7 @@ gulp.task('deploy-test', function () {
 
 gulp.task('log', function () {
     return gulp.src('').pipe(
-        exec('ssh deploy@192.168.10.10 tail site-v2.log', {silent: false})
+        exec('ssh deploy@192.168.10.10 tail viewport-webgl.log', {silent: false})
     );
 });
 
