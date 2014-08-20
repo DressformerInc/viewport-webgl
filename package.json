@@ -1,6 +1,6 @@
 {
     "name": "viewport-webgl",
-    "version": "0.0.35",
+    "version": "0.0.36",
     "description": "WebGL view port for plugin dressformer",
     "main": "",
     "dependencies": {
