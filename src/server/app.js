@@ -10,8 +10,8 @@ var express = require('express'),
     path = require('path'),
     lusca = require('lusca'),
     engine = require('ejs-locals'),
-    pkg = require('../../package'),
-    config = require('./config');
+    config = require('./config'),
+    pkg = 'production' == config.ENVIRONMENT ? require('../package') : require('../../package');
 
 app.set('port', config.PORT || process.env.PORT);
 app.engine('ejs', engine);
