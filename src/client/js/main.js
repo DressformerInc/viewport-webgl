@@ -3,7 +3,7 @@
  */
 //Main
 var webgl = require("./webgl").init(),
-    $ = require('../../libs/jquery-2.1.1.min'),
+    $ = require('../../../libs/jquery-2.1.1.min'),
     control;
 
 webgl.ee.on('update', function () {

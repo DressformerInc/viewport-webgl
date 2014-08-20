@@ -19,28 +19,28 @@ var gulp = require('gulp'),
             'node_modules/threejs-stats/Stats.js',
             'node_modules/dat.gui/dat.gui.min.js',
             //src
-            'src/js/main.js',
-            'src/js/*.js',
-            '!src/js/viewport-webgl.js'
+            'src/client/js/main.js',
+            'src/client/js/*.js',
+            '!src/client/js/viewport-webgl.js'
         ],
-        css: ['src/css/*.css', '!src/css/style.css'],
+        css: ['src/client/css/*.css', '!src/client/css/style.css'],
         compiled: {
-            script: ['src/js/viewport_webgl.js'],
-            css: ['src/css/style.css']
+            script: ['src/client/js/viewport_webgl.js'],
+            css: ['src/client/css/style.css']
         },
-        assets: ['src/assets/**/*']
+        assets: ['src/client/assets/**/*']
     };
 
 
 // Basic usage
 gulp.task('js', function() {
-    gulp.src('src/js/main.js')
+    gulp.src('src/client/js/main.js')
         .pipe(browserify({
             insertGlobals : true,
             debug : !gulp.env.production
         }))
         .pipe(rename("viewport-webgl.js"))
-        .pipe(gulp.dest('src/js'))
+        .pipe(gulp.dest('src/client/js'))
 });
 
 //gulp.task('js', function () {
@@ -54,23 +54,23 @@ gulp.task('js', function() {
 gulp.task('css', function () {
     return gulp.src(paths.css)
         .pipe(concat('style.css'))
-        .pipe(gulp.dest('src/css'));
+        .pipe(gulp.dest('src/client/css'));
 });
 
-gulp.task('html', function () {
-    var v = require('./package.json').version;
-    return gulp.src(['src/index.html'])
-        .pipe(replace(/(\?v=\d+\.\d+\.\d+)/g, '?v=' + v))
-        .pipe(gulp.dest('src/'));
-});
+//gulp.task('html', function () {
+//    var v = require('./package.json').version;
+//    return gulp.src(['src/index.html'])
+//        .pipe(replace(/(\?v=\d+\.\d+\.\d+)/g, '?v=' + v))
+//        .pipe(gulp.dest('src/'));
+//});
 
-gulp.task('dist', ['js', 'css', 'html'], function () {
+gulp.task('dist', ['js', 'css'], function () {
     return gulp.src([
 //        'src/assets/**/*.*',
-        'src/js/viewport-webgl.js',
-        'src/css/style.css',
-        'src/fonts/*',
-        'src/index.html'
+        'src/client/js/viewport-webgl.js',
+        'src/client/css/style.css',
+        'src/client/fonts/*',
+        'src/client/index.html'
     ], { base: './src' }).pipe(gulp.dest('dist'));
 });
 

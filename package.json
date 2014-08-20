@@ -19,7 +19,11 @@
         "request": "^2.34.0",
         "run-sequence": "^0.3.6",
         "glslify": "latest",
-        "browserify-shim": "~3.2.0"
+        "browserify-shim": "~3.2.0",
+        "express": "3.x",
+        "lusca": "^1.0.0",
+        "ejs-locals": "^1.0.2",
+        "ejs": "*"
     },
     "browserify-shim": {
         "jquery": "$",

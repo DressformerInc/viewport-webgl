@@ -2,7 +2,7 @@
  * Created by Miha-ha on 02.08.14.
  */
 //Controls
-var dat = require('../../libs/dat.gui.js'),
+var dat = require('../../../libs/dat.gui.js'),
     webgl = require('./webgl'),
     gui,
     controllers = {},
