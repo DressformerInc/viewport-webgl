@@ -26,7 +26,7 @@ app.use(lusca({
     hsts: {maxAge: 31536000, includeSubDomains: true},  //https://www.owasp.org/index.php/HTTP_Strict_Transport_Security
     xssProtection: true //http://blog.sjinks.pro/security/884-http-headers-to-secure-website/
 }));
-app.use('/client', express.static(__dirname + '/../client'));
+app.use('/', express.static(__dirname + '/../client'));
 app.use(morgan('dev'));
 app.use(bodyParser());
 app.use(methodOverride());

@@ -39,12 +39,12 @@ var screenWidth = global.innerWidth,
     orbitControl,
     renderStart,
     envMap = THREE.ImageUtils.loadTextureCube([
-        'client/assets/envMap/pos-x-l.png',
-        'client/assets/envMap/neg-x-l.png',
-        'client/assets/envMap/pos-y-l.png',
-        'client/assets/envMap/neg-y-l.png',
-        'client/assets/envMap/pos-z-l.png',
-        'client/assets/envMap/neg-z-l.png'
+        'assets/envMap/pos-x-l.png',
+        'assets/envMap/neg-x-l.png',
+        'assets/envMap/pos-y-l.png',
+        'assets/envMap/neg-y-l.png',
+        'assets/envMap/pos-z-l.png',
+        'assets/envMap/neg-z-l.png'
     ]);
 
 //var shader = glslify({
@@ -187,7 +187,7 @@ function loadDummyModel(scene) {
             shading: THREE.SmoothShading
         });
 
-    loader.load('client/assets/models/obj/dummy/DummyLP.OBJ', function (dummy) {
+    loader.load('assets/models/obj/dummy/DummyLP.OBJ', function (dummy) {
 //    loader.load('assets/models/obj/lenin/lenin.obj', function (dummy) {
 
         dummy.traverse(function (child) {
@@ -239,7 +239,7 @@ function loadModelFromWeb(name, cb) {
 }
 
 function loadModel(name, cb) {
-    var basePath = "client/assets/models/obj/" + name + "/",
+    var basePath = "assets/models/obj/" + name + "/",
         objPath = basePath + name + ".obj",
         normalPath = basePath + name + "_normal.jpg",
         diffusePath = basePath + name + "_diffuse.jpg",
