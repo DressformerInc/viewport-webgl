@@ -70,7 +70,9 @@ gulp.task('dist', ['js', 'css'], function () {
         'src/client/js/viewport-webgl.js',
         'src/client/css/style.css',
         'src/client/fonts/*',
-        'src/client/index.html'
+        'src/client/index.html',
+        '!src/server/config.json',
+        'src/server/**'
     ], { base: './src' }).pipe(gulp.dest('dist'));
 });
 

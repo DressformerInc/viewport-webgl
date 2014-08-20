@@ -1,9 +1,17 @@
 {
     "name": "viewport-webgl",
-    "version": "0.0.31",
+    "version": "0.0.32",
     "description": "WebGL view port for plugin dressformer",
     "main": "",
-    "dependencies": {},
+    "dependencies": {
+        "express": "~4.0.0",
+        "lusca": "^1.0.0",
+        "ejs-locals": "^1.0.2",
+        "ejs": "*",
+        "morgan": "~1.0.0",
+        "body-parser": "~1.0.0",
+        "method-override": "~1.0.0"
+    },
     "devDependencies": {
         "gulp": "^3.8.6",
         "gulp-bump": "^0.1.6",
@@ -19,11 +27,7 @@
         "request": "^2.34.0",
         "run-sequence": "^0.3.6",
         "glslify": "latest",
-        "browserify-shim": "~3.2.0",
-        "express": "3.x",
-        "lusca": "^1.0.0",
-        "ejs-locals": "^1.0.2",
-        "ejs": "*"
+        "browserify-shim": "~3.2.0"
     },
     "browserify-shim": {
         "jquery": "$",

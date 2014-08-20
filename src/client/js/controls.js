@@ -60,6 +60,7 @@ var dat = require('../../../libs/dat.gui.js'),
 
 function initGUI(controls) {
     gui = new dat.GUI();
+    gui.closed = true;
     controllers['garment'] = gui.add(controls, 'garment', [
         'KPL_201407_0020_0001',
         'KPL_201407_0020_0002',
@@ -71,7 +72,7 @@ function initGUI(controls) {
         'KPL_201407_0020_0008',
         'KPL_201407_0020_0009',
         'KPL_201407_0020_0010'
-    ]);
+    ]).listen();
     var dummyFolder = gui.addFolder('dummy');
     controllers['dummy.color'] = dummyFolder.add(controls.dummy, 'color');
 

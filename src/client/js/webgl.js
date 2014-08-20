@@ -563,7 +563,7 @@ function init() {
     setupLight(scene);
     setupEnvironment(scene);
     loadDummyModel(scene);
-    loadModel(controls.garment, function (model) {
+    loadModel(controls.garment = global.Dressformer.garment.id, function (model) {
         models['garment'] = model;
         scene.add(model);
         render();
@@ -587,7 +587,7 @@ function init() {
 
 
 
-    showStats(container);
+//    showStats(container);
 
     global.addEventListener('resize', onWindowResize, false);
     onWindowResize();
