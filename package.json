@@ -1,64 +1,65 @@
 {
-    "name": "viewport-webgl",
-    "version": "0.0.37",
-    "description": "WebGL view port for plugin dressformer",
-    "main": "",
-    "dependencies": {
-        "express": "~4.0.0",
-        "lusca": "^1.0.0",
-        "ejs-locals": "^1.0.2",
-        "ejs": "*",
-        "morgan": "~1.0.0",
-        "body-parser": "~1.0.0",
-        "method-override": "~1.0.0"
-    },
-    "devDependencies": {
-        "gulp": "^3.8.6",
-        "gulp-bump": "^0.1.6",
-        "gulp-concat": "^2.3.4",
-        "gulp-exec": "^1.0.4",
-        "gulp-replace": "^0.4.0",
-        "gulp-rimraf": "latest",
-        "gulp-sourcemaps": "^1.1.0",
-        "gulp-browserify": "latest",
-        "gulp-rename": "latest",
-        "napa": "^0.4.1",
-        "q": "^1.0.0",
-        "request": "^2.34.0",
-        "run-sequence": "^0.3.6",
-        "glslify": "latest",
-        "browserify-shim": "~3.2.0"
-    },
-    "browserify-shim": {
-        "jquery": "$",
-        "three": "global:THREE"
-    },
-    "browserify": {
-        "transform": [
-            "glslify",
-            "browserify-shim"
-        ]
-    },
-    "scripts": {
-        "install": "napa",
-        "build-js": "browserify src/js/main.js -t glslify > src/js/viewport-webgl.js -d",
-        "watch-js": "watchify src/js/main.js -o dist/viewport-webgl.js -dv",
-        "debug": "nodemon src/server/app.js -e js,css,html,ejs",
-        "release": "nodemon dist/server/app.js -e js,css,html,ejs",
-        "test": "echo \"Error: no test specified\" && exit 1"
-    },
-    "napa": {
-        "threejs": "mrdoob/three.js",
-        "threejs-stats": "mrdoob/stats.js"
-    },
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/DressformerInc/viewport-webgl.git"
-    },
-    "author": "Miha-ha",
-    "license": "ISC",
-    "bugs": {
-        "url": "https://github.com/DressformerInc/viewport-webgl/issues"
-    },
-    "homepage": "https://github.com/DressformerInc/viewport-webgl"
+  "name": "viewport-webgl",
+  "version": "0.0.37",
+  "description": "WebGL view port for plugin dressformer",
+  "main": "",
+  "dependencies": {
+    "body-parser": "~1.0.0",
+    "ejs": "*",
+    "ejs-locals": "^1.0.2",
+    "express": "~4.0.0",
+    "lusca": "^1.0.0",
+    "method-override": "~1.0.0",
+    "morgan": "~1.0.0",
+    "tween.js": "^0.14.0"
+  },
+  "devDependencies": {
+    "gulp": "^3.8.6",
+    "gulp-bump": "^0.1.6",
+    "gulp-concat": "^2.3.4",
+    "gulp-exec": "^1.0.4",
+    "gulp-replace": "^0.4.0",
+    "gulp-rimraf": "latest",
+    "gulp-sourcemaps": "^1.1.0",
+    "gulp-browserify": "latest",
+    "gulp-rename": "latest",
+    "napa": "^0.4.1",
+    "q": "^1.0.0",
+    "request": "^2.34.0",
+    "run-sequence": "^0.3.6",
+    "glslify": "latest",
+    "browserify-shim": "~3.2.0"
+  },
+  "browserify-shim": {
+    "jquery": "$",
+    "three": "global:THREE"
+  },
+  "browserify": {
+    "transform": [
+      "glslify",
+      "browserify-shim"
+    ]
+  },
+  "scripts": {
+    "install": "napa",
+    "build-js": "browserify src/js/main.js -t glslify > src/js/viewport-webgl.js -d",
+    "watch-js": "watchify src/js/main.js -o dist/viewport-webgl.js -dv",
+    "debug": "nodemon src/server/app.js -e js,css,html,ejs",
+    "release": "nodemon dist/server/app.js -e js,css,html,ejs",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "napa": {
+    "threejs": "mrdoob/three.js",
+    "threejs-stats": "mrdoob/stats.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DressformerInc/viewport-webgl.git"
+  },
+  "author": "Miha-ha",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DressformerInc/viewport-webgl/issues"
+  },
+  "homepage": "https://github.com/DressformerInc/viewport-webgl"
 }

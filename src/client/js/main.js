@@ -38,8 +38,8 @@ function initEvents() {
         .on('mousedown', '#cc_right', function () {
             control = webgl.rotateRight;
         })
-        .on('mousedown', '#cc_default', function () {
-            control = webgl.resetRotation;
+        .on('click', '#cc_default', function () {
+            webgl.resetRotation();
         })
         .on('mousedown', '#zc_in', function () {
             control = webgl.zoomIn;
@@ -47,7 +47,7 @@ function initEvents() {
         .on('mousedown', '#zc_out', function () {
             control = webgl.zoomOut;
         })
-        .on('mousedown', '#vprt_full', function () {
+        .on('click', '#vprt_full', function () {
             webgl.toggleFullscreen();
         })
         .on('mousedown', function () {

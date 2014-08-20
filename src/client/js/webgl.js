@@ -3,6 +3,7 @@
  */
 //WebGL
 var THREE = global.THREE = require('threejs/build/three.min'),
+    TWEEN = require('tween.js'),
     glslify = require('glslify'),
     utils = require('./utils'),
     EventEmitter = require('events').EventEmitter,
@@ -445,17 +446,25 @@ function init() {
     orbitControl.minDistance = 100;
     orbitControl.maxDistance = 500;
 
-
     orbitControl.addEventListener('change', startRender);
     orbitControl.update();
-
-
 
 //    showStats(container);
 
     global.addEventListener('resize', onWindowResize, false);
     onWindowResize();
     update();
+}
+
+function rotateTo(angle) {
+    for (var model in models) {
+        if (models.hasOwnProperty(model) && 'floor' !== model) {
+            var curModel = models[model];
+            curModel.rotation.y = angle;
+        }
+    }
+
+    startRender();
 }
 
 function rotate(speed, horisontal) {
@@ -468,7 +477,6 @@ function rotate(speed, horisontal) {
                 curModel.rotation.y += speed;
             } else {
                 orbitControl.rotateUp(speed);
-                orbitControl.update();
             }
         }
     }
@@ -476,7 +484,7 @@ function rotate(speed, horisontal) {
     startRender();
 }
 
-function update() {
+function update(dt) {
     if (Date.now() - renderStart < 700) {
         render();
     }
@@ -486,10 +494,12 @@ function update() {
         rotate(controls.rotate.speed, true);
     }
 
-//    orbitControl.update();
     if (stats) stats.update();
 
     orbitControl.update();
+
+    TWEEN.update(dt);
+
     ee.emit('update');
 
     requestAnimationFrame(update);
@@ -537,8 +547,35 @@ module.exports = {
         rotate(controls.rotate.speed, false);
     },
     resetRotation: function () {
-        orbitControl.reset();
-
+//        orbitControl.reset();
+//        console.log('cur rotation:', models['dummy'].rotation.y, 'position:', orbitControl.object.position);
+        var speed = 300;
+        var tween = new TWEEN.Tween({
+            angle: models['dummy'].rotation.y,
+            target: orbitControl.target,
+            position: orbitControl.object.position
+        })
+            .to({
+                angle: 0,
+                target: orbitControl.target0,
+                position: orbitControl.position0
+            }, speed)
+            .easing(TWEEN.Easing.Sinusoidal.Out)
+            .onUpdate(function () {
+                console.log('target:', this.target, 'position:', this.position);
+                orbitControl.target.copy(this.target);
+                orbitControl.object.position.copy(this.position);
+                rotateTo(this.angle);
+            })
+            .start();
+        var tween2 = new TWEEN.Tween(orbitControl.object.position)
+            .to(orbitControl.position0, speed)
+            .easing(TWEEN.Easing.Sinusoidal.Out)
+            .onUpdate(function () {
+                orbitControl.object.position = this;
+                orbitControl.object.lookAt( orbitControl.target0 );
+            })
+            .start();
     },
     zoomIn: function () {
         orbitControl.dollyOut();
