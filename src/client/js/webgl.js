@@ -40,12 +40,12 @@ var screenWidth = global.innerWidth,
     orbitControl,
     renderStart,
     envMap = THREE.ImageUtils.loadTextureCube([
-        'assets/envMap/pos-x-l.png',
-        'assets/envMap/neg-x-l.png',
-        'assets/envMap/pos-y-l.png',
-        'assets/envMap/neg-y-l.png',
-        'assets/envMap/pos-z-l.png',
-        'assets/envMap/neg-z-l.png'
+        'assets/envMap/pos-x.png',
+        'assets/envMap/neg-x.png',
+        'assets/envMap/pos-y.png',
+        'assets/envMap/neg-y.png',
+        'assets/envMap/pos-z.png',
+        'assets/envMap/neg-z.png'
     ]);
 
 //var shader = glslify({
@@ -442,7 +442,6 @@ function init() {
     orbitControl.noKeys = true;
     orbitControl.target.y = 100;
     orbitControl.target0.y = 100;
-//    orbitControl.autoRotate = true;
     orbitControl.minPolarAngle = Math.PI / 6; // radians
     orbitControl.maxPolarAngle = Math.PI / 1.6; // radians
     orbitControl.minDistance = 100;
@@ -549,17 +548,18 @@ module.exports = {
         rotate(controls.rotate.speed, false);
     },
     resetRotation: function () {
-        var speed = 300;
+        var speed = 300,
+            fn = TWEEN.Easing.Cubic.InOut;
         var tween = new TWEEN.Tween({angle: models['dummy'].rotation.y})
             .to({angle: 0}, speed)
-            .easing(TWEEN.Easing.Sinusoidal.Out)
+            .easing(fn)
             .onUpdate(function () {
                 rotateTo(this.angle);
             })
             .start();
         var tween2 = new TWEEN.Tween(orbitControl.object.position)
             .to(orbitControl.position0, speed)
-            .easing(TWEEN.Easing.Sinusoidal.Out)
+            .easing(fn)
             .onUpdate(function () {
                 orbitControl.object.position = this;
                 orbitControl.object.lookAt(orbitControl.target0);
