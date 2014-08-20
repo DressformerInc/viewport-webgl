@@ -4,10 +4,20 @@
 //Main
 var webgl = require("./webgl").init(),
     $ = require('../../../libs/jquery-2.1.1.min'),
-    control;
+    control,
+    isMouseUp = true,
+    end = Date.now();
 
 webgl.ee.on('update', function () {
-    if(control) control();
+
+    if(control){
+        control();
+    }
+
+    if (isMouseUp && (Date.now() - end > 100)) {
+        control = null;
+    }
+
 });
 
 initEvents();
@@ -40,7 +50,14 @@ function initEvents() {
         .on('mousedown', '#vprt_full', function () {
             webgl.toggleFullscreen();
         })
+        .on('mousedown', function () {
+//            console.log('mouse down', null);
+            isMouseUp = false;
+        })
         .on('mouseup', function () {
-            control = null;
+//            control = null;
+//            console.log('mouse up', null);
+            end = Date.now();
+            isMouseUp = true;
         });
 }

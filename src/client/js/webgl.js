@@ -489,6 +489,7 @@ function update() {
 //    orbitControl.update();
     if (stats) stats.update();
 
+    orbitControl.update();
     ee.emit('update');
 
     requestAnimationFrame(update);
@@ -524,10 +525,10 @@ module.exports = {
     },
     //controls
     rotateLeft: function () {
-        rotate(-controls.rotate.speed, true);
+        rotate(-0.09, true);
     },
     rotateRight: function () {
-        rotate(controls.rotate.speed, true);
+        rotate(0.09, true);
     },
     rotateUp: function () {
         rotate(-controls.rotate.speed, false);
@@ -537,15 +538,15 @@ module.exports = {
     },
     resetRotation: function () {
         orbitControl.reset();
-        orbitControl.update();
+
     },
     zoomIn: function () {
         orbitControl.dollyOut();
-        orbitControl.update();
+//        orbitControl.update();
     },
     zoomOut: function () {
         orbitControl.dollyIn();
-        orbitControl.update();
+//        orbitControl.update();
     },
     toggleFullscreen: function () {
         if (!document.fullscreenElement &&    // alternative standard method
