@@ -438,6 +438,8 @@ function init() {
     container.appendChild(renderer.domElement);
 
     orbitControl = new THREE.OrbitControls(camera, container);
+    orbitControl.noPan = true;
+    orbitControl.noKeys = true;
     orbitControl.target.y = 100;
     orbitControl.target0.y = 100;
 //    orbitControl.autoRotate = true;
@@ -547,24 +549,11 @@ module.exports = {
         rotate(controls.rotate.speed, false);
     },
     resetRotation: function () {
-//        orbitControl.reset();
-//        console.log('cur rotation:', models['dummy'].rotation.y, 'position:', orbitControl.object.position);
         var speed = 300;
-        var tween = new TWEEN.Tween({
-            angle: models['dummy'].rotation.y,
-            target: orbitControl.target,
-            position: orbitControl.object.position
-        })
-            .to({
-                angle: 0,
-                target: orbitControl.target0,
-                position: orbitControl.position0
-            }, speed)
+        var tween = new TWEEN.Tween({angle: models['dummy'].rotation.y})
+            .to({angle: 0}, speed)
             .easing(TWEEN.Easing.Sinusoidal.Out)
             .onUpdate(function () {
-                console.log('target:', this.target, 'position:', this.position);
-                orbitControl.target.copy(this.target);
-                orbitControl.object.position.copy(this.position);
                 rotateTo(this.angle);
             })
             .start();
@@ -573,7 +562,7 @@ module.exports = {
             .easing(TWEEN.Easing.Sinusoidal.Out)
             .onUpdate(function () {
                 orbitControl.object.position = this;
-                orbitControl.object.lookAt( orbitControl.target0 );
+                orbitControl.object.lookAt(orbitControl.target0);
             })
             .start();
     },
