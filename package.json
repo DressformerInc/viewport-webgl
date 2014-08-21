@@ -44,7 +44,7 @@
     "install": "napa",
     "build-js": "browserify src/js/main.js -t glslify > src/js/viewport-webgl.js -d",
     "watch-js": "watchify src/js/main.js -o dist/viewport-webgl.js -dv",
-    "debug": "nodemon src/server/app.js -e js,css,html,ejs",
+    "debug": "nodemon --watch src/server src/server/app.js -e js,css,html,ejs --ignore src/client",
     "release": "nodemon dist/server/app.js -e js,css,html,ejs",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

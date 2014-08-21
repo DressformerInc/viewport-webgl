@@ -38,6 +38,9 @@ var screenWidth = global.innerWidth,
     events = {},
     controls,
     orbitControl,
+    targetSpeed = 1,
+    targetMin = 50,
+    targetMax = 150,
     renderStart,
     envMap = THREE.ImageUtils.loadTextureCube([
         'assets/envMap/pos-x.png',
@@ -485,6 +488,14 @@ function rotate(speed, horisontal) {
     startRender();
 }
 
+function targetOffset(speed) {
+    var pos = orbitControl.target.y += speed;
+    if (pos < targetMin) pos = targetMin;
+    else if (pos > targetMax) pos = targetMax;
+
+    orbitControl.target.y = pos;
+}
+
 function update(dt) {
     if (Date.now() - renderStart < 700) {
         render();
@@ -543,18 +554,21 @@ module.exports = {
     },
     rotateUp: function () {
         rotate(-controls.rotate.speed, false);
+        targetOffset(-targetSpeed);
     },
     rotateDown: function () {
         rotate(controls.rotate.speed, false);
+        targetOffset(targetSpeed);
     },
     resetRotation: function () {
         var speed = 300,
             fn = TWEEN.Easing.Cubic.InOut;
-        var tween = new TWEEN.Tween({angle: models['dummy'].rotation.y})
-            .to({angle: 0}, speed)
+        var tween = new TWEEN.Tween({angle: models['dummy'].rotation.y, target: orbitControl.target.y})
+            .to({angle: 0, target: orbitControl.target0.y}, speed)
             .easing(fn)
             .onUpdate(function () {
                 rotateTo(this.angle);
+                orbitControl.target.y = this.target;
             })
             .start();
         var tween2 = new TWEEN.Tween(orbitControl.object.position)
@@ -568,11 +582,9 @@ module.exports = {
     },
     zoomIn: function () {
         orbitControl.dollyOut();
-//        orbitControl.update();
     },
     zoomOut: function () {
         orbitControl.dollyIn();
-//        orbitControl.update();
     },
     toggleFullscreen: function () {
         if (!document.fullscreenElement &&    // alternative standard method
