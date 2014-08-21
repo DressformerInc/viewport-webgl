@@ -39,8 +39,8 @@ var screenWidth = global.innerWidth,
     controls,
     orbitControl,
     targetSpeed = 1,
-    targetMin = 50,
-    targetMax = 150,
+    targetMin = 100,
+    targetMax = 200,
     renderStart,
     envMap = THREE.ImageUtils.loadTextureCube([
         'assets/envMap/pos-x.png',
@@ -72,7 +72,7 @@ function showStats(container) {
 function setupLight(scene) {
 
 
-    var ambientLight = new THREE.AmbientLight(0x444444);
+    var ambientLight = new THREE.AmbientLight(0x666666);
     ambientLight.position.set(100, 130, 100);
     scene.add(lights['ambientLight'] = ambientLight);
 
