@@ -62,6 +62,11 @@ function initGUI(controls) {
     gui = new dat.GUI();
     gui.closed = true;
     controllers['garment'] = gui.add(controls, 'garment', [
+        'ADS_201407_0005_0001',
+        'ADS_201407_0005_0002',
+        'ADS_201407_0005_0003',
+        'ADS_201407_0005_0004',
+        'ADS_201407_0005_0005',
         'KPL_201407_0020_0001',
         'KPL_201407_0020_0002',
         'KPL_201407_0020_0003',

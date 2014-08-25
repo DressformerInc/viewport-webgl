@@ -72,7 +72,7 @@ function showStats(container) {
 function setupLight(scene) {
 
 
-    var ambientLight = new THREE.AmbientLight(0x666666);
+    var ambientLight = new THREE.AmbientLight(0x444444);
     ambientLight.position.set(100, 130, 100);
     scene.add(lights['ambientLight'] = ambientLight);
 
