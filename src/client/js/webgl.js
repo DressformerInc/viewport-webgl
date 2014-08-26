@@ -72,7 +72,7 @@ function showStats(container) {
 function setupLight(scene) {
 
 
-    var ambientLight = new THREE.AmbientLight(0x444444);
+    var ambientLight = new THREE.AmbientLight(0x333333);
     ambientLight.position.set(100, 130, 100);
     scene.add(lights['ambientLight'] = ambientLight);
 
@@ -114,7 +114,7 @@ function setupLight(scene) {
     light1.shadowMapHeight = 2048;
     scene.add(lights['light1'] = light1);
 
-    var light2 = new THREE.SpotLight(0xffffff, 0.5);
+    var light2 = new THREE.SpotLight(0xffffff, 1);
 //    directionalLight.onlyShadow = true;
     light2.position.x = -500;
     light2.position.z = 300;

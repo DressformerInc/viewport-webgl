@@ -26,7 +26,7 @@ var dat = require('../../../libs/dat.gui.js'),
         //light2
         light2: {
             enable: true,
-            intensity: 0.5,
+            intensity: 1,
             x:-500,
             y:800,
             z:300,
