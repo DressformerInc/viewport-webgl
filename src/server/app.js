@@ -41,7 +41,7 @@ app.route('/:id?')
         res.render('index', {
             version: pkg.version,
             title: "Dressformer widget",
-            id: req.params.id || 'KPL_201407_0020_0005'
+            id: req.params.id || 'ADS_201407_0005_0002'
         });
     });
 
