@@ -453,8 +453,8 @@ function init() {
     container.appendChild(renderer.domElement);
 
     orbitControl = new THREE.OrbitControls(camera, container);
-    orbitControl.noPan = true;
-    orbitControl.noKeys = true;
+//    orbitControl.noPan = false;
+//    orbitControl.noKeys = false;
     orbitControl.target.y = 100;
     orbitControl.target0.y = 100;
     orbitControl.minPolarAngle = Math.PI / 6; // radians
