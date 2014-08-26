@@ -125,6 +125,18 @@ function setupLight(scene) {
     light2.shadowMapWidth = 2048;
     light2.shadowMapHeight = 2048;
     scene.add(lights['light2'] = light2);
+    
+    var light3 = new THREE.SpotLight(0xffffff, 1);
+//    directionalLight.onlyShadow = true;
+    light3.position.x = 0;
+    light3.position.z = -300;
+    light3.position.y = 600;
+    light3.castShadow = false;
+//    light3.shadowBias = 0.0001;
+//    light3.shadowDarkness = 0.01;
+//    light3.shadowMapWidth = 2048;
+//    light3.shadowMapHeight = 2048;
+    scene.add(lights['light3'] = light3);
 
 }
 
@@ -185,8 +197,8 @@ function loadDummyModel(scene) {
     var loader = new THREE.OBJLoader(loadingManager),
         matWithCubeMap = new THREE.MeshPhongMaterial({
             color: 0x000000,
-            shininess: 100,
-            reflectivity: 0.6,
+            shininess: 500,
+            reflectivity: 1,
             envMap: envMap,
             shading: THREE.SmoothShading
         });
