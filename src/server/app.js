@@ -11,7 +11,8 @@ var express = require('express'),
     lusca = require('lusca'),
     engine = require('ejs-locals'),
     config = require('./config'),
-    pkg = 'production' == config.ENVIRONMENT ? require('../package') : require('../../package');
+    pkg = 'production' == config.ENVIRONMENT ? require('../package') : require('../../package'),
+    request = require('request');
 
 app.set('port', config.PORT || process.env.PORT);
 app.engine('ejs', engine);
@@ -38,10 +39,20 @@ if ('development' === config.ENVIRONMENT) {
 
 app.route('/:id?')
     .get(function (req, res, next) {
-        res.render('index', {
-            version: pkg.version,
-            title: "Dressformer widget",
-            id: req.params.id || 'ADS_201407_0005_0002'
+        request('http://webgl.dressformer.com/api/user', function (error, response, body) {
+            if (!error && response.statusCode == 200) {
+                var data;
+                try {
+                    data = JSON.parse(body);
+                }catch(e){}
+
+                res.render('index', {
+                    version: pkg.version,
+                    title: "Dressformer widget",
+                    id: req.params.id || 'ADS_201407_0005_0002',
+                    dummy: data.dummy
+                });
+            }
         });
     });
 

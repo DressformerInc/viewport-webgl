@@ -12,16 +12,16 @@ var THREE = global.THREE = require('threejs/build/three.min'),
 require('threejs/examples/js/loaders/OBJLoader');
 require('threejs/examples/js/controls/OrbitControls');
 
-require('threejs/examples/js/shaders/CopyShader');
-require('threejs/examples/js/shaders/BokehShader');
-require('threejs/examples/js/shaders/FXAAShader');
-
-
-require('threejs/examples/js/postprocessing/EffectComposer');
-require('threejs/examples/js/postprocessing/RenderPass');
-require('threejs/examples/js/postprocessing/ShaderPass');
-require('threejs/examples/js/postprocessing/MaskPass');
-require('threejs/examples/js/postprocessing/BokehPass');
+//require('threejs/examples/js/shaders/CopyShader');
+//require('threejs/examples/js/shaders/BokehShader');
+//require('threejs/examples/js/shaders/FXAAShader');
+//
+//
+//require('threejs/examples/js/postprocessing/EffectComposer');
+//require('threejs/examples/js/postprocessing/RenderPass');
+//require('threejs/examples/js/postprocessing/ShaderPass');
+//require('threejs/examples/js/postprocessing/MaskPass');
+//require('threejs/examples/js/postprocessing/BokehPass');
 
 //private
 var screenWidth = global.innerWidth,
@@ -125,7 +125,7 @@ function setupLight(scene) {
     light2.shadowMapWidth = 2048;
     light2.shadowMapHeight = 2048;
     scene.add(lights['light2'] = light2);
-    
+
     var light3 = new THREE.SpotLight(0xffffff, 1);
 //    directionalLight.onlyShadow = true;
     light3.position.x = 0;
@@ -193,7 +193,18 @@ function makeShaderMaterial(normal, diffuse, specular) {
     });
 }
 
-function loadDummyModel(scene) {
+function reloadDummy() {
+
+    loadDummyModel(global.Dressformer.dummy, [
+            'height=' + controls.sizes.height,
+            'chest=' + controls.sizes.chest,
+            'underbust=' + controls.sizes.underbust,
+            'waist=' + controls.sizes.waist,
+            'hips=' + controls.sizes.hips
+    ]);
+}
+
+function loadDummyModel(url, params) {
     var loader = new THREE.OBJLoader(loadingManager),
         matWithCubeMap = new THREE.MeshPhongMaterial({
             color: 0x000000,
@@ -202,8 +213,13 @@ function loadDummyModel(scene) {
             envMap: envMap,
             shading: THREE.SmoothShading
         });
+    scene.remove(models['dummy']);
+    if (params && params.length > 0) {
+        url += '?' + params.join('&');
+    }
 
-    loader.load('assets/models/obj/dummy/DummyLP.OBJ', function (dummy) {
+    loader.load(url, function (dummy) {
+//    loader.load('assets/models/obj/dummy/DummyLP.OBJ', function (dummy) {
 //    loader.load('assets/models/obj/lenin/lenin.obj', function (dummy) {
 
         dummy.traverse(function (child) {
@@ -284,6 +300,8 @@ function loadModelWithMTL(name, cb) {
 function initControls() {
     var Ctrl = require("./controls").init();
     controls = Ctrl.controls;
+
+    controls.sizes.apply = reloadDummy;
 
     function shadowEnable(light, flag) {
         if (flag) {
@@ -437,17 +455,17 @@ function init() {
     scene = new THREE.Scene();
 
     scene.matrixAutoUpdate = false;
-    initPostprocessing();
+//    initPostprocessing();
 //    renderer.autoClear = false;
 
     setupLight(scene);
     setupEnvironment(scene);
-    loadDummyModel(scene);
-    loadModel(controls.garment = global.Dressformer.garment.id, function (model) {
-        models['garment'] = model;
-        scene.add(model);
-        render();
-    });
+    loadDummyModel(global.Dressformer.dummy);
+//    loadModel(controls.garment = global.Dressformer.garment.id, function (model) {
+//        models['garment'] = model;
+//        scene.add(model);
+//        render();
+//    });
 
     container = global.document.getElementById('viewport');
     container.appendChild(renderer.domElement);
@@ -545,7 +563,7 @@ function onWindowResize() {
     camera.updateProjectionMatrix();
 
     renderer.setSize(screenWidth, screenHeight, true);
-    postprocessing.composer.setSize(screenWidthDPR, screenHeightDPR);
+//    postprocessing.composer.setSize(screenWidthDPR, screenHeightDPR);
     startRender();
 }
 

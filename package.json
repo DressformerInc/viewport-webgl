@@ -11,7 +11,8 @@
     "lusca": "^1.0.0",
     "method-override": "~1.0.0",
     "morgan": "~1.0.0",
-    "tween.js": "^0.14.0"
+    "tween.js": "^0.14.0",
+    "request": "latest"
   },
   "devDependencies": {
     "gulp": "^3.8.6",

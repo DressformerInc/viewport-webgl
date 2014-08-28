@@ -8,6 +8,17 @@ var dat = require('../../../libs/dat.gui.js'),
     controllers = {},
     controls = {
         garment: 'ADS_201407_0005_0002',
+        //sizes
+        sizes: {
+            height: 190,
+            chest: 130,
+            underbust: 130,
+            waist: 90,
+            hips: 110,
+            apply: function () {
+                console.log('apply sizes', null);
+            }
+        },
         //dummy
         dummy: {
             color: '#000000'
@@ -60,7 +71,7 @@ var dat = require('../../../libs/dat.gui.js'),
 
 function initGUI(controls) {
     gui = new dat.GUI();
-    gui.closed = true;
+    gui.closed = false;
     controllers['garment'] = gui.add(controls, 'garment', [
 //        'ADS_201407_0005_0001',
         'ADS_201407_0005_0002',
@@ -78,6 +89,15 @@ function initGUI(controls) {
         'KPL_201407_0020_0009',
         'KPL_201407_0020_0010'
     ]).listen();
+    var sizesFolder = gui.addFolder('sizes');
+    controllers['sizes.height'] = sizesFolder.add(controls.sizes, 'height', 130, 230, 5);
+    controllers['sizes.chest'] = sizesFolder.add(controls.sizes, 'chest', 50, 150, 5);
+    controllers['sizes.underbust'] = sizesFolder.add(controls.sizes, 'underbust', 50, 150, 5);
+    controllers['sizes.waist'] = sizesFolder.add(controls.sizes, 'waist', 50, 150, 5);
+    controllers['sizes.hips'] = sizesFolder.add(controls.sizes, 'hips', 70, 150, 5);
+    controllers['sizes.apply'] = sizesFolder.add(controls.sizes, 'apply');
+    sizesFolder.closed = false;
+
     var dummyFolder = gui.addFolder('dummy');
     controllers['dummy.color'] = dummyFolder.add(controls.dummy, 'color');
 
@@ -119,8 +139,6 @@ function initGUI(controls) {
     controllers['focus'] = dof.add(controls, 'focus', 0.0, 3.0, 0.025);
     controllers['aperture'] = dof.add(controls, 'aperture', 0.001, 0.2, 0.001 );
     controllers['maxblur'] = dof.add(controls, 'maxblur', 0.0, 3.0, 0.025);
-
-
 
 }
 
