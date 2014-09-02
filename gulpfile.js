@@ -168,8 +168,6 @@ gulp.task('rsync', function (cb) {
         .pipe(exec('ssh v2.dressformer.com forever restart /opt/www/viewport-webgl-test/server/app.js', options));
 });
 
-
-
 gulp.task('deploy', function (cb) {
     sequence(
         'clear',
