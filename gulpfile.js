@@ -158,6 +158,27 @@ gulp.task('log', function () {
     );
 });
 
+gulp.task('rsync', function (cb) {
+    var options = {
+            silent: false
+        };
+
+    return gulp.src('')
+        .pipe(exec('rsync -crv --delete --exclude "server/config.json" ./dist v2.dressformer.com:/opt/www/viewport-webgl-test', options))
+        .pipe(exec('ssh v2.dressformer.com forever restart /opt/www/viewport-webgl-test/server/app.js', options));
+});
+
+
+
+gulp.task('deploy', function (cb) {
+    sequence(
+        'clear',
+        'dist',
+        'rsync',
+        'clear',
+        cb);
+});
+
 gulp.task('github-release', require('./github/release').createAndUpload);
 
 //combo tasks
