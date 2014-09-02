@@ -39,7 +39,7 @@ if ('development' === config.ENVIRONMENT) {
 
 app.route('/:id?')
     .get(function (req, res, next) {
-        request('http://webgl.dressformer.com/api/user', function (error, response, body) {
+        request('http://v2.dressformer.com/api/user', function (error, response, body) {
             if (!error && response.statusCode == 200) {
                 var data;
                 try {
