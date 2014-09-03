@@ -68,6 +68,8 @@ app.route('/:id?')
                     data = JSON.parse(body);
                 }catch(e){}
 
+                console.log('data:', data);
+
                 res.render('index', {
                     version: pkg.version,
                     title: "Dressformer widget",
