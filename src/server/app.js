@@ -37,6 +37,28 @@ if ('development' === config.ENVIRONMENT) {
     console.log('Development mode');
 }
 
+app.route('/ext/:id?')
+    .get(function (req, res, next) {
+        request('http://v2.dressformer.com/api/user', function (error, response, body) {
+            if (!error && response.statusCode == 200) {
+                var data;
+                try {
+                    data = JSON.parse(body);
+                }catch(e){}
+
+                res.render('ext', {
+                    version: pkg.version,
+                    title: "Dressformer widget ext",
+                    id: req.params.id || 'ADS_201407_0005_0002',
+                    dummy: data.dummy
+                });
+            }else {
+                next(error);
+            }
+        });
+    });
+
+
 app.route('/:id?')
     .get(function (req, res, next) {
         request('http://v2.dressformer.com/api/user', function (error, response, body) {
@@ -52,9 +74,12 @@ app.route('/:id?')
                     id: req.params.id || 'ADS_201407_0005_0002',
                     dummy: data.dummy
                 });
+            }else {
+                next(error);
             }
         });
     });
+
 
 http.createServer(app).listen(app.get('port'), '0.0.0.0', function () {
     console.log('Express server listening on port ' + app.get('port'));

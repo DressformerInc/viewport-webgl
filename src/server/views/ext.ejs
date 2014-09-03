@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title><%=title%></title>
+    <link rel="stylesheet" id="css_theme" href="css/light.css">
+</head>
+<body>
+<div class="df_widget_bg" id="dfw_bg">
+    <div class="dfw_viewport_wrapper">
+        <div class="dfw_viewport_wrapper2">
+            <iframe src="" class="dfw_viewport" scrollig="no"></iframe>
+            <div class="dfwv_history">
+                <div class="dfwv_history_back" onclick="dfViewport.history.back();"><span class="df_icon">&#xf053;</span></div>
+                <div class="dfwv_history_forward" onclick="dfViewport.history.forward();"><span class="df_icon">&#xf054;</span></div>
+            </div>
+            <div class="dfwv_control dfwvc_up"><span class="df_icon">&#xf106;</span></div>
+            <div class="dfwv_control dfwvc_down"><span class="df_icon">&#xf107;</span></div>
+            <div class="dfwv_control dfwvc_left"><span class="df_icon">&#xf104;</span></div>
+            <div class="dfwv_control dfwvc_right"><span class="df_icon">&#xf105;</span></div>
+            <div class="dfwv_control dfwvc_default"><span class="df_icon">&#xf1db;</span></div>
+
+            <div class="dfwv_control dfwvc_zoom_in"><span class="df_icon">&#xf067;</span></div>
+            <div class="dfwv_control dfwvc_zoom_out"><span class="df_icon">&#xf068;</span></div>
+
+            <div class="dfwv_control dfwvc_d_silver"><div class="dfwvc_d_inner dfd_silver"></div></div>
+            <div class="dfwv_control dfwvc_d_gold"><div class="dfwvc_d_inner dfd_gold"></div></div>
+            <div class="dfwv_control dfwvc_d_carbon"><div class="dfwvc_d_inner dfd_carbon"></div></div>
+            <div class="dfwv_control dfwvc_d_plastic"><div class="dfwvc_d_inner dfd_plastic"></div></div>
+
+            <div class="df_preloader">
+                <div class="dfp_dot" id="dfpd_left"></div>
+                <div class="dfp_dot" id="dfpd_center"></div>
+                <div class="dfp_dot" id="dfpd_right"></div>
+            </div>
+        </div>
+    </div>
+    <div class="df_left_sidebar" id="profile">
+        <div class="h10"></div>
+        <div class="dfp_block">Gender:
+            <div class="dfpb_radio dfpbr_left dfpb_radio_on">Female</div>
+            <div class="dfpb_radio dfpbr_right">Male</div>
+        </div>
+        <div class="h10"></div>
+        <div class="dfp_block">Units:
+            <div class="dfpb_radio dfpbr_left dfpb_radio_on">cm</div>
+            <div class="dfpb_radio dfpbr_right">inches</div>
+        </div>
+        <div class="h10"></div>
+        <div class="dfp_block">Height:
+            <div class="dfpbm_minus"><span class="df_icon">&#xf068;</span></div>
+            <div class="dfpbm_enter" contenteditable="true">175</div>
+            <div class="dfpbm_plus"><span class="df_icon">&#xf067;</span></div>
+        </div>
+        <div class="h10"></div>
+        <div class="dfp_block">Bust circum:
+            <div class="dfpbm_minus"><span class="df_icon">&#xf068;</span></div>
+            <div class="dfpbm_enter" contenteditable="true">90</div>
+            <div class="dfpbm_plus"><span class="df_icon">&#xf067;</span></div>
+        </div>
+        <div class="h10"></div>
+        <div class="dfp_block">Underbust circum:
+            <div class="dfpbm_minus"><span class="df_icon">&#xf068;</span></div>
+            <div class="dfpbm_enter" contenteditable="true">65</div>
+            <div class="dfpbm_plus"><span class="df_icon">&#xf067;</span></div>
+        </div>
+        <div class="h10"></div>
+        <div class="dfp_block">Waist circum:
+            <div class="dfpbm_minus"><span class="df_icon">&#xf068;</span></div>
+            <div class="dfpbm_enter" contenteditable="true">60</div>
+            <div class="dfpbm_plus"><span class="df_icon">&#xf067;</span></div>
+        </div>
+        <div class="h10"></div>
+        <div class="dfp_block">Hips circum:
+            <div class="dfpbm_minus"><span class="df_icon">&#xf068;</span></div>
+            <div class="dfpbm_enter" contenteditable="true">90</div>
+            <div class="dfpbm_plus"><span class="df_icon">&#xf067;</span></div>
+        </div>
+        <div class="h10"></div>
+        <div class="dfp_block">Save changes?
+            <div class="dfp_btn dfpbr_left dfp_btn_cancel">Cancel</div>
+            <div class="dfp_btn dfpbr_right dfp_btn_ok">Yes</div>
+        </div>
+
+    </div>
+    <div class="df_left_sidebar" id="share">
+        <div class="df_share_btn" onclick="social.share('fb');"><span class="df_icon">&#xf09a;</span></div>
+        <div class="df_share_btn" onclick="social.share('gp');"><span class="df_icon">&#xf0d5;</span></div>
+        <div class="df_share_btn" onclick="social.share('tw');"><span class="df_icon">&#xf099;</span></div>
+    </div>
+
+    <div class="df_widget_left_panel" id="dfw_left_panel">
+        <div class="dflp_btn" id="sb_btn_profile" onclick="dfSidebar._show('profile');">My Body Profile</div>
+        <div class="dflp_btn" id="sb_btn_share" onclick="dfSidebar._show('share');">Share Look</div>
+        <a href="//dressformer.com" class="df_logo"></a>
+    </div>
+    <div class="df_garment_set" id="df_garment_set">
+        <div class="df_garment_preview"></div>
+        <div class="dfg_size">XS</div>
+        <div class="dfg_size dfg_size_on">S</div>
+        <div class="dfg_size">M</div><div class="dfg_size_recomended"><span class="df_icon">&#xf078;</span>&nbsp; Recomended</div>
+        <div class="dfg_size">L</div>
+        <div class="dfg_size">XL</div>
+        <div class="h40"></div>
+        <div class="dfg_btn"><span class="df_icon">&#xf061;</span>&nbsp; Put Off</div>
+        <div class="dfg_btn"><span class="df_icon">&#xf00d;</span>&nbsp; Remove from list</div>
+    </div>
+    <div class="df_widget_right_panel" id="dfw_left_panel">
+        <div class="dfw_close" onclick="dfWidget._close();"><span class="df_icon">&#xf00d;</span></div>
+        <div class="dfrp_garment" id="dfg_item1" onclick="dfGarment.setting();"><div class="dfrpg_select"><span class="df_icon">&#xf00c;</span></div></div>
+        <div class="dfrp_garment" id="dfg_item2" title="Select garment"></div>
+        <div class="dfrp_garment" id="dfg_item3"><div class="dfrpg_select"><span class="df_icon">&#xf00c;</span></div></div>
+        <div class="dfrp_garment" id="dfg_item4"></div>
+        <div class="dfrp_garment" id="dfg_item5"></div>
+        <div class="dfrp_garment" id="dfg_item6"><div class="dfrpg_select"><span class="df_icon">&#xf00c;</span></div></div>
+        <div class="dfrp_garment" id="dfg_item7"><div class="dfrpg_select"><span class="df_icon">&#xf00c;</span></div></div>
+        <div class="dfrp_garment" id="dfg_item8"></div>
+        <div class="buy_all" onclick="dfWidget._close();"><span class="df_icon">&#xf07a;</span>
+            <div class="buy_all_items">4 items</div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
