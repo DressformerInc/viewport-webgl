@@ -43,12 +43,12 @@ var screenWidth = global.innerWidth,
     targetMax = 200,
     renderStart,
     envMap = THREE.ImageUtils.loadTextureCube([
-        'assets/envMap/pos-x.png',
-        'assets/envMap/neg-x.png',
-        'assets/envMap/pos-y.png',
-        'assets/envMap/neg-y.png',
-        'assets/envMap/pos-z.png',
-        'assets/envMap/neg-z.png'
+        'static/envMap/pos-x.png',
+        'static/envMap/neg-x.png',
+        'static/envMap/pos-y.png',
+        'static/envMap/neg-y.png',
+        'static/envMap/pos-z.png',
+        'static/envMap/neg-z.png'
     ]);
 
 //var shader = glslify({
@@ -236,7 +236,7 @@ function loadDummyModel(url, params) {
 }
 
 function loadModel(name, cb) {
-    var basePath = "assets/models/obj/" + name + "/",
+    var basePath = "static/models/obj/" + name + "/",
         objPath = basePath + name + ".obj",
         normalPath = basePath + name + "_normal.jpg",
         diffusePath = basePath + name + "_diffuse.jpg",
@@ -269,7 +269,7 @@ function loadModel(name, cb) {
 }
 
 function loadModelWithMTL(name, cb) {
-    var basePath = "assets/models/obj/" + name + "/",
+    var basePath = "static/models/obj/" + name + "/",
         objPath = basePath + name + ".obj",
         mtlPath = basePath + name + ".mtl",
         normalPath = basePath + name + "_normal.jpg",
