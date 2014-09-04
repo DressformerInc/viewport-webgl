@@ -27,7 +27,8 @@ app.use(lusca({
     hsts: {maxAge: 31536000, includeSubDomains: true},  //https://www.owasp.org/index.php/HTTP_Strict_Transport_Security
     xssProtection: true //http://blog.sjinks.pro/security/884-http-headers-to-secure-website/
 }));
-app.use('/', express.static(__dirname + '/../client'));
+console.log('static dir:', path.normalize(__dirname + '/../client'));
+app.use('/', express.static(path.normalize(__dirname + '/../client')));
 app.use(morgan('dev'));
 app.use(bodyParser());
 app.use(methodOverride());
@@ -46,6 +47,8 @@ app.route('/ext/:id?')
                     data = JSON.parse(body);
                 }catch(e){}
 
+                console.log('dummy:', data.dummy);
+
                 res.render('ext', {
                     version: pkg.version,
                     title: "Dressformer widget ext",
@@ -59,7 +62,7 @@ app.route('/ext/:id?')
     });
 
 
-app.route('/:id?')
+app.route('/')
     .get(function (req, res, next) {
         request('http://v2.dressformer.com/api/user', function (error, response, body) {
             if (!error && response.statusCode == 200) {
@@ -68,7 +71,8 @@ app.route('/:id?')
                     data = JSON.parse(body);
                 }catch(e){}
 
-                console.log('data:', data);
+                console.log('data:', data.dummy.assets);
+                data.dummy.assets.geometry.url = 'http://v2.dressformer.com/assets/geometry/'+data.dummy.assets.geometry.id;
 
                 res.render('index', {
                     version: pkg.version,

@@ -6,15 +6,16 @@ var dat = require('../../../libs/dat.gui.js'),
     webgl = require('./webgl'),
     gui,
     controllers = {},
+    body = global.Dressformer.dummy.body,
     controls = {
         garment: 'ADS_201407_0005_0002',
         //sizes
         sizes: {
-            height: 190,
-            chest: 130,
-            underbust: 130,
-            waist: 90,
-            hips: 110,
+            height: body.height,
+            chest: body.chest,
+            underbust: body.underbust,
+            waist: body.waist,
+            hips: body.hips,
             apply: function () {
                 console.log('apply sizes', null);
             }
@@ -89,12 +90,12 @@ function initGUI(controls) {
         'KPL_201407_0020_0009',
         'KPL_201407_0020_0010'
     ]).listen();
-    var sizesFolder = gui.addFolder('sizes');
-    controllers['sizes.height'] = sizesFolder.add(controls.sizes, 'height', 130, 230, 5);
-    controllers['sizes.chest'] = sizesFolder.add(controls.sizes, 'chest', 50, 150, 5);
-    controllers['sizes.underbust'] = sizesFolder.add(controls.sizes, 'underbust', 50, 150, 5);
-    controllers['sizes.waist'] = sizesFolder.add(controls.sizes, 'waist', 50, 150, 5);
-    controllers['sizes.hips'] = sizesFolder.add(controls.sizes, 'hips', 70, 150, 5);
+    var sizesFolder = gui.addFolder('sizes'), step = 0.5;
+    controllers['sizes.height'] = sizesFolder.add(controls.sizes, 'height', 130, 230, step);
+    controllers['sizes.chest'] = sizesFolder.add(controls.sizes, 'chest', 50, 150, step);
+    controllers['sizes.underbust'] = sizesFolder.add(controls.sizes, 'underbust', 50, 150, step);
+    controllers['sizes.waist'] = sizesFolder.add(controls.sizes, 'waist', 50, 150, step);
+    controllers['sizes.hips'] = sizesFolder.add(controls.sizes, 'hips', 70, 150, step);
     controllers['sizes.apply'] = sizesFolder.add(controls.sizes, 'apply');
     sizesFolder.closed = false;
 

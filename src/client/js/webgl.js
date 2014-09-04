@@ -195,7 +195,7 @@ function makeShaderMaterial(normal, diffuse, specular) {
 
 function reloadDummy() {
 
-    loadDummyModel(global.Dressformer.dummy, [
+    loadDummyModel(global.Dressformer.dummy.assets.geometry.url, [
             'height=' + controls.sizes.height,
             'chest=' + controls.sizes.chest,
             'underbust=' + controls.sizes.underbust,
@@ -213,7 +213,9 @@ function loadDummyModel(url, params) {
             envMap: envMap,
             shading: THREE.SmoothShading
         });
+
     scene.remove(models['dummy']);
+
     if (params && params.length > 0) {
         url += '?' + params.join('&');
     }
@@ -460,7 +462,7 @@ function init() {
 
     setupLight(scene);
     setupEnvironment(scene);
-    loadDummyModel(global.Dressformer.dummy);
+    loadDummyModel(global.Dressformer.dummy.assets.geometry.url);
 //    loadModel(controls.garment = global.Dressformer.garment.id, function (model) {
 //        models['garment'] = model;
 //        scene.add(model);
