@@ -8,5 +8,4 @@ var webgl = require('./webgl').init(),
     ViewportExt = require('./viewport-ext');
 
 
-new ViewportExt(events);
-console.log('events.on:', events.on);
+new ViewportExt(events, webgl);

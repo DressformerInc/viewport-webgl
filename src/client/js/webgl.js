@@ -638,5 +638,9 @@ module.exports = {
                 document.webkitCancelFullScreen();
             }
         }
+    },
+    setParams: function (params) {
+        loadDummyModel(global.Dressformer.dummy.assets.geometry.url, params);
     }
+
 };

@@ -7,8 +7,10 @@ var inherits = require('util').inherits,
     CtrlRadio = require('./controls/CtrlRadio'),
     CtrlNumber = require('./controls/CtrlNumber');
 
-var ViewportExt = module.exports = function (events) {
+var ViewportExt = module.exports = function (events, webgl) {
     Viewport.call(this, events);
+    this.webgl = webgl;
+    this.paramsChanged = {};
 };
 
 inherits(ViewportExt, Viewport);
@@ -24,6 +26,8 @@ ViewportExt.prototype.init = function () {
 
     $viewport.on('click', '#sb_btn_profile', this.showProfile.bind(this));
     $viewport.on('click', '#sb_btn_share', this.showShare.bind(this));
+    $viewport.on('click', '#btnProfileSave', this.saveProfile.bind(this));
+    $viewport.on('click', '#btnProfileCancel', this.cancelProfile.bind(this));
 
     this.radioGender = new CtrlRadio('#radioGender', this.genderChanged.bind(this));
     this.radioUnits = new CtrlRadio('#radioUnits', this.unitsChanged.bind(this));
@@ -56,22 +60,44 @@ ViewportExt.prototype.unitsChanged = function (value) {
 
 ViewportExt.prototype.heightChanged = function (value) {
     console.log('heihgt changed:', value);
+    this.paramsChanged.height = value;
 };
 
 ViewportExt.prototype.chestChanged = function (value) {
     console.log('chest changed:', value);
+    this.paramsChanged.chest = value;
 };
 
 ViewportExt.prototype.underbustChanged = function (value) {
     console.log('underbust changed:', value);
+    this.paramsChanged.underbust = value;
 };
 
 ViewportExt.prototype.waistChanged = function (value) {
     console.log('waist changed:', value);
+    this.paramsChanged.waist = value;
 };
 
 ViewportExt.prototype.hipsChanged = function (value) {
     console.log('hips changed:', value);
+    this.paramsChanged.hips = value;
+};
+
+ViewportExt.prototype.saveProfile = function () {
+    var params = [];
+    for (var param in this.paramsChanged) {
+        if (this.paramsChanged.hasOwnProperty(param)){
+            params.push(param+'='+this.paramsChanged[param].toFixed(0))
+        }
+    }
+
+    console.log('save profile:', params);
+
+    this.webgl.setParams(params);
+};
+
+ViewportExt.prototype.cancelProfile = function () {
+    console.log('cancel profile');
 };
 
 
