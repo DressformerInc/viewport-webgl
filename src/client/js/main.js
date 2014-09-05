@@ -51,7 +51,6 @@ function initEvents() {
 //            webgl.toggleFullscreen();
 //        })
         .on('mousedown', function () {
-//            console.log('mouse down', null);
             isMouseUp = false;
         })
         .on('mouseup', function () {
