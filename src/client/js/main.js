@@ -23,28 +23,28 @@ webgl.ee.on('update', function () {
 initEvents();
 
 function initEvents() {
-    var $viewport = $('#viewport');
+    var $viewport = $('body');
 
     $viewport
-        .on('mousedown', '#cc_up', function () {
+        .on('mousedown', '.dfwvc_up', function () {
             control = webgl.rotateUp;
         })
-        .on('mousedown', '#cc_down', function () {
+        .on('mousedown', '.dfwvc_down', function () {
             control = webgl.rotateDown;
         })
-        .on('mousedown', '#cc_left', function () {
+        .on('mousedown', '.dfwvc_left', function () {
             control = webgl.rotateLeft;
         })
-        .on('mousedown', '#cc_right', function () {
+        .on('mousedown', '.dfwvc_right', function () {
             control = webgl.rotateRight;
         })
-        .on('click', '#cc_default', function () {
+        .on('click', '.dfwvc_default', function () {
             webgl.resetRotation();
         })
-        .on('mousedown', '#zc_in', function () {
+        .on('mousedown', '.dfwvc_zoom_in', function () {
             control = webgl.zoomIn;
         })
-        .on('mousedown', '#zc_out', function () {
+        .on('mousedown', '.dfwvc_zoom_out', function () {
             control = webgl.zoomOut;
         })
         .on('click', '#vprt_full', function () {

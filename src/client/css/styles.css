@@ -1,3 +1,5 @@
+/* COMMON */
+
 @charset "utf-8";
 
 @font-face {
@@ -15,6 +17,7 @@ body {
 	margin: 0;
 	padding: 0;
     font-family: 'Open Sans Condensed';
+    transition: 0.2s;
     color: #292929;
     background-image: url('../img/bg_tile.png');
 }
@@ -33,20 +36,7 @@ label {
 .df_icon {
 	font-family: 'IconFont';
 }
-.ui-tooltip {
-	position: absolute;
-	padding-left: 14px;
-	padding-right: 14px;
-	line-height: 36px;
-	text-align: center;
-	border-radius: 18px;
-	background-color: #292929;
-	color: #fff;
-	box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
-}
-.ui-tooltip-content {
-	
-}
+/* UI */
 .df_input_text {
     display: inline-block;
     height: 40px;
@@ -62,7 +52,7 @@ label {
     padding-bottom: 0px;
     background-color: #fafafa;
     transition: 0.2s;
-	box-sizing: border-box;
+	box-shadow: border-box;
 }
 .df_input_text:hover {
     border-radius: 12px;
@@ -85,6 +75,9 @@ label {
 .df_input_button:hover {
     border-radius: 12px;
 }
+/* BLOCKS */
+
+/* LAYUOT */
 .url_panel {
     position: fixed;
     top: 0px;
@@ -166,15 +159,16 @@ label {
     left: 50%;
     margin-top: -100px;
     margin-left: -100px;
+    border: 1px #ccc solid;
     text-align: center;
     font-size: 2em;
     line-height: 200px;
     color: #ccc;
-    background-color: rgba(256, 256, 256, 0.6);
+    background-color: #fff;
 }
 
 .df_widget_bg {
-    display: block;
+    display: none;
     position: fixed;
     height: 100%;
     width: 100%;
@@ -602,7 +596,6 @@ label {
 }
 
 .df_preloader {
-    display: none;
 	position: absolute;
 	height: 120px;
 	width: 120px;
@@ -903,16 +896,4 @@ label {
 .dfp_btn_ok {
 	border-left: 1px #292929 solid;
 	color: green;
-}
-
-.fd_theme_swap {
-	display: inline-block;
-}
-
-.mdfr_f12 {
-	
-}
-
-.mdfr_f12 {
-	
 }

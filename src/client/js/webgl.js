@@ -196,11 +196,11 @@ function makeShaderMaterial(normal, diffuse, specular) {
 function reloadDummy() {
 
     loadDummyModel(global.Dressformer.dummy.assets.geometry.url, [
-            'height=' + controls.sizes.height,
-            'chest=' + controls.sizes.chest,
-            'underbust=' + controls.sizes.underbust,
-            'waist=' + controls.sizes.waist,
-            'hips=' + controls.sizes.hips
+            'height=' + controls.sizes.height.toFixed(1),
+            'chest=' + controls.sizes.chest.toFixed(1),
+            'underbust=' + controls.sizes.underbust.toFixed(1),
+            'waist=' + controls.sizes.waist.toFixed(1),
+            'hips=' + controls.sizes.hips.toFixed(1)
     ]);
 }
 
@@ -559,8 +559,9 @@ function startRender() {
 }
 
 function onWindowResize() {
-    screenWidth = global.innerWidth;
-    screenHeight = global.innerHeight;
+    var viewport = global.document.getElementById('viewport');
+    screenWidth = viewport.clientWidth;//global.innerWidth;
+    screenHeight = viewport.clientHeight;//global.innerHeight;
     camera.aspect = screenWidth / screenHeight;
     camera.updateProjectionMatrix();
 

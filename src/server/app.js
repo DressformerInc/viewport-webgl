@@ -47,7 +47,7 @@ app.route('/ext/:id?')
                     data = JSON.parse(body);
                 }catch(e){}
 
-                console.log('dummy:', data.dummy);
+                data.dummy.assets.geometry.url = 'http://v2.dressformer.com/assets/geometry/'+data.dummy.assets.geometry.id;
 
                 res.render('ext', {
                     version: pkg.version,

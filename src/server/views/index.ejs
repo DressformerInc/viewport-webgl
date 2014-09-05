@@ -1,12 +1,19 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="description" content="Dressformer Widget Testing Page">
+    <meta name="keywords" content="[[*keywords]]"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Dressformer webgl widget v<%=version%></title>
+    <title>Dressformer webgl widget v<%= version %></title>
+
+    <link rel="icon" type="image/png" href="img/favicon.png"/>
     <link href='http://fonts.googleapis.com/css?family=Dosis:500' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="css/style.css"/>
+    <link rel="stylesheet" id="css_theme" href="css/light.css">
+
     <script>
         var Dressformer = {
             garment: {
@@ -18,23 +25,59 @@
     </script>
 </head>
 <body>
-<div id="viewport">
-    <div class="viewport_controls">
-        <div class="camera_control">
-            <div class="cc_btn animation" id="cc_up">&#xf077;</div>
-            <div class="cc_btn animation" id="cc_down">&#xf078;</div>
-            <div class="cc_btn animation" id="cc_left">&#xf053;</div>
-            <div class="cc_btn animation" id="cc_right">&#xf054;</div>
-            <div class="cc_btn animation" id="cc_default">&#xf192;</div>
-        </div>
-        <div class="vprt_full" id="vprt_full">&#xf065;</div>
-        <div class="zoom_control">
-            <div class="zc_btn animation" id="zc_in">&#xf067;</div>
-            <div class="zc_btn animation" id="zc_out">&#xf068;</div>
-        </div>
+<!--<div id="viewport">-->
+<!--<div class="viewport_controls">-->
+<!--<div class="camera_control">-->
+<!--<div class="cc_btn animation" id="cc_up">&#xf077;</div>-->
+<!--<div class="cc_btn animation" id="cc_down">&#xf078;</div>-->
+<!--<div class="cc_btn animation" id="cc_left">&#xf053;</div>-->
+<!--<div class="cc_btn animation" id="cc_right">&#xf054;</div>-->
+<!--<div class="cc_btn animation" id="cc_default">&#xf192;</div>-->
+<!--</div>-->
+<!--<div class="vprt_full" id="vprt_full">&#xf065;</div>-->
+<!--<div class="zoom_control">-->
+<!--<div class="zc_btn animation" id="zc_in">&#xf067;</div>-->
+<!--<div class="zc_btn animation" id="zc_out">&#xf068;</div>-->
+<!--</div>-->
+<!--</div>-->
+<!--</div>-->
+<div class="wrapper-fullscreen">
+    <div id="viewport" class="dfw_viewport" scrollig="no"></div>
+    <div class="dfwv_history">
+        <div class="dfwv_history_back" onclick="dfViewport.history.back();" title="Return to previous view">
+            <span class="df_icon">&#xf053;</span></div>
+        <div class="dfwv_history_forward" onclick="dfViewport.history.forward();" title="Go to next view"><span
+                    class="df_icon">&#xf054;</span></div>
+    </div>
+    <div class="dfwv_control dfwvc_up"><span class="df_icon">&#xf106;</span></div>
+    <div class="dfwv_control dfwvc_down"><span class="df_icon">&#xf107;</span></div>
+    <div class="dfwv_control dfwvc_left"><span class="df_icon">&#xf104;</span></div>
+    <div class="dfwv_control dfwvc_right"><span class="df_icon">&#xf105;</span></div>
+    <div class="dfwv_control dfwvc_default"><span class="df_icon">&#xf1db;</span></div>
+
+    <div class="dfwv_control dfwvc_zoom_in" title="Zoom in"><span class="df_icon">&#xf067;</span></div>
+    <div class="dfwv_control dfwvc_zoom_out" title="Zoom out"><span class="df_icon">&#xf068;</span></div>
+
+    <div class="dfwv_control dfwvc_d_silver">
+        <div class="dfwvc_d_inner dfd_silver"></div>
+    </div>
+    <div class="dfwv_control dfwvc_d_gold">
+        <div class="dfwvc_d_inner dfd_gold"></div>
+    </div>
+    <div class="dfwv_control dfwvc_d_carbon">
+        <div class="dfwvc_d_inner dfd_carbon"></div>
+    </div>
+    <div class="dfwv_control dfwvc_d_plastic">
+        <div class="dfwvc_d_inner dfd_plastic"></div>
+    </div>
+
+    <div class="df_preloader">
+        <div class="dfp_dot" id="dfpd_left"></div>
+        <div class="dfp_dot" id="dfpd_center"></div>
+        <div class="dfp_dot" id="dfpd_right"></div>
     </div>
 </div>
 
-<script src="js/viewport-webgl.js?v=<%=version%>"></script>
+<script src="js/viewport-webgl.js?v=<%= version %>"></script>
 </body>
 </html>

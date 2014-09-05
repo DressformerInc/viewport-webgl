@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="120px" height="120px" viewBox="0 0 120 120" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.0.4 (8053) - http://www.bohemiancoding.com/sketch -->
+    <title>Star 1</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#EF0000" offset="0%"></stop>
+            <stop stop-color="#B10000" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <polygon id="Star-1" fill="url(#linearGradient-1)" sketch:type="MSShapeGroup" points="60 115.171233 50.6139321 119.2613 42.9511514 112.470961 32.76057 113.460391 27.571163 104.634465 17.5735931 102.426407 15.365535 92.428837 6.53960855 87.23943 7.52903946 77.0488486 0.738699564 69.3860679 4.82876712 60 0.738699564 50.6139321 7.52903946 42.9511514 6.53960855 32.76057 15.365535 27.571163 17.5735931 17.5735931 27.571163 15.365535 32.76057 6.53960855 42.9511514 7.52903946 50.6139321 0.738699564 60 4.82876712 69.3860679 0.738699564 77.0488486 7.52903946 87.23943 6.53960855 92.428837 15.365535 102.426407 17.5735931 104.634465 27.571163 113.460391 32.76057 112.470961 42.9511514 119.2613 50.6139321 115.171233 60 119.2613 69.3860679 112.470961 77.0488486 113.460391 87.23943 104.634465 92.428837 102.426407 102.426407 92.428837 104.634465 87.23943 113.460391 77.0488486 112.470961 69.3860679 119.2613 "></polygon>
+    </g>
+</svg>
