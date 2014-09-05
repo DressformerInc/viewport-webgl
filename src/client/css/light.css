@@ -602,7 +602,6 @@ label {
 }
 
 .df_preloader {
-    display: none;
 	position: absolute;
 	height: 120px;
 	width: 120px;

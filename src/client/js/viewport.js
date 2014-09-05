@@ -2,13 +2,13 @@
  * Created by Miha-ha on 05.09.14.
  */
 
-var Viewport = module.exports= function (events) {
+var Viewport = module.exports= function (events, webgl) {
     this.events = events;
+    this.webgl = webgl;
     this.init();
 };
 
 Viewport.prototype.init = function () {
-    console.log('viewport init');
     this.events.on('mousedown', '.dfwvc_up', 'rotateUp');
     this.events.on('mousedown', '.dfwvc_down', 'rotateDown');
     this.events.on('mousedown', '.dfwvc_left', 'rotateLeft');

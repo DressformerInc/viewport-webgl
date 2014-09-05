@@ -214,6 +214,8 @@ function loadDummyModel(url, params) {
             shading: THREE.SmoothShading
         });
 
+    ee.emit('startload');
+
     scene.remove(models['dummy']);
 
     if (params && params.length > 0) {
@@ -233,6 +235,7 @@ function loadDummyModel(url, params) {
         });
 
         scene.add(models['dummy'] = dummy);
+        ee.emit('endload', dummy)
 
     });
 }
