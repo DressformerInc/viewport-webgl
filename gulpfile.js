@@ -82,7 +82,10 @@ gulp.task('dist', ['js', 'css', 'modules'], function () {
         //client
         'src/client/js/viewport-webgl.js',
         'src/client/css/style.css',
+        'src/client/css/light.css',
+        'src/client/css/dark.css',
         'src/client/fonts/*',
+        'src/client/img/*',
         'src/client/index.html',
         //server
         '!src/server/config.json',
