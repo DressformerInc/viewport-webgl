@@ -2,79 +2,11 @@
  * Created by Miha-ha on 01.08.14.
  */
 //Main
-var webgl = require("./webgl").init(),
-    $ = require('../../../libs/jquery-2.1.1.min'),
-    control,
-    isMouseUp = true,
-    end = Date.now();
+var webgl = require('./webgl').init(),
+    events = require('./events')(webgl),
+//    Viewport = require('./viewport'),
+    ViewportExt = require('./viewport-ext');
 
-webgl.ee.on('update', function () {
 
-    if (control) {
-        control();
-    }
-
-    if (isMouseUp && (Date.now() - end > 100)) {
-        control = null;
-    }
-
-});
-
-initEvents();
-
-function initEvents() {
-    var $viewport = $('body');
-
-    $viewport
-        .on('mousedown', '.dfwvc_up', function () {
-            control = webgl.rotateUp;
-        })
-        .on('mousedown', '.dfwvc_down', function () {
-            control = webgl.rotateDown;
-        })
-        .on('mousedown', '.dfwvc_left', function () {
-            control = webgl.rotateLeft;
-        })
-        .on('mousedown', '.dfwvc_right', function () {
-            control = webgl.rotateRight;
-        })
-        .on('click', '.dfwvc_default', function () {
-            webgl.resetRotation();
-        })
-        .on('mousedown', '.dfwvc_zoom_in', function () {
-            control = webgl.zoomIn;
-        })
-        .on('mousedown', '.dfwvc_zoom_out', function () {
-            control = webgl.zoomOut;
-        })
-        .on('click', '.dfwvc_d_silver', function () {
-            console.log('set color: silver');
-        })
-        .on('click', '.dfwvc_d_gold', function () {
-            console.log('set color: gold');
-        })
-        .on('click', '.dfwvc_d_carbon', function () {
-            console.log('set color: carbon');
-        })
-        .on('click', '.dfwvc_d_plastic', function () {
-            console.log('set color: plastic');
-        })
-        .on('click', '.dfwv_history_back', function () {
-            console.log('dfwv_history_back');
-        })
-        .on('click', '.dfwv_history_forward', function () {
-            console.log('dfwv_history_forward');
-        })
-//        .on('click', '#vprt_full', function () {
-//            webgl.toggleFullscreen();
-//        })
-        .on('mousedown', function () {
-            isMouseUp = false;
-        })
-        .on('mouseup', function () {
-//            control = null;
-//            console.log('mouse up', null);
-            end = Date.now();
-            isMouseUp = true;
-        });
-}
+new ViewportExt(events);
+console.log('events.on:', events.on);

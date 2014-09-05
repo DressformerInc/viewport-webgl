@@ -72,7 +72,7 @@ var dat = require('../../../libs/dat.gui.js'),
 
 function initGUI(controls) {
     gui = new dat.GUI();
-    gui.closed = false;
+    gui.closed = true;
     controllers['garment'] = gui.add(controls, 'garment', [
 //        'ADS_201407_0005_0001',
         'ADS_201407_0005_0002',

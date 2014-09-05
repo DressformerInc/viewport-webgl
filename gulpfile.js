@@ -20,7 +20,7 @@ var gulp = require('gulp'),
             'node_modules/dat.gui/dat.gui.min.js',
             //src
             'src/client/js/main.js',
-            'src/client/js/*.js',
+            'src/client/js/**/*.js',
             '!src/client/js/viewport-webgl.js'
         ],
         css: ['src/client/css/*.css', '!src/client/css/style.css', '!src/client/css/dark.css', '!src/client/css/light.css'],
