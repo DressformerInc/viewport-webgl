@@ -30,6 +30,15 @@ var CtrlNumber = module.exports = function (selector, onChange) {
     this.$input.on('change', this.onInputChange.bind(this));
 
     this.onChange = onChange;
+
+    return this;
+};
+
+CtrlNumber.prototype.setValue = function (value) {
+    this.value = value;
+    this.$input.text(this.value);
+    this.onChange(this.value);
+    return this;
 };
 
 CtrlNumber.prototype.onInputChange = function () {
@@ -38,13 +47,9 @@ CtrlNumber.prototype.onInputChange = function () {
 
 
 CtrlNumber.prototype.onPlusClick = function (e) {
-    this.value += 0.5;
-    this.$input.text(this.value);
-    this.onChange(this.value);
+    this.setValue(this.value += 0.5);
 };
 
 CtrlNumber.prototype.onMinusClick = function (e) {
-    this.value -= 0.5;
-    this.$input.text(this.value);
-    this.onChange(this.value);
+    this.setValue(this.value -= 0.5);
 };

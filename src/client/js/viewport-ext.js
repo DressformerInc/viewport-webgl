@@ -8,9 +8,8 @@ var inherits = require('util').inherits,
     CtrlNumber = require('./controls/CtrlNumber');
 
 var ViewportExt = module.exports = function (events, webgl) {
-    Viewport.call(this, events);
-    this.webgl = webgl;
-    this.paramsChanged = {};
+    Viewport.call(this, events, webgl);
+
     this.params = {
         height: {
             min:145,
@@ -42,6 +41,8 @@ ViewportExt.prototype.init = function () {
 
     var $viewport = this.events.$viewport;
 
+    this.paramsChanged = {};
+
     this.$profile = $viewport.find('#profile');
     this.$share = $viewport.find('#share');
     this.$leftSidebar = $viewport.find('.df_left_sidebar');
@@ -54,11 +55,12 @@ ViewportExt.prototype.init = function () {
     this.radioGender = new CtrlRadio('#radioGender', this.genderChanged.bind(this));
     this.radioUnits = new CtrlRadio('#radioUnits', this.unitsChanged.bind(this));
 
-    this.numberHeight = new CtrlNumber('#numberHeight', this.heightChanged.bind(this));
-    this.numberChest = new CtrlNumber('#numberChest', this.chestChanged.bind(this));
-    this.numberUnderbust = new CtrlNumber('#numberUnderbust', this.underbustChanged.bind(this));
-    this.numberWaist = new CtrlNumber('#numberWaist', this.waistChanged.bind(this));
-    this.numberHips = new CtrlNumber('#numberHips', this.hipsChanged.bind(this));
+    var body = global.Dressformer.dummy.body;
+    this.numberHeight = new CtrlNumber('#numberHeight', this.heightChanged.bind(this)).setValue(body.height.toFixed(0));
+    this.numberChest = new CtrlNumber('#numberChest', this.chestChanged.bind(this)).setValue(body.chest.toFixed(0));
+    this.numberUnderbust = new CtrlNumber('#numberUnderbust', this.underbustChanged.bind(this)).setValue(body.underbust.toFixed(0));
+    this.numberWaist = new CtrlNumber('#numberWaist', this.waistChanged.bind(this)).setValue(body.waist.toFixed(0));
+    this.numberHips = new CtrlNumber('#numberHips', this.hipsChanged.bind(this)).setValue(body.hips.toFixed(0));
 };
 
 ViewportExt.prototype.showProfile = function () {
