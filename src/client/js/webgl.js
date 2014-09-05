@@ -7,7 +7,8 @@ var THREE = global.THREE = require('threejs/build/three.min'),
     glslify = require('glslify'),
     utils = require('./utils'),
     EventEmitter = require('events').EventEmitter,
-    ee = new EventEmitter();
+    ee = new EventEmitter(),
+    Api = require('./api');
 
 require('threejs/examples/js/loaders/OBJLoader');
 require('threejs/examples/js/controls/OrbitControls');
@@ -273,6 +274,39 @@ function loadModel(name, cb) {
     });
 }
 
+function loadModelById(id, cb) {
+    Api.getGarment(id, function (data) {
+        console.log('garment:', data);
+        var objPath = data.assets.geometry.url,
+            normalPath = data.assets.normal.url,
+            diffusePath = data.assets.diffuse.url,
+            specularPath = data.assets.specular.url,
+            shaderMaterial = makeShaderMaterial(
+                normalPath,
+                diffusePath,
+                specularPath
+            );
+
+        objLoader.load(objPath, function (model) {
+
+            model.traverse(function (child) {
+                if (child instanceof THREE.Mesh) {
+                    child.geometry.computeVertexNormals(true);
+                    child.geometry.computeTangents();
+                    child.material = shaderMaterial;
+                    child.material.needsUpdate = true;
+                    child.castShadow = true;
+                    child.receiveShadow = true;
+                }
+            });
+            model.name = data.name;
+            model.position.set(0, 0, 0);
+            cb(model);
+        });
+    })
+}
+
+
 function loadModelWithMTL(name, cb) {
     var basePath = "static/models/obj/" + name + "/",
         objPath = basePath + name + ".obj",
@@ -471,6 +505,11 @@ function init() {
 //        scene.add(model);
 //        render();
 //    });
+    loadModelById('de8b4da5-da7e-4547-9a47-9027e0bd85c2', function (model) {
+        models['garment'] = model;
+        scene.add(model);
+        startRender();
+    });
 
     container = global.document.getElementById('viewport');
     container.appendChild(renderer.domElement);

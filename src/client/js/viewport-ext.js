@@ -139,13 +139,12 @@ ViewportExt.prototype.hipsChanged = function (value) {
 
 ViewportExt.prototype.saveProfile = function () {
     var params = [];
+
     for (var param in this.paramsChanged) {
         if (this.paramsChanged.hasOwnProperty(param)){
             params.push(param+'='+this.paramsChanged[param].toFixed(0))
         }
     }
-
-
 
     this.webgl.setParams(params);
 };
