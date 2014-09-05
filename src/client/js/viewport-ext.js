@@ -9,7 +9,16 @@ var inherits = require('util').inherits,
 
 var ViewportExt = module.exports = function (events, webgl) {
     Viewport.call(this, events, webgl);
+};
 
+inherits(ViewportExt, Viewport);
+
+ViewportExt.prototype.init = function () {
+    Viewport.prototype.init.call(this);
+
+    var $viewport = this.events.$viewport;
+
+    this.paramsChanged = {};
     this.params = {
         height: {
             min:145,
@@ -31,17 +40,7 @@ var ViewportExt = module.exports = function (events, webgl) {
             min: 83.394,
             max: 124.027
         }
-    }
-};
-
-inherits(ViewportExt, Viewport);
-
-ViewportExt.prototype.init = function () {
-    Viewport.prototype.init.call(this);
-
-    var $viewport = this.events.$viewport;
-
-    this.paramsChanged = {};
+    };
 
     this.$profile = $viewport.find('#profile');
     this.$share = $viewport.find('#share');
@@ -56,11 +55,43 @@ ViewportExt.prototype.init = function () {
     this.radioUnits = new CtrlRadio('#radioUnits', this.unitsChanged.bind(this));
 
     var body = global.Dressformer.dummy.body;
-    this.numberHeight = new CtrlNumber('#numberHeight', this.heightChanged.bind(this)).setValue(body.height.toFixed(0));
-    this.numberChest = new CtrlNumber('#numberChest', this.chestChanged.bind(this)).setValue(body.chest.toFixed(0));
-    this.numberUnderbust = new CtrlNumber('#numberUnderbust', this.underbustChanged.bind(this)).setValue(body.underbust.toFixed(0));
-    this.numberWaist = new CtrlNumber('#numberWaist', this.waistChanged.bind(this)).setValue(body.waist.toFixed(0));
-    this.numberHips = new CtrlNumber('#numberHips', this.hipsChanged.bind(this)).setValue(body.hips.toFixed(0));
+    this.numberHeight = new CtrlNumber({
+        selector: '#numberHeight',
+        onChange: this.heightChanged.bind(this),
+        value: body.height.toFixed(0),
+        min: 145,
+        max: 180
+    });
+    this.numberChest = new CtrlNumber({
+        selector: '#numberChest',
+        onChange: this.chestChanged.bind(this),
+        value: body.chest.toFixed(0),
+        min: 79,
+        max: 105
+    });
+    this.numberUnderbust = new CtrlNumber({
+        selector: '#numberUnderbust',
+        onChange: this.underbustChanged.bind(this),
+        value: body.underbust.toFixed(0),
+        min: 65,
+        max: 86
+    });
+    this.numberWaist = new CtrlNumber({
+        selector: '#numberWaist',
+        onChange: this.waistChanged.bind(this),
+        value: body.waist.toFixed(0),
+        min: 58,
+        max: 96
+    });
+    this.numberHips = new CtrlNumber({
+        selector: '#numberHips',
+        onChange: this.hipsChanged.bind(this),
+        value: body.hips.toFixed(0),
+        min: 84,
+        max: 124
+    });
+
+    this.paramsChanged = {}; //reset после установки начальных значений
 };
 
 ViewportExt.prototype.showProfile = function () {
@@ -114,13 +145,21 @@ ViewportExt.prototype.saveProfile = function () {
         }
     }
 
-    this.paramsChanged = {};
+
 
     this.webgl.setParams(params);
 };
 
 ViewportExt.prototype.cancelProfile = function () {
     console.log('cancel profile');
+    var body = global.Dressformer.dummy.body;
+    this.numberHeight.setValue(body.height.toFixed(0));
+    this.numberChest.setValue(body.chest.toFixed(0));
+    this.numberUnderbust.setValue(body.underbust.toFixed(0));
+    this.numberWaist.setValue(body.waist.toFixed(0));
+    this.numberHips.setValue(body.hips.toFixed(0));
+
+    this.paramsChanged = {};
 };
 
 
