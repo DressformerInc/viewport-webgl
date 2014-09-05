@@ -22,7 +22,7 @@ var dat = require('../../../libs/dat.gui.js'),
         },
         //dummy
         dummy: {
-            color: '#000000'
+            color: '#FFFFFF'
         },
         //light1
         light1: {

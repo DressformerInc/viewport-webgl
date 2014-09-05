@@ -207,7 +207,7 @@ function reloadDummy() {
 function loadDummyModel(url, params) {
     var loader = new THREE.OBJLoader(loadingManager),
         matWithCubeMap = new THREE.MeshPhongMaterial({
-            color: 0x000000,
+            color: 0xFFFFFF,
             shininess: 500,
             reflectivity: 1,
             envMap: envMap,
@@ -641,6 +641,9 @@ module.exports = {
     },
     setParams: function (params) {
         loadDummyModel(global.Dressformer.dummy.assets.geometry.url, params);
+    },
+    setDummyColor: function (color) {
+        models['dummy'].children[0].material.color.setHex(color);
     }
 
 };
