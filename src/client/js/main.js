@@ -10,7 +10,7 @@ var webgl = require("./webgl").init(),
 
 webgl.ee.on('update', function () {
 
-    if(control){
+    if (control) {
         control();
     }
 
@@ -46,6 +46,24 @@ function initEvents() {
         })
         .on('mousedown', '.dfwvc_zoom_out', function () {
             control = webgl.zoomOut;
+        })
+        .on('click', '.dfwvc_d_silver', function () {
+            console.log('set color: silver');
+        })
+        .on('click', '.dfwvc_d_gold', function () {
+            console.log('set color: gold');
+        })
+        .on('click', '.dfwvc_d_carbon', function () {
+            console.log('set color: carbon');
+        })
+        .on('click', '.dfwvc_d_plastic', function () {
+            console.log('set color: plastic');
+        })
+        .on('click', '.dfwv_history_back', function () {
+            console.log('dfwv_history_back');
+        })
+        .on('click', '.dfwv_history_forward', function () {
+            console.log('dfwv_history_forward');
         })
 //        .on('click', '#vprt_full', function () {
 //            webgl.toggleFullscreen();
