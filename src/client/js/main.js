@@ -47,9 +47,9 @@ function initEvents() {
         .on('mousedown', '.dfwvc_zoom_out', function () {
             control = webgl.zoomOut;
         })
-        .on('click', '#vprt_full', function () {
-            webgl.toggleFullscreen();
-        })
+//        .on('click', '#vprt_full', function () {
+//            webgl.toggleFullscreen();
+//        })
         .on('mousedown', function () {
 //            console.log('mouse down', null);
             isMouseUp = false;

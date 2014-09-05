@@ -18,7 +18,6 @@ app.set('port', config.PORT || process.env.PORT);
 app.engine('ejs', engine);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
-//app.use(express.favicon());
 app.use(lusca({
     csrf: false,
     csp: false,
