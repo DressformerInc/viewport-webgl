@@ -9,6 +9,7 @@ var Viewport = module.exports= function (events, webgl) {
 };
 
 Viewport.prototype.init = function () {
+    var webgl = this.webgl;
     this.events.on('mousedown', '.dfwvc_up', 'rotateUp');
     this.events.on('mousedown', '.dfwvc_down', 'rotateDown');
     this.events.on('mousedown', '.dfwvc_left', 'rotateLeft');
@@ -16,7 +17,19 @@ Viewport.prototype.init = function () {
     this.events.on('click', '.dfwvc_default', 'resetRotation');
     this.events.on('mousedown', '.dfwvc_zoom_in', 'zoomIn');
     this.events.on('mousedown', '.dfwvc_zoom_out', 'zoomOut');
-    this.events.on('click', '.dfwvc_d_silver', 'resetRotation');
+
+    this.events.$viewport.on('click','.dfwvc_d_silver', function () {
+        webgl.setDummyColor('cccccc');
+    });
+    this.events.$viewport.on('click','.dfwvc_d_gold', function () {
+        webgl.setDummyColor('cccc00');
+    });
+    this.events.$viewport.on('click','.dfwvc_d_carbon', function () {
+        webgl.setDummyColor('444444');
+    });
+    this.events.$viewport.on('click','.dfwvc_d_plastic', function () {
+        webgl.setDummyColor('999999');
+    });
 };
 /*
  //        .on('click', '.dfwvc_d_silver', function () {
