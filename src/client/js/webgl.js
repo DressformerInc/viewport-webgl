@@ -196,7 +196,7 @@ function makeShaderMaterial(normal, diffuse, specular) {
 
 function reloadDummy() {
 
-    loadDummyModel(global.Dressformer.dummy.assets.geometry.url, [
+    loadDummy(global.Dressformer.dummy.assets.geometry.url, [
             'height=' + controls.sizes.height.toFixed(1),
             'chest=' + controls.sizes.chest.toFixed(1),
             'underbust=' + controls.sizes.underbust.toFixed(1),
@@ -205,7 +205,7 @@ function reloadDummy() {
     ]);
 }
 
-function loadDummyModel(url, params) {
+function loadDummy(url, params) {
     var loader = new THREE.OBJLoader(loadingManager),
         matWithCubeMap = new THREE.MeshPhongMaterial({
             color: 0xFFFFFF,
@@ -214,6 +214,8 @@ function loadDummyModel(url, params) {
             envMap: envMap,
             shading: THREE.SmoothShading
         });
+
+    url = url || global.Dressformer.dummy.assets.geometry.url;
 
     ee.emit('startload');
 
@@ -274,36 +276,45 @@ function loadModel(name, cb) {
     });
 }
 
-function loadModelById(id, cb) {
-    Api.getGarment(id, function (data) {
-        console.log('garment:', data);
-        var objPath = data.assets.geometry.url,
-            normalPath = data.assets.normal.url,
-            diffusePath = data.assets.diffuse.url,
-            specularPath = data.assets.specular.url,
-            shaderMaterial = makeShaderMaterial(
-                normalPath,
-                diffusePath,
-                specularPath
-            );
+function loadGarment(garment, params, cb) {
+    var objPath = garment.assets.geometry.url,
+        normalPath = garment.assets.normal.url,
+        diffusePath = garment.assets.diffuse.url,
+        specularPath = garment.assets.specular.url,
+        shaderMaterial = makeShaderMaterial(
+            normalPath,
+            diffusePath,
+            specularPath
+        );
 
-        objLoader.load(objPath, function (model) {
+    if (params && params.length > 0) {
+        objPath += '?' + params.join('&');
+    }
 
-            model.traverse(function (child) {
-                if (child instanceof THREE.Mesh) {
-                    child.geometry.computeVertexNormals(true);
-                    child.geometry.computeTangents();
-                    child.material = shaderMaterial;
-                    child.material.needsUpdate = true;
-                    child.castShadow = true;
-                    child.receiveShadow = true;
-                }
-            });
-            model.name = data.name;
-            model.position.set(0, 0, 0);
-            cb(model);
+    objLoader.load(objPath, function (model) {
+
+        model.traverse(function (child) {
+            if (child instanceof THREE.Mesh) {
+                child.geometry.computeVertexNormals(true);
+                child.geometry.computeTangents();
+                child.material = shaderMaterial;
+                child.material.needsUpdate = true;
+                child.castShadow = true;
+                child.receiveShadow = true;
+            }
         });
-    })
+        model.name = garment.name;
+        model.position.set(0, 0, 0);
+        cb(model);
+    });
+
+}
+
+function loadGarmentById(id, params, cb) {
+    Api.getGarment(id, function (data) {
+        global.Dressformer.garment = data;
+        loadGarment(data, params, cb);
+    });
 }
 
 
@@ -499,17 +510,13 @@ function init() {
 
     setupLight(scene);
     setupEnvironment(scene);
-    loadDummyModel(global.Dressformer.dummy.assets.geometry.url);
+    loadDummy();
 //    loadModel(controls.garment = global.Dressformer.garment.id, function (model) {
 //        models['garment'] = model;
 //        scene.add(model);
 //        render();
 //    });
-    loadModelById('de8b4da5-da7e-4547-9a47-9027e0bd85c2', function (model) {
-        models['garment'] = model;
-        scene.add(model);
-        startRender();
-    });
+
 
     container = global.document.getElementById('viewport');
     container.appendChild(renderer.domElement);
@@ -682,10 +689,33 @@ module.exports = {
         }
     },
     setParams: function (params) {
-        loadDummyModel(global.Dressformer.dummy.assets.geometry.url, params);
+        var df = global.Dressformer;
+        loadDummy(df.dummy.assets.geometry.url, params);
+        if (df.garment) {
+            this.load(df.garment.id, params);
+        }
+
     },
     setDummyColor: function (color) {
         models['dummy'].children[0].material.color.setHex(color);
+    },
+    load: function (id, params) {
+        var garment = global.Dressformer.garment,
+            cb = function (model) {
+                models['garment'] = model;
+                scene.add(model);
+                startRender();
+            };
+
+        scene.remove(models['garment']);
+
+        if (garment && garment.id === id){
+            loadGarment(garment, params, cb)
+        }else {
+            loadGarmentById(id, params, cb);
+        }
+
     }
+
 
 };

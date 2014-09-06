@@ -15,9 +15,6 @@
     <link rel="stylesheet" id="css_theme" href="css/light.css">
     <script>
         var Dressformer = {
-            garment: {
-                id: '<%=id%>'
-            },
             dummy: <%-JSON.stringify(dummy)%>
         };
         console.log('Dressformer', Dressformer);
@@ -143,7 +140,7 @@
     <div class="df_widget_right_panel" id="dfw_left_panel">
         <div class="dfw_close" title="Close widget & return to shopping"><span
                     class="df_icon">&#xf00d;</span></div>
-        <div class="dfrp_garment" id="dfg_item1" title="Kira Plastinina dress">
+        <div class="dfrp_garment" id="dfg_item1" data-garment="de8b4da5-da7e-4547-9a47-9027e0bd85c2" title="Kira Plastinina dress">
             <div class="dfrpg_select"><span class="df_icon">&#xf00c;</span></div>
         </div>
         <div class="dfrp_garment" id="dfg_item2" title="Select garment"></div>

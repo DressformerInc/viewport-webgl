@@ -2,7 +2,8 @@
  * Created by Miha-ha on 05.09.14.
  */
 
-var inherits = require('util').inherits,
+var $ = require('../../../libs/jquery-2.1.1.min'),
+    inherits = require('util').inherits,
     Viewport = require('./viewport'),
     CtrlRadio = require('./controls/CtrlRadio'),
     CtrlNumber = require('./controls/CtrlNumber');
@@ -17,6 +18,13 @@ ViewportExt.prototype.init = function () {
     Viewport.prototype.init.call(this);
 
     var $viewport = this.events.$viewport;
+
+//    $(document).tooltip({
+//        track: true,
+//        show: {
+//            delay: 1400
+//        }
+//    });
 
     this.paramsChanged = {};
     this.params = {
@@ -41,15 +49,22 @@ ViewportExt.prototype.init = function () {
             max: 124.027
         }
     };
+    this.selectedGarment = {};
 
     this.$profile = $viewport.find('#profile');
     this.$share = $viewport.find('#share');
     this.$leftSidebar = $viewport.find('.df_left_sidebar');
+    this.$rightSidebar = $viewport.find('.df_widget_right_panel');
+    this.$garmentInfo = $viewport.find('.df_garment_set');
 
+    //left controls
     $viewport.on('click', '#sb_btn_profile', this.showProfile.bind(this));
     $viewport.on('click', '#sb_btn_share', this.showShare.bind(this));
     $viewport.on('click', '#btnProfileSave', this.saveProfile.bind(this));
     $viewport.on('click', '#btnProfileCancel', this.cancelProfile.bind(this));
+
+    //right controls
+    $viewport.on('click', '.dfrp_garment', this.selectGarment.bind(this));
 
     this.radioGender = new CtrlRadio('#radioGender', this.genderChanged.bind(this));
     this.radioUnits = new CtrlRadio('#radioUnits', this.unitsChanged.bind(this));
@@ -92,6 +107,16 @@ ViewportExt.prototype.init = function () {
     });
 
     this.paramsChanged = {}; //reset после установки начальных значений
+};
+
+ViewportExt.prototype.getParams = function () {
+    return [
+        'height='+this.numberHeight.value,
+        'chest='+this.numberChest.value,
+        'underbust='+this.numberUnderbust.value,
+        'waist='+this.numberWaist.value,
+        'hips='+this.numberHips.value
+    ]
 };
 
 ViewportExt.prototype.showProfile = function () {
@@ -159,6 +184,15 @@ ViewportExt.prototype.cancelProfile = function () {
     this.numberHips.setValue(body.hips.toFixed(0));
 
     this.paramsChanged = {};
+};
+
+ViewportExt.prototype.selectGarment = function (e) {
+    var $target = $(e.target),
+        garmentId = $target.data('garment');
+
+    this.$garmentInfo.css('right', '200px');
+    console.log('garment id:', garmentId);
+    this.webgl.load(garmentId, this.getParams());
 };
 
 
