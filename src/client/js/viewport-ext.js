@@ -116,16 +116,8 @@ ViewportExt.prototype.getBaseParams = function () {
 };
 
 ViewportExt.prototype.getParams = function (onlyChanged) {
-//    return [
-//        'height='+this.numberHeight.value,
-//        'chest='+this.numberChest.value,
-//        'underbust='+this.numberUnderbust.value,
-//        'waist='+this.numberWaist.value,
-//        'hips='+this.numberHips.value
-//    ]
     var params = [];
 
-//    debugger;
     for (var param in this.params) {
         if (this.params.hasOwnProperty(param)) {
             var value = this.params[param].value;
@@ -205,7 +197,7 @@ ViewportExt.prototype.selectGarment = function (e) {
 
     this.$garmentInfo.css('right', '200px');
     console.log('garment id:', garmentId);
-    this.webgl.load(garmentId, this.getParams());
+    this.webgl.load(garmentId, this.getParams(true));
 };
 
 
