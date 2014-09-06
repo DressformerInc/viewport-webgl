@@ -371,12 +371,13 @@ label {
 	position: fixed;
 	height: 100%;
 	width: 140px;
-	right: 0px;
+	right: 0;
 	transition: 0.2s;
 	text-align: center;
 	background-color: rgba(256, 256, 256, 0.6);
 	padding-left: 10px;
 	padding-right: 10px;
+    overflow-y: scroll;
 }
 
 .df_garment_inner {

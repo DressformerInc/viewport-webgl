@@ -6,6 +6,7 @@ var $ = require('../../../libs/jquery-2.1.1.min'),
     inherits = require('util').inherits,
     Viewport = require('./viewport'),
     CtrlRadio = require('./controls/CtrlRadio'),
+    CtrlSwitch = require('./controls/CtrlSwitch'),
     CtrlNumber = require('./controls/CtrlNumber');
 
 var ViewportExt = module.exports = function (events, webgl) {
@@ -59,9 +60,6 @@ ViewportExt.prototype.init = function () {
     $viewport.on('click', '#btnProfileSave', this.saveProfile.bind(this));
     $viewport.on('click', '#btnProfileCancel', this.cancelProfile.bind(this));
 
-    //right controls
-    $viewport.on('click', '.dfrp_garment', this.selectGarment.bind(this));
-
     this.radioGender = new CtrlRadio('#radioGender', this.genderChanged.bind(this));
     this.radioUnits = new CtrlRadio('#radioUnits', this.unitsChanged.bind(this));
     this.params = {
@@ -101,6 +99,16 @@ ViewportExt.prototype.init = function () {
             max: 124
         })
     };
+
+    //right controls
+    $viewport.on('click', '.dfrp_garment', this.selectGarment.bind(this));
+    this.switchPut = new CtrlSwitch({
+        selector: '#switchPut',
+        value: true
+    });
+
+
+
 
 };
 
