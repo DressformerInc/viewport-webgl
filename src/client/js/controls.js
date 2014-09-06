@@ -9,6 +9,7 @@ var dat = require('../../../libs/dat.gui.js'),
     body = global.Dressformer.dummy.body,
     controls = {
         garment: 'ADS_201407_0005_0002',
+        offset: 1,
         //sizes
         sizes: {
             height: body.height,
@@ -90,6 +91,9 @@ function initGUI(controls) {
         'KPL_201407_0020_0009',
         'KPL_201407_0020_0010'
     ]).listen();
+
+    controllers['offset'] = gui.add(controls, 'offset', 0, 10, 0.5);
+
     var sizesFolder = gui.addFolder('sizes'), step = 0.5;
     controllers['sizes.height'] = sizesFolder.add(controls.sizes, 'height', 130, 230, step);
     controllers['sizes.chest'] = sizesFolder.add(controls.sizes, 'chest', 50, 150, step);

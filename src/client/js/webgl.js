@@ -238,7 +238,6 @@ function loadDummy(url, params) {
         });
 
         scene.add(models['dummy'] = dummy);
-        ee.emit('endload', dummy)
 
     });
 }
@@ -295,7 +294,7 @@ function loadGarment(garment, params, cb) {
         var parts = params[i].split('='),
             value = +parts[1];
 
-        value += 1;
+        value += +(controls.offset.toFixed(1) || 1);
 
         params[i] = parts[0]+'='+value;
     }
@@ -320,7 +319,6 @@ function loadGarment(garment, params, cb) {
         model.name = garment.name;
         model.position.set(0, 0, 0);
         cb(model);
-        ee.emit('endload');
     });
 
 }
@@ -496,6 +494,9 @@ function init() {
 //            controls.rotate = true;
         }
         renderStart = Date.now();
+    };
+    loadingManager.onLoad = function () {
+        ee.emit('endload');
     };
     objLoader = new THREE.OBJLoader(loadingManager);
 
@@ -736,6 +737,7 @@ module.exports = {
         scene.remove(models['garment']);
         startRender();
     }
+
 
 
 };
