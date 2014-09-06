@@ -11,11 +11,13 @@
 
     <link rel="icon" type="image/png" href="img/favicon.png"/>
     <link href='http://fonts.googleapis.com/css?family=Dosis:500' rel='stylesheet' type='text/css'>
+    <!--<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">-->
     <link rel="stylesheet" href="css/style.css"/>
     <link rel="stylesheet" id="css_theme" href="css/light.css">
     <script>
         var Dressformer = {
-            dummy: <%-JSON.stringify(dummy)%>
+            dummy: <%-JSON.stringify(dummy)%>,
+            history: <%-JSON.stringify(history)%>
         };
         console.log('Dressformer', Dressformer);
     </script>
@@ -126,27 +128,39 @@
 
     <div class="df_garment_set" id="df_garment_set">
         <div class="df_garment_preview" title="Kira Plastinina dress"></div>
-        <div class="dfg_size" title="Select size">XS</div>
-        <div class="dfg_size dfg_size_on" title="Select size">S</div>
-        <div class="dfg_size" title="Select recommended size">M</div>
+        <!--<div class="dfg_size" title="Select size">XS</div>-->
+        <!--<div class="dfg_size dfg_size_on" title="Select size">S</div>-->
+        <div class="dfg_size dfg_size_on" title="Select recommended size">M</div>
         <div class="dfg_size_recomended"><span class="df_icon">&#xf078;</span>&nbsp; Recomended</div>
-        <div class="dfg_size" title="Select size">L</div>
-        <div class="dfg_size" title="Select size">XL</div>
+        <!--<div class="dfg_size" title="Select size">L</div>-->
+        <!--<div class="dfg_size" title="Select size">XL</div>-->
         <div class="h40"></div>
-        <div id="switchPut" class="dfg_btn"><span class="df_icon">&#xf061;</span>&nbsp; Put Off</div>
-        <div class="dfg_btn"><span class="df_icon">&#xf00d;</span>&nbsp; Remove from list</div>
+        <div id="switchPut" class="dfg_btn">
+            <span class="df_icon">&#xf061;</span>
+            &nbsp;<span class="df_text">Put Off</span>
+        </div>
+        <div id="buttonRemoveFromList" class="dfg_btn"><span class="df_icon">&#xf00d;</span>&nbsp; Remove from list</div>
     </div>
 
     <div class="df_widget_right_panel" id="dfw_left_panel">
         <div class="dfw_close" title="Close widget & return to shopping"><span
                     class="df_icon">&#xf00d;</span></div>
-        <div class="dfrp_garment" id="dfg_item1" data-garment="de8b4da5-da7e-4547-9a47-9027e0bd85c2" title="Kira Plastinina dress">
-            <div class="dfrpg_select"><span class="df_icon">&#xf00c;</span></div>
-        </div>
-        <div class="dfrp_garment" id="dfg_item2" data-garment="165e5bcb-ee7e-4c43-b8bf-1c4d077236ed" title="Select garment"></div>
-        <div class="dfrp_garment" id="dfg_item3" data-garment="61de8f81-b764-4550-814f-baea86574d11">
-            <div class="dfrpg_select"><span class="df_icon">&#xf00c;</span></div>
-        </div>
+
+        <% for(var i=0; i< history.length; i++) {%>
+            <div class="dfrp_garment"
+                 data-garment="<%=history[i].id%>"
+                 style="background-image: url(<%=history[i].placeholder%>);"
+                 title="">
+                <div class="dfrpg_select" style="display: none;"><span class="df_icon">&#xf00c;</span></div>
+            </div>
+        <% } %>
+        <!--<div class="dfrp_garment" id="dfg_item1" data-garment="de8b4da5-da7e-4547-9a47-9027e0bd85c2" title="Kira Plastinina dress">-->
+            <!--<div class="dfrpg_select"><span class="df_icon">&#xf00c;</span></div>-->
+        <!--</div>-->
+        <!--<div class="dfrp_garment" id="dfg_item2" data-garment="165e5bcb-ee7e-4c43-b8bf-1c4d077236ed" title="Select garment"></div>-->
+        <!--<div class="dfrp_garment" id="dfg_item3" data-garment="61de8f81-b764-4550-814f-baea86574d11">-->
+            <!--<div class="dfrpg_select"><span class="df_icon">&#xf00c;</span></div>-->
+        <!--</div>-->
         <!--<div class="dfrp_garment" id="dfg_item4"></div>-->
         <!--<div class="dfrp_garment" id="dfg_item5"></div>-->
         <!--<div class="dfrp_garment" id="dfg_item6">-->

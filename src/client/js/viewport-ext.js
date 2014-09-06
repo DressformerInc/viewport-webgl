@@ -46,7 +46,8 @@ ViewportExt.prototype.init = function () {
      }
      };
      */
-    this.selectedGarment = {};
+    this.old = {};
+    this.selected = {};
 
     this.$profile = $viewport.find('#profile');
     this.$share = $viewport.find('#share');
@@ -102,13 +103,13 @@ ViewportExt.prototype.init = function () {
 
     //right controls
     $viewport.on('click', '.dfrp_garment', this.selectGarment.bind(this));
+    $viewport.on('click', '#buttonRemoveFromList', this.removeFromList.bind(this));
     this.switchPut = new CtrlSwitch({
         selector: '#switchPut',
-        value: true
+        value: true,
+        onChange: this.putChanged.bind(this)
     });
-
-
-
+    this.$preview = $viewport.find('.df_garment_preview');
 
 };
 
@@ -189,7 +190,6 @@ ViewportExt.prototype.saveProfile = function () {
 };
 
 ViewportExt.prototype.cancelProfile = function () {
-    console.log('cancel profile');
 
     for (var param in this.params) {
         if (this.params.hasOwnProperty(param)) {
@@ -197,15 +197,48 @@ ViewportExt.prototype.cancelProfile = function () {
         }
     }
 
+    this.webgl.setParams(this.getParams());
 };
 
 ViewportExt.prototype.selectGarment = function (e) {
-    var $target = $(e.target),
-        garmentId = $target.data('garment');
+    var $target = $(e.target);
+
+    this.old = this.selected;
+    this.selected = {
+        id: $target.data('garment'),
+        button: $target
+    };
+    this.$preview.css('background-image', $target.css('background-image'));
 
     this.$garmentInfo.css('right', '200px');
-    console.log('garment id:', garmentId);
-    this.webgl.load(garmentId, this.getParams(true));
+
+    this.switchPut.setValue(!$target.data('selected'), true);
+
+};
+
+ViewportExt.prototype.putChanged = function (value) {
+    if (!value) {
+        this.webgl.load(this.selected.id, this.getParams(true));
+
+        this.selected.button.find('.dfrpg_select').show();
+        this.selected.button.data('selected', true);
+
+        if (this.old.button){
+            this.old.button.find('.dfrpg_select').hide();
+            this.old.button.data('selected', false);
+        }
+
+    } else {
+        this.webgl.remove(this.selected.id);
+        this.selected.button.find('.dfrpg_select').hide();
+        this.selected.button.data('selected', false);
+    }
+
+};
+
+ViewportExt.prototype.removeFromList = function (e) {
+    this.selected.button.remove();
+    this.$garmentInfo.css('right', '0');
 };
 
 

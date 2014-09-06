@@ -350,6 +350,9 @@ label {
 	cursor: pointer;
 	font-size: 20px;
 	transition: 0.2s;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
 }
 .dfrp_garment:hover {
 	box-shadow:  0 6px 12px rgba(0, 0, 0, 0.3);
@@ -434,7 +437,6 @@ label {
 	height: 220px;
 	background-color: #fff;
 	margin-top: 10px;
-	background-image: url(../img/g1.png);
 	background-size: cover;
 	background-repeat: no-repeat;
 	background-position: center center;

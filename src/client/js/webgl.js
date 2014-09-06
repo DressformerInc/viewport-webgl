@@ -287,6 +287,8 @@ function loadGarment(garment, params, cb) {
             specularPath
         );
 
+    ee.emit('startload');
+
     if (params && params.length > 0) {
         objPath += '?' + params.join('&');
     }
@@ -306,11 +308,13 @@ function loadGarment(garment, params, cb) {
         model.name = garment.name;
         model.position.set(0, 0, 0);
         cb(model);
+        ee.emit('endload');
     });
 
 }
 
 function loadGarmentById(id, params, cb) {
+    ee.emit('startload');
     Api.getGarment(id, function (data) {
         global.Dressformer.garment = data;
         loadGarment(data, params, cb);
@@ -698,6 +702,7 @@ module.exports = {
     },
     setDummyColor: function (color) {
         models['dummy'].children[0].material.color.setHex(color);
+        startRender();
     },
     load: function (id, params) {
         var garment = global.Dressformer.garment,
@@ -714,7 +719,10 @@ module.exports = {
         }else {
             loadGarmentById(id, params, cb);
         }
-
+    },
+    remove: function (garmentId) {
+        scene.remove(models['garment']);
+        startRender();
     }
 
 
