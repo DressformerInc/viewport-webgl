@@ -44,12 +44,12 @@ var screenWidth = global.innerWidth,
     targetMax = 200,
     renderStart,
     envMap = THREE.ImageUtils.loadTextureCube([
-        'static/envMap/pos-x.png',
-        'static/envMap/neg-x.png',
-        'static/envMap/pos-y.png',
-        'static/envMap/neg-y.png',
-        'static/envMap/pos-z.png',
-        'static/envMap/neg-z.png'
+        'static/envMap/pos-x.jpg',
+        'static/envMap/neg-x.jpg',
+        'static/envMap/pos-y.jpg',
+        'static/envMap/neg-y.jpg',
+        'static/envMap/pos-z.jpg',
+        'static/envMap/neg-z.jpg'
     ]);
 
 //var shader = glslify({
