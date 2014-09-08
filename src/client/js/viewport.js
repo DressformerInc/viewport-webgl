@@ -19,31 +19,19 @@ Viewport.prototype.init = function () {
     this.events.on('mousedown', '.dfwvc_zoom_out', 'zoomOut');
 
     this.events.$viewport.on('click','.dfwvc_d_silver', function () {
-        webgl.setDummyColor('cccccc');
+        webgl.setDummyColor('0xffffff');
     });
     this.events.$viewport.on('click','.dfwvc_d_gold', function () {
-        webgl.setDummyColor('cccc00');
+        webgl.setDummyColor('0xe0e082');
     });
     this.events.$viewport.on('click','.dfwvc_d_carbon', function () {
-        webgl.setDummyColor('444444');
+        webgl.setDummyColor('0x444444');
     });
     this.events.$viewport.on('click','.dfwvc_d_plastic', function () {
-        webgl.setDummyColor('999999');
+        webgl.setDummyColor('0x999999');
     });
 };
 /*
- //        .on('click', '.dfwvc_d_silver', function () {
- //            console.log('set color: silver');
- //        })
- //        .on('click', '.dfwvc_d_gold', function () {
- //            console.log('set color: gold');
- //        })
- //        .on('click', '.dfwvc_d_carbon', function () {
- //            console.log('set color: carbon');
- //        })
- //        .on('click', '.dfwvc_d_plastic', function () {
- //            console.log('set color: plastic');
- //        })
  //        .on('click', '.dfwv_history_back', function () {
  //            console.log('dfwv_history_back');
  //        })
