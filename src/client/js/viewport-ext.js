@@ -111,6 +111,18 @@ ViewportExt.prototype.init = function () {
     });
     this.$preview = $viewport.find('.df_garment_preview');
 
+    this.webgl.ee.on('garmentloaded', function () {
+        setTimeout(function () {
+            console.log('garment loaded');
+            if (this.selected && this.selected.button) {
+                var screenshot = this.webgl.getScreenshot();
+                this.selected.button.css('background-image', 'url("' + screenshot + '")');
+                this.$preview.css('background-image', 'url("' + screenshot + '")');
+            }
+        }.bind(this), 50);
+
+    }.bind(this));
+
 };
 
 ViewportExt.prototype.getBaseParams = function () {

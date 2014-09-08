@@ -156,25 +156,37 @@ function setupEnvironment(scene) {
     scene.add(models['floor'] = floor);
 }
 
-function makeShaderMaterial(normal, diffuse, specular) {
+function makeShaderMaterial(normal, diffuse, specular, cb) {
     var shininess = 0.5,
         shader = THREE.ShaderLib[ "normalmap" ],
-        uniforms = THREE.UniformsUtils.clone(shader.uniforms);
+        uniforms = THREE.UniformsUtils.clone(shader.uniforms),
+        count= 0,
+        onLoad = function () {
+            startRender();
+            if(--count === 0){
+                cb();
+            }
+        };
 
     uniforms[ "enableDisplacement" ].value = false;
     uniforms[ "shininess" ].value = shininess;
 //        uniforms[ "uNormalScale" ].value.y = -1;
 
-    if (normal) uniforms[ "tNormal" ].value = THREE.ImageUtils.loadTexture(normal, null, render);
+    if (normal) {
+        count++;
+        uniforms[ "tNormal" ].value = THREE.ImageUtils.loadTexture(normal, null, onLoad);
+    }
 
     if (diffuse) {
+        count++;
         uniforms[ "enableDiffuse" ].value = true;
-        uniforms[ 'tDiffuse'].value = THREE.ImageUtils.loadTexture(diffuse, null, render);
+        uniforms[ 'tDiffuse'].value = THREE.ImageUtils.loadTexture(diffuse, null, onLoad);
     }
 
     if (specular) {
+        count++
         uniforms[ "enableSpecular" ].value = true;
-        uniforms[ 'tSpecular'].value = THREE.ImageUtils.loadTexture(specular, null, render);
+        uniforms[ 'tSpecular'].value = THREE.ImageUtils.loadTexture(specular, null, onLoad);
     }
 
 
@@ -280,10 +292,17 @@ function loadGarment(garment, params, cb) {
         normalPath = garment.assets.normal.url,
         diffusePath = garment.assets.diffuse.url,
         specularPath = garment.assets.specular.url,
+        count = 2,
+        onLoad = function () {
+            if (--count === 0){
+                ee.emit('garmentloaded');
+            }
+        },
         shaderMaterial = makeShaderMaterial(
             normalPath,
             diffusePath,
-            specularPath
+            specularPath,
+            onLoad
         );
 
     ee.emit('startload');
@@ -318,6 +337,7 @@ function loadGarment(garment, params, cb) {
         });
         model.name = garment.name;
         model.position.set(0, 0, 0);
+        onLoad();
         cb(model);
     });
 
@@ -330,7 +350,6 @@ function loadGarmentById(id, params, cb) {
         loadGarment(data, params, cb);
     });
 }
-
 
 function loadModelWithMTL(name, cb) {
     var basePath = "static/models/obj/" + name + "/",
@@ -502,7 +521,8 @@ function init() {
 
     renderer = new THREE.WebGLRenderer({
         antialias: true,
-        alpha: false
+        alpha: false,
+        preserveDrawingBuffer : true
     });
     renderer.setClearColor(0xffffff);
     renderer.autoClear = true;
@@ -720,9 +740,9 @@ module.exports = {
     load: function (id, params) {
         var garment = global.Dressformer.garment,
             cb = function (model) {
+                startRender();
                 models['garment'] = model;
                 scene.add(model);
-                startRender();
             };
 
         scene.remove(models['garment']);
@@ -736,6 +756,9 @@ module.exports = {
     remove: function (garmentId) {
         scene.remove(models['garment']);
         startRender();
+    },
+    getScreenshot: function () {
+        return renderer.domElement.toDataURL()
     }
 
 
