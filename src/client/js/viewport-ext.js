@@ -114,10 +114,11 @@ ViewportExt.prototype.init = function () {
     this.webgl.ee.on('garmentloaded', function () {
         setTimeout(function () {
             console.log('garment loaded');
-            if (this.selected && this.selected.button) {
+            if (this.selected && this.selected.button && !this.selected.button.data('screenshot')) {
                 var screenshot = this.webgl.getScreenshot();
                 this.selected.button.css('background-image', 'url("' + screenshot + '")');
                 this.$preview.css('background-image', 'url("' + screenshot + '")');
+                this.selected.button.data('screenshot', true)
             }
         }.bind(this), 50);
 
