@@ -134,15 +134,19 @@ ViewportExt.prototype.init = function () {
 };
 
 ViewportExt.prototype.historyBack = function () {
-    console.log('history back');
     var state = history.back();
     if (state) {
-
+        this._selectGarment(state.selected.id, state.selected.button);
+        this.putChanged(state.mode, true);
     }
 };
 
 ViewportExt.prototype.historyForward = function () {
-  console.log('history forward');
+    var state = history.forward();
+    if (state) {
+        this._selectGarment(state.selected.id, state.selected.button);
+        this.putChanged(state.mode, true);
+    }
 };
 
 ViewportExt.prototype.getBaseParams = function () {
@@ -232,38 +236,57 @@ ViewportExt.prototype.cancelProfile = function () {
     this.webgl.setParams(this.getParams());
 };
 
-ViewportExt.prototype.selectGarment = function (e) {
-    var $target = $(e.target);
-
+ViewportExt.prototype._selectGarment = function (id, $button) {
     this.old = this.selected;
     this.selected = {
-        id: $target.data('garment'),
-        button: $target
+        id: id,
+        button: $button
     };
-    this.$preview.css('background-image', $target.css('background-image'));
+    this.$preview.css('background-image', $button.css('background-image'));
 
     this.$garmentInfo.css('right', '200px');
 
-    this.switchPut.setValue(!$target.data('selected'), true);
+    this.switchPut.setValue(!$button.data('selected'), true);
+};
+
+ViewportExt.prototype.selectGarment = function (e) {
+    var $target = $(e.target);
+
+    this._selectGarment($target.data('garment'), $target);
 
 };
 
-ViewportExt.prototype.putChanged = function (value) {
+ViewportExt.prototype.putChanged = function (value, noHistory) {
     if (!value) {
         this.webgl.load(this.selected.id, this.getParams(true));
 
         this.selected.button.find('.dfrpg_select').show();
         this.selected.button.data('selected', true);
 
-        if (this.old.button){
+        if (this.old.button) {
             this.old.button.find('.dfrpg_select').hide();
             this.old.button.data('selected', false);
+        }
+
+        if (!noHistory){
+            history.push({
+                mode: value,
+                selected: this.selected
+            });
         }
 
     } else {
         this.webgl.remove(this.selected.id);
         this.selected.button.find('.dfrpg_select').hide();
         this.selected.button.data('selected', false);
+
+        if (!noHistory){
+            history.push({
+                mode: value,
+                selected: this.selected
+            });
+        }
+
     }
 
 };
