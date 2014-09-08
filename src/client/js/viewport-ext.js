@@ -7,7 +7,8 @@ var $ = require('../../../libs/jquery-2.1.1.min'),
     Viewport = require('./viewport'),
     CtrlRadio = require('./controls/CtrlRadio'),
     CtrlSwitch = require('./controls/CtrlSwitch'),
-    CtrlNumber = require('./controls/CtrlNumber');
+    CtrlNumber = require('./controls/CtrlNumber'),
+    history = require('./history');
 
 var ViewportExt = module.exports = function (events, webgl) {
     Viewport.call(this, events, webgl);
@@ -48,6 +49,8 @@ ViewportExt.prototype.init = function () {
      */
     this.old = {};
     this.selected = {};
+    this.historyIndex = -1;
+    this.history = [];
 
     this.$profile = $viewport.find('#profile');
     this.$share = $viewport.find('#share');
@@ -124,6 +127,22 @@ ViewportExt.prototype.init = function () {
 
     }.bind(this));
 
+    //history controls
+    $viewport.on('click', '.dfwv_history_back', this.historyBack.bind(this));
+    $viewport.on('click', '.dfwv_history_forward', this.historyForward.bind(this));
+
+};
+
+ViewportExt.prototype.historyBack = function () {
+    console.log('history back');
+    var state = history.back();
+    if (state) {
+
+    }
+};
+
+ViewportExt.prototype.historyForward = function () {
+  console.log('history forward');
 };
 
 ViewportExt.prototype.getBaseParams = function () {

@@ -304,6 +304,7 @@ function loadGarment(garment, params, cb) {
             specularPath,
             onLoad
         );
+    params = params || [];
 
     ee.emit('startload');
 
@@ -318,6 +319,15 @@ function loadGarment(garment, params, cb) {
         params[i] = parts[0]+'='+value;
     }
     console.log('garment fixed params:', params);
+
+    //параметры для библиотеки морфирования
+    for (var param in global.Dressformer.params) {
+        if (global.Dressformer.params.hasOwnProperty(param)) {
+            params.push(param+'='+global.Dressformer.params[param]);
+        }
+    }
+
+
 
     if (params && params.length > 0) {
         objPath += '?' + params.join('&');
