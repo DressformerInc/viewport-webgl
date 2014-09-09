@@ -44,9 +44,10 @@ app.route('/ext/:id?')
                 var data;
                 try {
                     data = JSON.parse(body);
-                }catch(e){}
+                } catch (e) {
+                }
 
-                data.dummy.assets.geometry.url = 'http://v2.dressformer.com/assets/geometry/'+data.dummy.assets.geometry.id;
+                data.dummy.assets.geometry.url = 'http://v2.dressformer.com/assets/geometry/' + data.dummy.assets.geometry.id;
 
                 res.render('ext', {
                     version: pkg.version,
@@ -54,6 +55,10 @@ app.route('/ext/:id?')
                     id: req.params.id || 'ADS_201407_0005_0002',
                     dummy: data.dummy,
                     history: [
+                        {
+                            id: '75df08e3-a053-4cfe-97f9-d8c7f1af1393',
+                            placeholder: ''
+                        },
                         {
                             id: 'de8b4da5-da7e-4547-9a47-9027e0bd85c2',
                             placeholder: 'img/g1.png'
@@ -68,7 +73,7 @@ app.route('/ext/:id?')
                         }
                     ]
                 });
-            }else {
+            } else {
                 next(error);
             }
         });
@@ -82,10 +87,11 @@ app.route('/')
                 var data;
                 try {
                     data = JSON.parse(body);
-                }catch(e){}
+                } catch (e) {
+                }
 
                 console.log('data:', data.dummy.assets);
-                data.dummy.assets.geometry.url = 'http://v2.dressformer.com/assets/geometry/'+data.dummy.assets.geometry.id;
+                data.dummy.assets.geometry.url = 'http://v2.dressformer.com/assets/geometry/' + data.dummy.assets.geometry.id;
 
                 res.render('index', {
                     version: pkg.version,
@@ -93,7 +99,7 @@ app.route('/')
                     id: req.params.id || 'ADS_201407_0005_0002',
                     dummy: data.dummy
                 });
-            }else {
+            } else {
                 next(error);
             }
         });
