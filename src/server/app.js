@@ -60,16 +60,8 @@ app.route('/ext/:id?')
                             placeholder: ''
                         },
                         {
-                            id: 'de8b4da5-da7e-4547-9a47-9027e0bd85c2',
-                            placeholder: 'img/g1.png'
-                        },
-                        {
-                            id: '165e5bcb-ee7e-4c43-b8bf-1c4d077236ed',
-                            placeholder: 'img/g2.png'
-                        },
-                        {
-                            id: '61de8f81-b764-4550-814f-baea86574d11',
-                            placeholder: 'img/g3.png'
+                            id: '5a411326-5a77-43ae-b580-b45a292a2d5d',
+                            placeholder: ''
                         }
                     ]
                 });
