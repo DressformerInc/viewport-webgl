@@ -85,7 +85,7 @@ gulp.task('dist', ['js', 'css', 'modules'], function () {
         'src/client/css/light.css',
         'src/client/css/dark.css',
         'src/client/fonts/*',
-        'src/client/img/*',
+        'src/client/img/**',
         'src/client/index.html',
         //server
         '!src/server/config.json',
