@@ -114,6 +114,10 @@ ViewportExt.prototype.init = function () {
     });
     this.$preview = $viewport.find('.df_garment_preview');
 
+    //history controls
+    $viewport.on('click', '.dfwv_history_back', this.historyBack.bind(this));
+    $viewport.on('click', '.dfwv_history_forward', this.historyForward.bind(this));
+
     this.webgl.ee.on('garmentloaded', function () {
         setTimeout(function () {
             console.log('garment loaded');
@@ -126,27 +130,6 @@ ViewportExt.prototype.init = function () {
         }.bind(this), 50);
 
     }.bind(this));
-
-    //history controls
-    $viewport.on('click', '.dfwv_history_back', this.historyBack.bind(this));
-    $viewport.on('click', '.dfwv_history_forward', this.historyForward.bind(this));
-
-};
-
-ViewportExt.prototype.historyBack = function () {
-    var state = history.back();
-    if (state) {
-        this._selectGarment(state.selected.id, state.selected.button);
-        this.putChanged(state.mode, true);
-    }
-};
-
-ViewportExt.prototype.historyForward = function () {
-    var state = history.forward();
-    if (state) {
-        this._selectGarment(state.selected.id, state.selected.button);
-        this.putChanged(state.mode, true);
-    }
 };
 
 ViewportExt.prototype.getBaseParams = function () {
@@ -246,7 +229,18 @@ ViewportExt.prototype._selectGarment = function (id, $button) {
 
     this.$garmentInfo.css('right', '200px');
 
-    this.switchPut.setValue(!$button.data('selected'), true);
+    var switchValue = !$button.data('selected');
+    console.log('switchValue:', switchValue);
+    this.switchPut.setValue(switchValue, true);
+};
+
+ViewportExt.prototype.unSelectAll = function () {
+    $('.dfrp_garment').each(function () {
+        $this = $(this);
+        $this.data('selected', false);
+        $this.find('.dfrpg_select').hide();
+    });
+
 };
 
 ViewportExt.prototype.selectGarment = function (e) {
@@ -260,13 +254,16 @@ ViewportExt.prototype.putChanged = function (value, noHistory) {
     if (!value) {
         this.webgl.load(this.selected.id, this.getParams(true));
 
+        this.unSelectAll();
+
         this.selected.button.find('.dfrpg_select').show();
         this.selected.button.data('selected', true);
 
-        if (this.old.button) {
-            this.old.button.find('.dfrpg_select').hide();
-            this.old.button.data('selected', false);
-        }
+//        if (this.old.button) {
+//            this.old.button.find('.dfrpg_select').hide();
+//            this.old.button.data('selected', false);
+//        }
+
 
         if (!noHistory){
             history.push({
@@ -277,8 +274,9 @@ ViewportExt.prototype.putChanged = function (value, noHistory) {
 
     } else {
         this.webgl.remove(this.selected.id);
-        this.selected.button.find('.dfrpg_select').hide();
-        this.selected.button.data('selected', false);
+
+        this.unSelectAll();
+//        this.switchPut.setValue(false, true);
 
         if (!noHistory){
             history.push({
@@ -294,6 +292,26 @@ ViewportExt.prototype.putChanged = function (value, noHistory) {
 ViewportExt.prototype.removeFromList = function (e) {
     this.selected.button.remove();
     this.$garmentInfo.css('right', '0');
+};
+
+
+ViewportExt.prototype.historyBack = function () {
+    var state = history.back();
+    if (state) {
+
+        state.selected.button.data('selected', true);
+        this._selectGarment(state.selected.id, state.selected.button);
+        this.putChanged(state.mode, true);
+    }
+};
+
+ViewportExt.prototype.historyForward = function () {
+    var state = history.forward();
+    if (state) {
+        state.selected.button.data('selected', true);
+        this._selectGarment(state.selected.id, state.selected.button);
+        this.putChanged(state.mode, true);
+    }
 };
 
 
