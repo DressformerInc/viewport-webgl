@@ -2,7 +2,7 @@
  * Created by Miha-ha on 01.08.14.
  */
 //WebGL
-var THREE = global.THREE = require('threejs/build/three.min'),
+var THREE = global.THREE = require('threejs/build/three'),
     TWEEN = require('tween.js'),
     glslify = require('glslify'),
     utils = require('./utils'),
@@ -43,22 +43,16 @@ var screenWidth = global.innerWidth,
     targetMin = 100,
     targetMax = 200,
     renderStart,
-    envMap = THREE.ImageUtils.loadTextureCube([
-        'static/envMap/pos-x.jpg',
-        'static/envMap/neg-x.jpg',
-        'static/envMap/pos-y.jpg',
-        'static/envMap/neg-y.jpg',
-        'static/envMap/pos-z.jpg',
-        'static/envMap/neg-z.jpg'
-    ]);
+    dummyMaterial;//,
+//    envMap = THREE.ImageUtils.loadTextureCube([
+//        'static/envMap/pos-x.jpg',
+//        'static/envMap/neg-x.jpg',
+//        'static/envMap/pos-y.jpg',
+//        'static/envMap/neg-y.jpg',
+//        'static/envMap/pos-z.jpg',
+//        'static/envMap/neg-z.jpg'
+//    ]);
 
-//var shader = glslify({
-//    vertex: '../shaders/clipdepth/vert.glsl',
-//    fragment: '../shaders/clipdepth/frag.glsl',
-//    sourceOnly: true
-//});
-//
-//console.log('shader:', shader);
 
 function showStats(container) {
     // STATS
@@ -77,32 +71,6 @@ function setupLight(scene) {
     ambientLight.position.set(100, 130, 100);
     scene.add(lights['ambientLight'] = ambientLight);
 
-    /*
-     var inte = 0.3,
-     pointLight1 = new THREE.PointLight(0xffffff, inte);
-     pointLight1.position.set(100, 130, 100);
-     pointLight1.position.multiplyScalar(50);
-     scene.add(lights['pointLight1'] = pointLight1);
-
-     var pointLight2 = new THREE.PointLight(0xffffff, inte);
-     pointLight2.position.set(-100, 130, 100);
-     pointLight2.position.multiplyScalar(50);
-     scene.add(lights['pointLight2'] = pointLight2);
-
-     var pointLight3 = new THREE.PointLight(0xffffff, inte);
-     pointLight3.position.set(100, 0, 100);
-     pointLight3.position.multiplyScalar(50);
-     scene.add(lights['pointLight3'] = pointLight3);
-
-     var pointLight5 = new THREE.PointLight(0xffffff, inte);
-     pointLight5.position.set(-100, 0, 100);
-     pointLight5.position.multiplyScalar(50);
-     scene.add(lights['pointLight5'] = pointLight5);
-
-     */
-
-
-//    var light1 = new THREE.DirectionalLight(0xffffff, 1);
     var light1 = new THREE.SpotLight(0xffffff, 1);
 //    directionalLight.onlyShadow = true;
     light1.position.x = controls.light1.x;
@@ -160,10 +128,10 @@ function makeShaderMaterial(normal, diffuse, specular, cb) {
     var shininess = 0.5,
         shader = THREE.ShaderLib[ "normalmap" ],
         uniforms = THREE.UniformsUtils.clone(shader.uniforms),
-        count= 0,
+        count = 0,
         onLoad = function () {
             startRender();
-            if(--count === 0){
+            if (--count === 0) {
                 cb();
             }
         };
@@ -219,14 +187,31 @@ function reloadDummy() {
 
 function loadDummy(url, params) {
     var loader = new THREE.OBJLoader(loadingManager),
-        matWithCubeMap = new THREE.MeshPhongMaterial({
-            color: 0xFFFFFF,
-            shininess: 500,
-            reflectivity: 1,
-            envMap: envMap,
-            shading: THREE.SmoothShading
+//        matWithCubeMap = new THREE.MeshPhongMaterial({
+//            color: 0xFFFFFF,
+//            shininess: 10,
+//            reflectivity: 0.02,
+//            envMap: envMap
+//        }),
+        matcapShader = glslify({
+            vertex: '../shaders/matcap/vert.glsl',
+            fragment: '../shaders/matcap/frag.glsl',
+            sourceOnly: true
         });
 
+    dummyMaterial = new THREE.ShaderMaterial({
+        uniforms: {
+            tMatCap: {
+                type: 't',
+                value: THREE.ImageUtils.loadTexture('/img/matcaps/' + controls.dummy.matcap)
+            }
+        },
+        vertexShader: matcapShader.vertex,
+        fragmentShader: matcapShader.fragment,
+        shading: THREE.SmoothShading
+    });
+
+    dummyMaterial.uniforms.tMatCap.value.wrapS = dummyMaterial.uniforms.tMatCap.value.wrapT = THREE.ClampToEdgeWrapping;
     url = url || global.Dressformer.dummy.assets.geometry.url;
 
     ee.emit('startload');
@@ -243,7 +228,7 @@ function loadDummy(url, params) {
 
         dummy.traverse(function (child) {
             if (child instanceof THREE.Mesh) {
-                child.material = matWithCubeMap;
+                child.material = dummyMaterial;
                 child.castShadow = true;
                 child.receiveShadow = true;
             }
@@ -294,7 +279,7 @@ function loadGarment(garment, params, cb) {
         specularPath = garment.assets.specular.url,
         count = 2,
         onLoad = function () {
-            if (--count === 0){
+            if (--count === 0) {
                 ee.emit('garmentloaded');
             }
         },
@@ -316,17 +301,16 @@ function loadGarment(garment, params, cb) {
 
         value += +(controls.offset.toFixed(1) || 1);
 
-        params[i] = parts[0]+'='+value;
+        params[i] = parts[0] + '=' + value;
     }
     console.log('garment fixed params:', params);
 
     //параметры для библиотеки морфирования
     for (var param in global.Dressformer.params) {
         if (global.Dressformer.params.hasOwnProperty(param)) {
-            params.push(param+'='+global.Dressformer.params[param]);
+            params.push(param + '=' + global.Dressformer.params[param]);
         }
     }
-
 
 
     if (params && params.length > 0) {
@@ -443,6 +427,11 @@ function initControls() {
         models['dummy'].children[0].material.color.setHex(newColor);
     });
 
+    Ctrl.onChange('dummy.matcap', function (value) {
+        dummyMaterial.uniforms.tMatCap.value = THREE.ImageUtils.loadTexture('img/matcaps/' + value);
+//        dummyMaterial.uniforms.tMatCap.value.needsUpdate = true;
+    });
+
     Ctrl.onChange('light1.enable', lightChanged('light1'));
     Ctrl.onChange('light1.intensity', lightChanged('light1'));
     Ctrl.onChange('light1.x', lightChanged('light1'));
@@ -532,7 +521,7 @@ function init() {
     renderer = new THREE.WebGLRenderer({
         antialias: true,
         alpha: false,
-        preserveDrawingBuffer : true
+        preserveDrawingBuffer: true
     });
     renderer.setClearColor(0xffffff);
     renderer.autoClear = true;

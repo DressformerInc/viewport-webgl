@@ -23,7 +23,8 @@ var dat = require('../../../libs/dat.gui.js'),
         },
         //dummy
         dummy: {
-            color: '#FFFFFF'
+            color: '#FFFFFF',
+            matcap: '1.jpg'
         },
         //light1
         light1: {
@@ -73,7 +74,7 @@ var dat = require('../../../libs/dat.gui.js'),
 
 function initGUI(controls) {
     gui = new dat.GUI();
-    gui.closed = true;
+    gui.closed = false;
     controllers['garment'] = gui.add(controls, 'garment', [
 //        'ADS_201407_0005_0001',
         'ADS_201407_0005_0002',
@@ -101,10 +102,18 @@ function initGUI(controls) {
     controllers['sizes.waist'] = sizesFolder.add(controls.sizes, 'waist', 50, 150, step);
     controllers['sizes.hips'] = sizesFolder.add(controls.sizes, 'hips', 70, 150, step);
     controllers['sizes.apply'] = sizesFolder.add(controls.sizes, 'apply');
-    sizesFolder.closed = false;
+    sizesFolder.closed = true;
 
     var dummyFolder = gui.addFolder('dummy');
     controllers['dummy.color'] = dummyFolder.add(controls.dummy, 'color');
+    controllers['dummy.matcap'] = dummyFolder.add(controls.dummy, 'matcap', [
+        '1.jpg',
+        '2.jpg',
+        '3.jpg',
+        '4.jpg',
+        '5.jpg'
+    ]).listen();
+    dummyFolder.closed = false;
 
     var light1Folder = gui.addFolder('Light1');
     controllers['light1.enable'] = light1Folder.add(controls.light1, 'enable');
