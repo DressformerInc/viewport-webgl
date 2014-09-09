@@ -24,7 +24,7 @@ var dat = require('../../../libs/dat.gui.js'),
         //dummy
         dummy: {
             color: '#FFFFFF',
-            matcap: '1.jpg'
+            matcap: '2.jpg'
         },
         //light1
         light1: {
