@@ -62,6 +62,14 @@ app.route('/ext/:id?')
                         {
                             id: '5a411326-5a77-43ae-b580-b45a292a2d5d',
                             placeholder: ''
+                        },
+                        {
+                            id: 'd6b9ebc3-d96d-423d-aa7f-d1ff4e1c7e30',
+                            placeholder: ''
+                        },
+                        {
+                            id: '0af3a3fb-309b-4682-a745-cbd4e32f8e41',
+                            placeholder: ''
                         }
                     ]
                 });
