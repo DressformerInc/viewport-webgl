@@ -111,7 +111,10 @@ function initGUI(controls) {
         'rough-aluminium.jpg',
         'SketchToyPlastic.png',
         'test_gold.jpg',
-        'test_steel.jpg'
+        'test_steel.jpg',
+        'Chrome_Blue_Tint.png',
+        'Chrome_Bright_Blue_Tint.png',
+        'droplet_01.png'
     ]).listen();
     dummyFolder.closed = false;
 
