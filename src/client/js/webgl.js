@@ -680,8 +680,10 @@ module.exports = {
     },
     resetRotation: function () {
         var speed = 300,
-            fn = TWEEN.Easing.Cubic.InOut;
-        var tween = new TWEEN.Tween({angle: models['dummy'].rotation.y, target: orbitControl.target.y})
+            fn = TWEEN.Easing.Cubic.InOut,
+            dummyRotation = models['dummy'].rotation.y % (Math.PI*2);
+
+        var tween = new TWEEN.Tween({angle: dummyRotation, target: orbitControl.target.y})
             .to({angle: 0, target: orbitControl.target0.y}, speed)
             .easing(fn)
             .onUpdate(function () {
@@ -734,6 +736,10 @@ module.exports = {
     },
     setDummyColor: function (color) {
         models['dummy'].children[0].material.color.setHex(color);
+        startRender();
+    },
+    setDummyMatcap: function (value) {
+        dummyMaterial.uniforms.tMatCap.value = THREE.ImageUtils.loadTexture('img/matcaps/' + value);
         startRender();
     },
     load: function (id, params) {

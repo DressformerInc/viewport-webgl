@@ -24,7 +24,7 @@ var dat = require('../../../libs/dat.gui.js'),
         //dummy
         dummy: {
             color: '#FFFFFF',
-            matcap: 'test_steel.jpg'
+            matcap: 'mydarkgreymetal.jpg'
         },
         //light1
         light1: {
@@ -74,7 +74,7 @@ var dat = require('../../../libs/dat.gui.js'),
 
 function initGUI(controls) {
     gui = new dat.GUI();
-    gui.closed = false;
+    gui.closed = true;
     controllers['garment'] = gui.add(controls, 'garment', [
 //        'ADS_201407_0005_0001',
         'ADS_201407_0005_0002',

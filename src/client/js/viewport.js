@@ -19,16 +19,16 @@ Viewport.prototype.init = function () {
     this.events.on('mousedown', '.dfwvc_zoom_out', 'zoomOut');
 
     this.events.$viewport.on('click','.dfwvc_d_silver', function () {
-        webgl.setDummyColor('0xffffff');
+        webgl.setDummyMatcap('droplet_01.png');
     });
     this.events.$viewport.on('click','.dfwvc_d_gold', function () {
-        webgl.setDummyColor('0xe0e082');
+        webgl.setDummyMatcap('test_gold.jpg');
     });
     this.events.$viewport.on('click','.dfwvc_d_carbon', function () {
-        webgl.setDummyColor('0x444444');
+        webgl.setDummyMatcap('mydarkgreymetal.jpg');
     });
     this.events.$viewport.on('click','.dfwvc_d_plastic', function () {
-        webgl.setDummyColor('0x999999');
+        webgl.setDummyMatcap('SketchToyPlastic.png');
     });
 };
 /*
