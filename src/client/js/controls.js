@@ -24,7 +24,7 @@ var dat = require('../../../libs/dat.gui.js'),
         //dummy
         dummy: {
             color: '#FFFFFF',
-            matcap: '2.jpg'
+            matcap: 'test_steel.jpg'
         },
         //light1
         light1: {
@@ -107,11 +107,11 @@ function initGUI(controls) {
     var dummyFolder = gui.addFolder('dummy');
     controllers['dummy.color'] = dummyFolder.add(controls.dummy, 'color');
     controllers['dummy.matcap'] = dummyFolder.add(controls.dummy, 'matcap', [
-        '1.jpg',
-        '2.jpg',
-        '3.jpg',
-        '4.jpg',
-        '5.jpg'
+        'mydarkgreymetal.jpg',
+        'rough-aluminium.jpg',
+        'SketchToyPlastic.png',
+        'test_gold.jpg',
+        'test_steel.jpg'
     ]).listen();
     dummyFolder.closed = false;
 
