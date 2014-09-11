@@ -56,7 +56,7 @@ ViewportExt.prototype.init = function () {
     this.$share = $viewport.find('#share');
     this.$leftSidebar = $viewport.find('.df_left_sidebar');
     this.$rightSidebar = $viewport.find('.df_widget_right_panel');
-    this.$garmentInfo = $viewport.find('.df_garment_set');
+    this.$garmentInfo = $viewport.find('#df_garment_set');
 
     //left controls
     $viewport.on('click', '#sb_btn_profile', this.showProfile.bind(this));
@@ -219,21 +219,6 @@ ViewportExt.prototype.cancelProfile = function () {
     this.webgl.setParams(this.getParams());
 };
 
-ViewportExt.prototype._selectGarment = function (id, $button) {
-    this.old = this.selected;
-    this.selected = {
-        id: id,
-        button: $button
-    };
-    this.$preview.css('background-image', $button.css('background-image'));
-
-    this.$garmentInfo.css('right', '200px');
-
-    var switchValue = !$button.data('selected');
-    console.log('switchValue:', switchValue);
-    this.switchPut.setValue(switchValue, true);
-};
-
 ViewportExt.prototype.unSelectAll = function () {
     $('.dfrp_garment').each(function () {
         $this = $(this);
@@ -243,8 +228,39 @@ ViewportExt.prototype.unSelectAll = function () {
 
 };
 
+ViewportExt.prototype._selectGarment = function (id, $button) {
+    var me = this,
+        duration = 100,
+        right = parseInt(this.$garmentInfo.css('right'));
+
+//    if (me.old && me.old.id && me.old.id === me.selected.id) return;
+
+    me.old = me.selected;
+    me.selected = {
+        id: id,
+        button: $button
+    };
+
+    function updateInfo() {
+        me.$preview.css('background-image', $button.css('background-image'));
+        var switchValue = !$button.data('selected');
+        me.switchPut.setValue(switchValue, true);
+        me.$garmentInfo.css('right', '200px');
+    }
+
+    if (right < 200) {
+        updateInfo();
+    } else {
+        this.$garmentInfo.css('right', 0);
+        setTimeout(updateInfo, duration)
+    }
+
+};
+
 ViewportExt.prototype.selectGarment = function (e) {
     var $target = $(e.target);
+
+    e.preventDefault();
 
     this._selectGarment($target.data('garment'), $target);
 
@@ -265,7 +281,7 @@ ViewportExt.prototype.putChanged = function (value, noHistory) {
 //        }
 
 
-        if (!noHistory){
+        if (!noHistory) {
             history.push({
                 mode: value,
                 selected: this.selected
@@ -278,7 +294,7 @@ ViewportExt.prototype.putChanged = function (value, noHistory) {
         this.unSelectAll();
 //        this.switchPut.setValue(false, true);
 
-        if (!noHistory){
+        if (!noHistory) {
             history.push({
                 mode: value,
                 selected: this.selected
