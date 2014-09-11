@@ -43,7 +43,8 @@ var screenWidth = global.innerWidth,
     targetMin = 100,
     targetMax = 200,
     renderStart,
-    dummyMaterial;//,
+    dummyMaterial,
+    currentMatcap = THREE.ImageUtils.loadTexture('img/matcaps/mydarkgreymetal.jpg');//,
 //    envMap = THREE.ImageUtils.loadTextureCube([
 //        'static/envMap/pos-x.jpg',
 //        'static/envMap/neg-x.jpg',
@@ -203,7 +204,7 @@ function loadDummy(url, params) {
         uniforms: {
             tMatCap: {
                 type: 't',
-                value: THREE.ImageUtils.loadTexture('/img/matcaps/' + controls.dummy.matcap)
+                value: currentMatcap
             }
         },
         vertexShader: matcapShader.vertex,
@@ -739,7 +740,8 @@ module.exports = {
         startRender();
     },
     setDummyMatcap: function (value) {
-        dummyMaterial.uniforms.tMatCap.value = THREE.ImageUtils.loadTexture('img/matcaps/' + value);
+        currentMatcap = THREE.ImageUtils.loadTexture('img/matcaps/' + value);
+        dummyMaterial.uniforms.tMatCap.value = currentMatcap;
         startRender();
     },
     load: function (id, params) {
