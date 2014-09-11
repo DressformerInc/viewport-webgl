@@ -228,7 +228,7 @@ ViewportExt.prototype.unSelectAll = function () {
 
 };
 
-ViewportExt.prototype._selectGarment = function (id, $button) {
+ViewportExt.prototype._selectGarment = function (id, $button, animate) {
     var me = this,
         duration = 100,
         right = parseInt(this.$garmentInfo.css('right'));
@@ -245,13 +245,13 @@ ViewportExt.prototype._selectGarment = function (id, $button) {
         me.$preview.css('background-image', $button.css('background-image'));
         var switchValue = !$button.data('selected');
         me.switchPut.setValue(switchValue, true);
-        me.$garmentInfo.css('right', '200px');
+        animate && me.$garmentInfo.css('right', '200px');
     }
 
     if (right < 200) {
         updateInfo();
     } else {
-        this.$garmentInfo.css('right', 0);
+        animate && this.$garmentInfo.css('right', 0);
         setTimeout(updateInfo, duration)
     }
 
@@ -262,7 +262,7 @@ ViewportExt.prototype.selectGarment = function (e) {
 
     e.preventDefault();
 
-    this._selectGarment($target.data('garment'), $target);
+    this._selectGarment($target.data('garment'), $target, true);
 
 };
 
@@ -274,12 +274,6 @@ ViewportExt.prototype.putChanged = function (value, noHistory) {
 
         this.selected.button.find('.dfrpg_select').show();
         this.selected.button.data('selected', true);
-
-//        if (this.old.button) {
-//            this.old.button.find('.dfrpg_select').hide();
-//            this.old.button.data('selected', false);
-//        }
-
 
         if (!noHistory) {
             history.push({
@@ -316,7 +310,7 @@ ViewportExt.prototype.historyBack = function () {
     if (state) {
 
         state.selected.button.data('selected', true);
-        this._selectGarment(state.selected.id, state.selected.button);
+        this._selectGarment(state.selected.id, state.selected.button, false);
         this.putChanged(state.mode, true);
     }
 };
@@ -325,7 +319,7 @@ ViewportExt.prototype.historyForward = function () {
     var state = history.forward();
     if (state) {
         state.selected.button.data('selected', true);
-        this._selectGarment(state.selected.id, state.selected.button);
+        this._selectGarment(state.selected.id, state.selected.button, false);
         this.putChanged(state.mode, true);
     }
 };

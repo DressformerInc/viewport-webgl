@@ -623,12 +623,12 @@ function update(dt) {
     if (controls && controls.rotate && controls.rotate.auto) {
         rotate(controls.rotate.speed, true);
     }
-
-    if (stats) stats.update();
-
+//
+//    if (stats) stats.update();
+//
     orbitControl.update();
 
-    TWEEN.update(dt);
+    TWEEN.update();
 
     ee.emit('update');
 
