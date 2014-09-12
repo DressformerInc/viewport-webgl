@@ -555,7 +555,7 @@ function init() {
     setupEnvironment(scene);
     loadDummy();
 
-    if (global.Dressformer.garment.id) {
+    if (global.Dressformer.garment && global.Dressformer.garment.id) {
         loadGarmentById(global.Dressformer.garment.id, [], function (model) {
             models['garment'] = model;
             scene.add(model);
