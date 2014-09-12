@@ -80,7 +80,7 @@ app.route('/ext/:id?')
     });
 
 
-app.route('/')
+app.route('/:id?')
     .get(function (req, res, next) {
         request('http://v2.dressformer.com/api/user', function (error, response, body) {
             if (!error && response.statusCode == 200) {
@@ -90,8 +90,8 @@ app.route('/')
                 } catch (e) {
                 }
 
-                console.log('data:', data.dummy.assets);
-                data.dummy.assets.geometry.url = 'http://v2.dressformer.com/assets/geometry/' + data.dummy.assets.geometry.id;
+                //console.log('data:', data.dummy.assets);
+                //data.dummy.assets.geometry.url = 'http://v2.dressformer.com/assets/geometry/' + data.dummy.assets.geometry.id;
 
                 res.render('index', {
                     version: pkg.version,

@@ -554,11 +554,14 @@ function init() {
     setupLight(scene);
     setupEnvironment(scene);
     loadDummy();
-//    loadModel(controls.garment = global.Dressformer.garment.id, function (model) {
-//        models['garment'] = model;
-//        scene.add(model);
-//        render();
-//    });
+
+    if (global.Dressformer.garment.id) {
+        loadGarmentById(global.Dressformer.garment.id, [], function (model) {
+            models['garment'] = model;
+            scene.add(model);
+            render();
+        });
+    }
 
 
     container = global.document.getElementById('viewport');
