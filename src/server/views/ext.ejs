@@ -66,13 +66,13 @@
     <div class="df_left_sidebar" id="profile">
         <!--<div class="h10"></div>-->
         <!--<div id="radioGender" class="dfp_block">Gender:-->
-            <!--<div class="dfpb_radio dfpbr_left dfpb_radio_on" data-value="Female">Female</div>-->
-            <!--<div class="dfpb_radio dfpbr_right" data-value="Male">Male</div>-->
+        <!--<div class="dfpb_radio dfpbr_left dfpb_radio_on" data-value="Female">Female</div>-->
+        <!--<div class="dfpb_radio dfpbr_right" data-value="Male">Male</div>-->
         <!--</div>-->
         <!--<div class="h10"></div>-->
         <!--<div id="radioUnits" class="dfp_block">Units:-->
-            <!--<div class="dfpb_radio dfpbr_left dfpb_radio_on" data-value="cm">cm</div>-->
-            <!--<div class="dfpb_radio dfpbr_right" data-value="inches">inches</div>-->
+        <!--<div class="dfpb_radio dfpbr_left dfpb_radio_on" data-value="cm">cm</div>-->
+        <!--<div class="dfpb_radio dfpbr_right" data-value="inches">inches</div>-->
         <!--</div>-->
         <div class="h10"></div>
         <div id="numberHeight" class="dfp_block">Height:
@@ -140,39 +140,42 @@
             <span class="df_icon">&#xf061;</span>
             &nbsp;<span class="df_text">Put Off</span>
         </div>
-        <div id="buttonRemoveFromList" class="dfg_btn"><span class="df_icon">&#xf00d;</span>&nbsp; Remove from list</div>
+        <div id="buttonRemoveFromList" class="dfg_btn"><span class="df_icon">&#xf00d;</span>&nbsp; Remove from list
+        </div>
     </div>
 
     <div class="df_widget_right_panel" id="dfw_right_panel">
         <div class="dfw_close" title="Close widget & return to shopping"><span
                     class="df_icon">&#xf00d;</span></div>
 
-        <% for(var i=0; i< history.length; i++) {%>
-            <div class="dfrp_garment"
-                 data-garment="<%=history[i].id%>"
-                 style="background-image: url(<%=history[i].placeholder%>);"
-                 title="">
-                <div class="dfrpg_select" style="display: none;"><span class="df_icon">&#xf00c;</span></div>
-            </div>
+        <% for(var i = 0; i < history.length; i++) { %>
+        <div class="dfrp_garment"
+             data-garment="<%= history[i].id %>"
+                <% if (history[i].placeholder) { %>
+             style="background-image: url(<%= history[i].placeholder %>);"
+                <% } %>
+             title="">
+            <div class="dfrpg_select" style="display: none;"><span class="df_icon">&#xf00c;</span></div>
+        </div>
         <% } %>
         <!--<div class="dfrp_garment" id="dfg_item1" data-garment="de8b4da5-da7e-4547-9a47-9027e0bd85c2" title="Kira Plastinina dress">-->
-            <!--<div class="dfrpg_select"><span class="df_icon">&#xf00c;</span></div>-->
+        <!--<div class="dfrpg_select"><span class="df_icon">&#xf00c;</span></div>-->
         <!--</div>-->
         <!--<div class="dfrp_garment" id="dfg_item2" data-garment="165e5bcb-ee7e-4c43-b8bf-1c4d077236ed" title="Select garment"></div>-->
         <!--<div class="dfrp_garment" id="dfg_item3" data-garment="61de8f81-b764-4550-814f-baea86574d11">-->
-            <!--<div class="dfrpg_select"><span class="df_icon">&#xf00c;</span></div>-->
+        <!--<div class="dfrpg_select"><span class="df_icon">&#xf00c;</span></div>-->
         <!--</div>-->
         <!--<div class="dfrp_garment" id="dfg_item4"></div>-->
         <!--<div class="dfrp_garment" id="dfg_item5"></div>-->
         <!--<div class="dfrp_garment" id="dfg_item6">-->
-            <!--<div class="dfrpg_select"><span class="df_icon">&#xf00c;</span></div>-->
+        <!--<div class="dfrpg_select"><span class="df_icon">&#xf00c;</span></div>-->
         <!--</div>-->
         <!--<div class="dfrp_garment" id="dfg_item7">-->
-            <!--<div class="dfrpg_select"><span class="df_icon">&#xf00c;</span></div>-->
+        <!--<div class="dfrpg_select"><span class="df_icon">&#xf00c;</span></div>-->
         <!--</div>-->
         <!--<div class="dfrp_garment" id="dfg_item8"></div>-->
         <!--<div class="buy_all" title="Go to shopping cart">-->
-            <!--<span class="df_icon">&#xf07a;</span>-->
+        <!--<span class="df_icon">&#xf07a;</span>-->
         <!--</div>-->
     </div>
 </div>
