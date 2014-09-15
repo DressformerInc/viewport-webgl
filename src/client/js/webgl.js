@@ -118,7 +118,8 @@ function setupLight(scene) {
 
 function setupEnvironment(scene) {
     // FLOOR
-    var floorMaterial = new THREE.MeshBasicMaterial({ /*map: floorTexture,*/
+    var floorMaterial = new THREE.MeshBasicMaterial({
+            /*map: floorTexture,*/
             color: 0xFFFFFF,
             side: THREE.BackSide
         }),
@@ -131,64 +132,14 @@ function setupEnvironment(scene) {
     scene.add(models['floor'] = floor);
 }
 
-function makeShaderMaterial(normal, diffuse, specular, cb) {
-    var shininess = 0.5,
-        shader = THREE.ShaderLib[ "normalmap" ],
-        uniforms = THREE.UniformsUtils.clone(shader.uniforms),
-        count = 0,
-        onLoad = function () {
-            startRender();
-            if (--count === 0) {
-                cb();
-            }
-        };
-
-    uniforms[ "enableDisplacement" ].value = false;
-    uniforms[ "shininess" ].value = shininess;
-//        uniforms[ "uNormalScale" ].value.y = -1;
-
-    if (normal) {
-        count++;
-        uniforms[ "tNormal" ].value = THREE.ImageUtils.loadTexture(normal, null, onLoad);
-    }
-
-    if (diffuse) {
-        count++;
-        uniforms[ "enableDiffuse" ].value = true;
-        uniforms[ 'tDiffuse'].value = THREE.ImageUtils.loadTexture(diffuse, null, onLoad);
-    }
-
-    if (specular) {
-        count++
-        uniforms[ "enableSpecular" ].value = true;
-        uniforms[ 'tSpecular'].value = THREE.ImageUtils.loadTexture(specular, null, onLoad);
-    }
-
-
-//            uniforms[ "tDisplacement" ].value = THREE.ImageUtils.loadTexture("models/obj/sweater/BDM_201404_0006_0005_DISP.png");
-////            uniforms[ "uDisplacementBias" ].value = -0.1; //- 0.428408;;
-////            uniforms[ "uDisplacementScale" ].value = 0.5;
-//            uniforms[ "uDisplacementBias" ].value = - 0.428408;
-//            uniforms[ "uDisplacementScale" ].value = 2.436143;
-
-    return  new THREE.ShaderMaterial({
-        fragmentShader: shader.fragmentShader,
-        vertexShader: shader.vertexShader,
-        uniforms: uniforms,
-        lights: true,
-        fog: false,
-        side: THREE.DoubleSide
-    });
-}
-
 function reloadDummy() {
 
     loadDummy(global.Dressformer.dummy.assets.geometry.url, [
-            'height=' + controls.sizes.height.toFixed(1),
-            'chest=' + controls.sizes.chest.toFixed(1),
-            'underbust=' + controls.sizes.underbust.toFixed(1),
-            'waist=' + controls.sizes.waist.toFixed(1),
-            'hips=' + controls.sizes.hips.toFixed(1)
+        'height=' + controls.sizes.height.toFixed(1),
+        'chest=' + controls.sizes.chest.toFixed(1),
+        'underbust=' + controls.sizes.underbust.toFixed(1),
+        'waist=' + controls.sizes.waist.toFixed(1),
+        'hips=' + controls.sizes.hips.toFixed(1)
     ]);
 }
 
@@ -223,7 +174,6 @@ function loadDummy(url, params) {
 
     ee.emit('startload');
 
-    scene.remove(models['dummy']);
 
     if (params && params.length > 0) {
         url += '?' + params.join('&');
@@ -241,6 +191,7 @@ function loadDummy(url, params) {
             }
         });
 
+        scene.remove(models['dummy']);
         scene.add(models['dummy'] = dummy);
 
     });
@@ -279,7 +230,121 @@ function loadModel(name, cb) {
     });
 }
 
+function makeShaderMaterial(normal, diffuse, specular, cb) {
+    var shininess = 0.5,
+        shader = THREE.ShaderLib["normalmap"],
+        uniforms = THREE.UniformsUtils.clone(shader.uniforms),
+        count = 0,
+        onLoad = function () {
+            startRender();
+            if (--count === 0) {
+                cb();
+            }
+        };
+
+    uniforms["enableDisplacement"].value = false;
+    uniforms["enableAO"].value = false;
+    uniforms["shininess"].value = shininess;
+//        uniforms[ "uNormalScale" ].value.y = -1;
+    uniforms["enableDiffuse"].value = false;
+    uniforms["enableSpecular"].value = false;
+    uniforms["tNormal"].value = null;
+
+    if (normal) {
+        count++;
+        uniforms["tNormal"].value = THREE.ImageUtils.loadTexture(normal, THREE.UVMapping, onLoad);
+    }
+
+    if (diffuse) {
+        count++;
+        uniforms["enableDiffuse"].value = true;
+        uniforms['tDiffuse'].value = THREE.ImageUtils.loadTexture(diffuse, THREE.UVMapping, onLoad);
+    }
+
+    if (specular) {
+        count++;
+        uniforms["enableSpecular"].value = true;
+        uniforms['tSpecular'].value = THREE.ImageUtils.loadTexture(specular, THREE.UVMapping, onLoad);
+    }
+
+
+//            uniforms[ "tDisplacement" ].value = THREE.ImageUtils.loadTexture("models/obj/sweater/BDM_201404_0006_0005_DISP.png");
+////            uniforms[ "uDisplacementBias" ].value = -0.1; //- 0.428408;;
+////            uniforms[ "uDisplacementScale" ].value = 0.5;
+//            uniforms[ "uDisplacementBias" ].value = - 0.428408;
+//            uniforms[ "uDisplacementScale" ].value = 2.436143;
+
+    //if (normal) {
+    //    return new THREE.ShaderMaterial({
+    //        fragmentShader: shader.fragmentShader,
+    //        vertexShader: shader.vertexShader,
+    //        uniforms: uniforms,
+    //        lights: true,
+    //        fog: false,
+    //        side: THREE.DoubleSide
+    //    });
+    //
+    //} else {
+    //    return new THREE.MeshPhongMaterial({
+    //        map: diffuse && uniforms['tDiffuse'].value,
+    //        specularMap: specular && uniforms['tSpecular'].value,
+    //        normalMap: normal && uniforms['tNormal'].value
+    //    });
+    //}
+
+    return new THREE.MeshPhongMaterial({
+        map: diffuse && uniforms['tDiffuse'].value,
+        specularMap: specular && uniforms['tSpecular'].value,
+        normalMap: normal && uniforms['tNormal'].value
+    });
+}
+
+function makePhongMaterial(normal, diffuse, specular, cb) {
+    var count = 0,
+        textures = {},
+        onLoad = function () {
+            startRender();
+            if (--count === 0) {
+                cb();
+            }
+        };
+
+    uniforms["enableDisplacement"].value = false;
+    uniforms["enableAO"].value = false;
+    uniforms["shininess"].value = shininess;
+//        uniforms[ "uNormalScale" ].value.y = -1;
+    uniforms["enableDiffuse"].value = false;
+    uniforms["enableSpecular"].value = false;
+    uniforms["tNormal"].value = null;
+
+    if (normal) {
+        count++;
+        textures.normal = THREE.ImageUtils.loadTexture(normal, THREE.UVMapping, onLoad);
+    }
+
+    if (diffuse) {
+        count++;
+        textures.diffuse = THREE.ImageUtils.loadTexture(diffuse, THREE.UVMapping, onLoad);
+    }
+
+    if (specular) {
+        count++;
+        textures.specular = THREE.ImageUtils.loadTexture(specular, THREE.UVMapping, onLoad);
+    }
+
+    return new THREE.MeshPhongMaterial({
+        map: textures.diffuse,
+        specularMap: textures.specular,
+        normalMap: textures.normal
+    });
+}
+
+
+
 function loadGarment(garment, params, cb) {
+
+    console.log('garment.assets:', garment.assets);
+
     var objPath = garment.assets.geometry.url,
         normalPath = garment.assets.normal.url,
         diffusePath = garment.assets.diffuse.url,
@@ -290,7 +355,7 @@ function loadGarment(garment, params, cb) {
                 ee.emit('garmentloaded');
             }
         },
-        shaderMaterial = makeShaderMaterial(
+        material = makePhongMaterial(
             normalPath,
             diffusePath,
             specularPath,
@@ -330,8 +395,10 @@ function loadGarment(garment, params, cb) {
             if (child instanceof THREE.Mesh) {
                 child.geometry.computeVertexNormals(true);
                 child.geometry.computeTangents();
-                child.material = shaderMaterial;
+                child.material = material;
                 child.material.needsUpdate = true;
+                console.log('shader material:', child.material, 'update:' + child.material.needsUpdate);
+
                 child.castShadow = true;
                 child.receiveShadow = true;
             }
@@ -339,6 +406,7 @@ function loadGarment(garment, params, cb) {
         model.name = garment.name;
         model.position.set(0, 0, 0);
         onLoad();
+        scene.remove(models['garment']);
         cb(model);
     });
 
@@ -422,9 +490,9 @@ function initControls() {
         postprocessing.bokeh.enabled = controls.dof;
         renderer.autoClear = !controls.dof;
         renderer.antialias = !controls.dof;
-        postprocessing.bokeh.uniforms[ "focus" ].value = controls.focus;
-        postprocessing.bokeh.uniforms[ "aperture" ].value = controls.aperture;
-        postprocessing.bokeh.uniforms[ "maxblur" ].value = controls.maxblur;
+        postprocessing.bokeh.uniforms["focus"].value = controls.focus;
+        postprocessing.bokeh.uniforms["aperture"].value = controls.aperture;
+        postprocessing.bokeh.uniforms["maxblur"].value = controls.maxblur;
         startRender();
     }
 
@@ -493,7 +561,7 @@ function initPostprocessing() {
         composer = new THREE.EffectComposer(renderer);
 
     // FXAA
-    FXAA.uniforms[ 'resolution' ].value.set(1 / screenHeightDPR, 1 / screenHeightDPR);
+    FXAA.uniforms['resolution'].value.set(1 / screenHeightDPR, 1 / screenHeightDPR);
     FXAA.renderToScreen = true;
 
     bokehPass.renderToScreen = true;
@@ -669,8 +737,20 @@ function onWindowResize() {
 module.exports = {
     ee: ee,
     init: function () {
+        var me = this;
+
         init();
         render();
+        //init postMessage handlers
+        //for (var prop in this) {
+        //    if (this.hasOwnProperty(prop)) {
+        //
+        //    }
+        //}
+
+        window.addEventListener("message", function (event) {
+            console.log('event:', event);
+        }, false);
         return this;
     },
     //controls
@@ -691,7 +771,7 @@ module.exports = {
     resetRotation: function () {
         var speed = 300,
             fn = TWEEN.Easing.Cubic.InOut,
-            dummyRotation = models['dummy'].rotation.y % (Math.PI*2);
+            dummyRotation = models['dummy'].rotation.y % (Math.PI * 2);
 
         var tween = new TWEEN.Tween({angle: dummyRotation, target: orbitControl.target.y})
             .to({angle: 0, target: orbitControl.target0.y}, speed)
@@ -762,8 +842,6 @@ module.exports = {
                 scene.add(model);
             };
 
-        scene.remove(models['garment']);
-
         if (garment && garment.id === id) {
             loadGarment(garment, params, cb)
         } else {
@@ -777,7 +855,6 @@ module.exports = {
     getScreenshot: function () {
         return renderer.domElement.toDataURL()
     }
-
 
 
 };
