@@ -16,6 +16,11 @@
     <link rel="stylesheet" id="css_theme" href="css/light.css">
     <script>
         var Dressformer = {
+            <% if (id) {%>
+            garment: {
+                id: '<%-id%>'
+            },
+            <%}%>
             dummy: <%-JSON.stringify(dummy)%>,
             history: <%-JSON.stringify(history)%>,
             params: {}

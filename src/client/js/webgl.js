@@ -307,21 +307,24 @@ function makePhongMaterial(normal, diffuse, specular, cb) {
             if (--count === 0) {
                 cb();
             }
+        }, onError = function () {
+            onLoad();
+            console.error('Texture not loaded:', arguments);
         };
 
     if (normal) {
         count++;
-        textures.normal = THREE.ImageUtils.loadTexture(normal, THREE.UVMapping, onLoad);
+        textures.normal = THREE.ImageUtils.loadTexture(normal, THREE.UVMapping, onLoad, onError);
     }
 
     if (diffuse) {
         count++;
-        textures.diffuse = THREE.ImageUtils.loadTexture(diffuse, THREE.UVMapping, onLoad);
+        textures.diffuse = THREE.ImageUtils.loadTexture(diffuse, THREE.UVMapping, onLoad, onError);
     }
 
     if (specular) {
         count++;
-        textures.specular = THREE.ImageUtils.loadTexture(specular, THREE.UVMapping, onLoad);
+        textures.specular = THREE.ImageUtils.loadTexture(specular, THREE.UVMapping, onLoad, onError);
     }
 
     return new THREE.MeshPhongMaterial({
@@ -616,7 +619,8 @@ function init() {
     setupEnvironment(scene);
     loadDummy();
 
-    if (global.Dressformer.garment && global.Dressformer.garment.id) {
+    if (global.Dressformer.garment
+        && global.Dressformer.garment.id) {
         loadGarmentById(global.Dressformer.garment.id, [], function (model) {
             models['garment'] = model;
             scene.add(model);

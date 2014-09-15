@@ -52,7 +52,7 @@ app.route('/ext/:id?')
                 res.render('ext', {
                     version: pkg.version,
                     title: "Dressformer widget ext",
-                    id: req.params.id || 'ADS_201407_0005_0002',
+                    id: req.params.id,
                     dummy: data.dummy,
                     history: [
                         {
@@ -85,18 +85,18 @@ app.route('/:id?')
         request('http://v2.dressformer.com/api/user', function (error, response, body) {
             if (!error && response.statusCode == 200) {
                 var data;
+
                 try {
                     data = JSON.parse(body);
                 } catch (e) {
                 }
 
-                //console.log('data:', data.dummy.assets);
                 //data.dummy.assets.geometry.url = 'http://v2.dressformer.com/assets/geometry/' + data.dummy.assets.geometry.id;
 
                 res.render('index', {
                     version: pkg.version,
                     title: "Dressformer widget",
-                    id: req.params.id || 'ADS_201407_0005_0002',
+                    id: req.params.id,
                     dummy: data.dummy
                 });
             } else {
