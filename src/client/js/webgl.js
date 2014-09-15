@@ -327,7 +327,8 @@ function makePhongMaterial(normal, diffuse, specular, cb) {
     return new THREE.MeshPhongMaterial({
         map: textures.diffuse,
         specularMap: textures.specular,
-        normalMap: textures.normal
+        normalMap: textures.normal,
+        side: THREE.DoubleSide
     });
 }
 
