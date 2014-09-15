@@ -741,16 +741,11 @@ module.exports = {
 
         init();
         render();
-        //init postMessage handlers
-        //for (var prop in this) {
-        //    if (this.hasOwnProperty(prop)) {
-        //
-        //    }
-        //}
 
         window.addEventListener("message", function (event) {
-            console.log('event:', event);
+            me[event.data.method] && me[event.data.method].apply(me, event.data.params);
         }, false);
+
         return this;
     },
     //controls
