@@ -309,14 +309,6 @@ function makePhongMaterial(normal, diffuse, specular, cb) {
             }
         };
 
-    uniforms["enableDisplacement"].value = false;
-    uniforms["enableAO"].value = false;
-    uniforms["shininess"].value = shininess;
-//        uniforms[ "uNormalScale" ].value.y = -1;
-    uniforms["enableDiffuse"].value = false;
-    uniforms["enableSpecular"].value = false;
-    uniforms["tNormal"].value = null;
-
     if (normal) {
         count++;
         textures.normal = THREE.ImageUtils.loadTexture(normal, THREE.UVMapping, onLoad);
