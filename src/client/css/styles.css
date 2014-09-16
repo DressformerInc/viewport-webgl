@@ -319,6 +319,25 @@ label {
 	background-color: #292929;
 }
 
+.dfwv_screenshot {
+    position: absolute;
+    height: 40px;
+    width: 40px;
+    top: 0px;
+    left: 50px;
+    line-height: 40px;
+    text-align: center;
+    cursor: pointer;
+    color: #fff;
+	transition: 0.2s;
+	border-radius: 20px;
+	box-sizing: border-box;
+	background-color: rgba(0, 0, 0, 0.4);
+}
+.dfwv_screenshot:hover {
+	background-color: #292929;
+}
+
 .buy_all {
 	position: absolute;
 	width: 100%;

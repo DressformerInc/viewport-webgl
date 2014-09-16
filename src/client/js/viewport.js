@@ -30,6 +30,10 @@ Viewport.prototype.init = function () {
     this.events.$viewport.on('click','.dfwvc_d_plastic', function () {
         webgl.setDummyMatcap('plastic');
     });
+
+    this.events.$viewport.on('click', '.dfwv_screenshot', function () {
+        console.log('screenshot');
+    })
 };
 /*
  //        .on('click', '.dfwv_history_back', function () {
