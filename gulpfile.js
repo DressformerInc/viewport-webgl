@@ -167,8 +167,8 @@ gulp.task('rsync', function (cb) {
         };
 
     return gulp.src('')
-        .pipe(exec('rsync -crv --delete --exclude "server/config.json" ./dist/ v2.dressformer.com:/opt/www/viewport-webgl-test', options))
-        .pipe(exec('ssh v2.dressformer.com forever restart /opt/www/viewport-webgl-test/server/app.js', options));
+        .pipe(exec('rsync -crv --delete --exclude "server/config.json" ./dist/ v2.dressformer.com:/opt/www/viewport-webgl-test', options));
+        //.pipe(exec('ssh v2.dressformer.com forever restart /opt/www/viewport-webgl-test/server/app.js', options));
 });
 
 gulp.task('deploy', function (cb) {
