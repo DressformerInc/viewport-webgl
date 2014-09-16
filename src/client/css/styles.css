@@ -19,7 +19,6 @@ body {
     font-family: 'Open Sans Condensed';
     transition: 0.2s;
     color: #292929;
-    opacity: 0.5;
     background-image: url('../img/bg_tile.png');
 }
 iframe {
