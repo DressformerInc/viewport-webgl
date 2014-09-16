@@ -169,8 +169,8 @@ function loadDummy(url, params) {
         shading: THREE.SmoothShading
     });
 
-    dummyMaterial.uniforms.tMatCap.value.wrapS = dummyMaterial.uniforms.tMatCap.value.wrapT = THREE.ClampToEdgeWrapping;
-    url = url || global.Dressformer.dummy.assets.geometry.url;
+    //dummyMaterial.uniforms.tMatCap.value.wrapS = dummyMaterial.uniforms.tMatCap.value.wrapT = THREE.ClampToEdgeWrapping;
+    url = url || global.Dressformer.user.dummy.assets.geometry.url;
 
     ee.emit('startload');
 

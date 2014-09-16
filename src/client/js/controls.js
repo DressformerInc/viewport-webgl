@@ -6,7 +6,7 @@ var dat = require('../../../libs/dat.gui.js'),
     webgl = require('./webgl'),
     gui,
     controllers = {},
-    body = global.Dressformer.dummy.body,
+    body = global.Dressformer.user.dummy.body,
     controls = {
         garment: 'ADS_201407_0005_0002',
         offset: 1,

@@ -133,7 +133,7 @@ ViewportExt.prototype.init = function () {
 };
 
 ViewportExt.prototype.getBaseParams = function () {
-    var params = global.Dressformer.dummy.body;
+    var params = global.Dressformer.user.dummy.body;
     for (var param in params) {
         if (params.hasOwnProperty(param)) {
             params[param] = +params[param].toFixed(0);
