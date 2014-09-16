@@ -23,7 +23,7 @@ var gulp = require('gulp'),
             'src/client/js/**/*.js',
             '!src/client/js/viewport-webgl.js'
         ],
-        css: ['src/client/css/*.css', '!src/client/css/style.css', '!src/client/css/dark.css', '!src/client/css/light.css'],
+        css: ['src/client/css/*.css', '!src/client/css/style.css','!src/client/css/common.css', '!src/client/css/dark.css', '!src/client/css/light.css'],
         compiled: {
             script: ['src/client/js/viewport_webgl.js'],
             css: ['src/client/css/style.css']

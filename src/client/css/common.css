@@ -85,7 +85,7 @@ label {
 	box-sizing: border-box;
 }
 
-.bg_iframe {
+.bg_iframe, .widget_iframe {
     display: none;
 	position: absolute;
 	height: 100%;
