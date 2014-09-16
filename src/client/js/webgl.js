@@ -45,10 +45,10 @@ var screenWidth = global.innerWidth,
     renderStart,
     dummyMaterial,
     matcaps = {
-        'silver': THREE.ImageUtils.loadTexture('img/matcaps/droplet_01.png'),
-        'gold': THREE.ImageUtils.loadTexture('img/matcaps/test_gold.jpg'),
-        'carbon': THREE.ImageUtils.loadTexture('img/matcaps/mydarkgreymetal.jpg'),
-        'plastic': THREE.ImageUtils.loadTexture('img/matcaps/SketchToyPlastic.png')
+        'silver': THREE.ImageUtils.loadTexture('/img/matcaps/droplet_01.png'),
+        'gold': THREE.ImageUtils.loadTexture('/img/matcaps/test_gold.jpg'),
+        'carbon': THREE.ImageUtils.loadTexture('/img/matcaps/mydarkgreymetal.jpg'),
+        'plastic': THREE.ImageUtils.loadTexture('/img/matcaps/SketchToyPlastic.png')
     },
     currentMatcap = matcaps['carbon'];//,
 //    envMap = THREE.ImageUtils.loadTextureCube([
