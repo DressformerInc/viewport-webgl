@@ -17,10 +17,7 @@ body {
     font-family: 'Open Sans Condensed';
     background-image: url('../img/bg_tile.png');
 }
-iframe {
-	display: block;
-	overflow: hidden;
-}
+
 form {
     display: inline-block;
 }

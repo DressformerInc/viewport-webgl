@@ -810,7 +810,7 @@ module.exports = {
     },
     setParams: function (params) {
         var df = global.Dressformer;
-        loadDummy(df.dummy.assets.geometry.url, params);
+        loadDummy(df.user.dummy.assets.geometry.url, params);
         if (df.garment) {
 
             this.load(df.garment.id, params);

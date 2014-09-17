@@ -22,7 +22,7 @@ body {
     background-image: url('../img/bg_tile.png');
 }
 iframe {
-	display: block;
+	display: none;
 	overflow: hidden;
 }
 form {

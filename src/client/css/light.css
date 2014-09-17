@@ -18,10 +18,7 @@ body {
     color: #292929;
     background-image: url('../img/bg_tile.png');
 }
-iframe {
-	display: block;
-	overflow: hidden;
-}
+
 form {
     display: inline-block;
 }

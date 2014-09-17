@@ -81,6 +81,7 @@ gulp.task('dist', ['js', 'css', 'modules'], function () {
     return gulp.src([
         //client
         'src/client/js/viewport-webgl.js',
+        'src/client/css/common.css',
         'src/client/css/style.css',
         'src/client/css/light.css',
         'src/client/css/dark.css',
