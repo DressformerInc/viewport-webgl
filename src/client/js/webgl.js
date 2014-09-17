@@ -847,6 +847,9 @@ module.exports = {
     },
     getScreenshot: function () {
         return renderer.domElement.toDataURL()
+    },
+    saveGarmentPlaceholder: function () {
+
     }
 
 

@@ -277,8 +277,8 @@ label {
 	position: absolute;
 	height: 40px;
 	top: 10px;
-	left: 16;
-	margin-left: 10px;
+	left: 50px;
+	/*margin-left: 10px;*/
 }
 
 .dfwv_history_back {
@@ -323,8 +323,8 @@ label {
     position: absolute;
     height: 40px;
     width: 40px;
-    top: 0px;
-    left: 50px;
+    top: 0;
+    left: 0;
     line-height: 40px;
     text-align: center;
     cursor: pointer;

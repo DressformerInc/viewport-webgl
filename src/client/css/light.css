@@ -276,14 +276,6 @@ label {
 	border-right: 4px #292929 solid;
 }
 
-.dfwv_history {
-	position: absolute;
-	height: 40px;
-	top: 10px;
-	left: 16;
-	margin-left: 10px;
-}
-
 .dfwv_history_back {
     position: absolute;
     height: 40px;

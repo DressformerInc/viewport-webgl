@@ -2,11 +2,12 @@
  * Created by Miha-ha on 05.09.14.
  */
 
-var Viewport = module.exports= function (events, webgl) {
-    this.events = events;
-    this.webgl = webgl;
-    this.init();
-};
+var Api = require('./api'),
+    Viewport = module.exports = function (events, webgl) {
+        this.events = events;
+        this.webgl = webgl;
+        this.init();
+    };
 
 Viewport.prototype.init = function () {
     var webgl = this.webgl;
@@ -18,22 +19,24 @@ Viewport.prototype.init = function () {
     this.events.on('mousedown', '.dfwvc_zoom_in', 'zoomIn');
     this.events.on('mousedown', '.dfwvc_zoom_out', 'zoomOut');
 
-    this.events.$viewport.on('click','.dfwvc_d_silver', function () {
+    this.events.$viewport.on('click', '.dfwvc_d_silver', function () {
         webgl.setDummyMatcap('silver');
     });
-    this.events.$viewport.on('click','.dfwvc_d_gold', function () {
+    this.events.$viewport.on('click', '.dfwvc_d_gold', function () {
         webgl.setDummyMatcap('gold');
     });
-    this.events.$viewport.on('click','.dfwvc_d_carbon', function () {
+    this.events.$viewport.on('click', '.dfwvc_d_carbon', function () {
         webgl.setDummyMatcap('carbon');
     });
-    this.events.$viewport.on('click','.dfwvc_d_plastic', function () {
+    this.events.$viewport.on('click', '.dfwvc_d_plastic', function () {
         webgl.setDummyMatcap('plastic');
     });
 
     this.events.$viewport.on('click', '.dfwv_screenshot', function () {
-        console.log('screenshot');
-    })
+        console.log('screenshot: ', global.Dressformer.garment.id);
+        var screenshot = webgl.getScreenshot();
+        Api.saveGarmentPlaceholder(global.Dressformer.garment.id, screenshot);
+    });
 };
 /*
  //        .on('click', '.dfwv_history_back', function () {
