@@ -848,8 +848,8 @@ module.exports = {
     getScreenshot: function () {
         return renderer.domElement.toDataURL()
     },
-    saveGarmentPlaceholder: function () {
-
+    saveGarmentPlaceholder: function (id) {
+        Api.saveGarmentPlaceholder(id, this.getScreenshot());
     }
 
 
