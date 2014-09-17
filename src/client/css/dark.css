@@ -15,7 +15,7 @@ body {
 	margin: 0;
 	padding: 0;
     font-family: 'Open Sans Condensed';
-    background-image: url('../img/bg_tile.png');
+    /*background-image: url('../img/bg_tile.png');*/
 }
 
 form {

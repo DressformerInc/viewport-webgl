@@ -90,8 +90,8 @@ label {
 	position: absolute;
 	height: 100%;
 	width: 100%;
-	top: 0px;
-	left: 0px;
+	top: 0;
+	left: 0;
     padding-top: 56px;
     transition: 0.2s;
     -webkit-box-sizing: border-box;
@@ -99,6 +99,10 @@ label {
     -ms-box-sizing: border-box;
     -o-box-sizing: border-box;
     box-sizing: border-box;
+}
+
+.widget_iframe {
+    padding-top: 0;
 }
 
 .df_card_btn {

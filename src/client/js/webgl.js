@@ -336,7 +336,6 @@ function makePhongMaterial(normal, diffuse, specular, cb) {
 }
 
 
-
 function loadGarment(garment, params, cb) {
 
     console.log('garment.assets:', garment.assets);
@@ -765,7 +764,7 @@ module.exports = {
             fn = TWEEN.Easing.Cubic.InOut,
             dummyRotation = models['dummy'].rotation.y % (Math.PI * 2);
 
-        var tween = new TWEEN.Tween({angle: dummyRotation, target: orbitControl.target.y})
+        new TWEEN.Tween({angle: dummyRotation, target: orbitControl.target.y})
             .to({angle: 0, target: orbitControl.target0.y}, speed)
             .easing(fn)
             .onUpdate(function () {
@@ -773,7 +772,7 @@ module.exports = {
                 orbitControl.target.y = this.target;
             })
             .start();
-        var tween2 = new TWEEN.Tween(orbitControl.object.position)
+        new TWEEN.Tween(orbitControl.object.position)
             .to(orbitControl.position0, speed)
             .easing(fn)
             .onUpdate(function () {

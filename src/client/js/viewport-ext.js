@@ -113,6 +113,11 @@ ViewportExt.prototype.init = function () {
         onChange: this.putChanged.bind(this)
     });
     this.$preview = $viewport.find('.df_garment_preview');
+    $viewport.on('click', '.dfw_close', function () {
+        if (global.parent) {
+            global.parent.postMessage({method: 'closeWidget', params: []}, '*');
+        }
+    });
 
     //history controls
     $viewport.on('click', '.dfwv_history_back', this.historyBack.bind(this));
