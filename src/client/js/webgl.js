@@ -366,6 +366,8 @@ function loadGarment(garment, params, cb) {
         var parts = params[i].split('='),
             value = +parts[1];
 
+        if ('height' === parts[0]) continue;
+
         value += +(controls.offset.toFixed(1) || 1);
 
         params[i] = parts[0] + '=' + value;
