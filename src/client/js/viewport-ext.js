@@ -8,7 +8,8 @@ var $ = require('../../../libs/jquery-2.1.1.min'),
     CtrlRadio = require('./controls/CtrlRadio'),
     CtrlSwitch = require('./controls/CtrlSwitch'),
     CtrlNumber = require('./controls/CtrlNumber'),
-    history = require('./history');
+    history = require('./history'),
+    DF = global.Dressformer;
 
 var ViewportExt = module.exports = function (events, webgl) {
     Viewport.call(this, events, webgl);
@@ -123,18 +124,27 @@ ViewportExt.prototype.init = function () {
     $viewport.on('click', '.dfwv_history_back', this.historyBack.bind(this));
     $viewport.on('click', '.dfwv_history_forward', this.historyForward.bind(this));
 
-    this.webgl.ee.on('garmentloaded', function () {
-        setTimeout(function () {
-            console.log('garment loaded');
-            if (this.selected && this.selected.button && !this.selected.button.data('screenshot')) {
-                var screenshot = this.webgl.getScreenshot();
-                this.selected.button.css('background-image', 'url("' + screenshot + '")');
-                this.$preview.css('background-image', 'url("' + screenshot + '")');
-                this.selected.button.data('screenshot', true)
-            }
-        }.bind(this), 50);
+    //this.webgl.ee.on('garmentloaded', function () {
+    //    setTimeout(function () {
+    //        console.log('garment loaded');
+    //        if (this.selected && this.selected.button && !this.selected.button.data('screenshot')) {
+    //            var screenshot = this.webgl.getScreenshot();
+    //            this.selected.button.css('background-image', 'url("' + screenshot + '")');
+    //            this.$preview.css('background-image', 'url("' + screenshot + '")');
+    //            this.selected.button.data('screenshot', true)
+    //        }
+    //    }.bind(this), 50);
+    //
+    //}.bind(this));
 
-    }.bind(this));
+    //ui init
+    this.showProfile();
+    if (DF.garment && DF.garment.id) {
+        var $button = $('.dfrp_garment[data-garment="'+DF.garment.id+'"]').first();
+        $button.data('selected', true);
+        $button.find('.dfrpg_select').show();
+        this._selectGarment(DF.garment.id, $button, true);
+    }
 };
 
 ViewportExt.prototype.getBaseParams = function () {
@@ -289,6 +299,7 @@ ViewportExt.prototype.putChanged = function (value, noHistory) {
 
     } else {
         this.webgl.remove(this.selected.id);
+        DF.garment = null;
 
         this.unSelectAll();
 //        this.switchPut.setValue(false, true);
