@@ -301,7 +301,9 @@ function makeShaderMaterial(normal, diffuse, specular, cb) {
 
 function makePhongMaterial(normal, diffuse, specular, cb) {
     var count = 0,
-        textures = {},
+        params = {
+            side: THREE.DoubleSide
+        },
         onLoad = function () {
             startRender();
             if (--count === 0) {
@@ -314,25 +316,20 @@ function makePhongMaterial(normal, diffuse, specular, cb) {
 
     if (normal) {
         count++;
-        textures.normal = THREE.ImageUtils.loadTexture(normal, THREE.UVMapping, onLoad, onError);
+        params.normalMap = THREE.ImageUtils.loadTexture(normal, THREE.UVMapping, onLoad, onError);
     }
 
     if (diffuse) {
         count++;
-        textures.diffuse = THREE.ImageUtils.loadTexture(diffuse, THREE.UVMapping, onLoad, onError);
+        params.map = THREE.ImageUtils.loadTexture(diffuse, THREE.UVMapping, onLoad, onError);
     }
 
     if (specular) {
         count++;
-        textures.specular = THREE.ImageUtils.loadTexture(specular, THREE.UVMapping, onLoad, onError);
+        params.specularMap = THREE.ImageUtils.loadTexture(specular, THREE.UVMapping, onLoad, onError);
     }
 
-    return new THREE.MeshPhongMaterial({
-        map: textures.diffuse,
-        specularMap: textures.specular,
-        normalMap: textures.normal,
-        side: THREE.DoubleSide
-    });
+    return new THREE.MeshPhongMaterial(params);
 }
 
 
