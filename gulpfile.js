@@ -21,6 +21,7 @@ var gulp = require('gulp'),
             //src
             'src/client/js/main.js',
             'src/client/js/**/*.js',
+            'src/client/shaders/**/*.glsl',
             '!src/client/js/viewport-webgl.js'
         ],
         css: ['src/client/css/*.css', '!src/client/css/style.css','!src/client/css/common.css', '!src/client/css/dark.css', '!src/client/css/light.css'],
