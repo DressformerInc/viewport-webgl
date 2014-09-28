@@ -8,9 +8,12 @@ var THREE = global.THREE = require('threejs/build/three'),
     utils = require('./utils'),
     EventEmitter = require('events').EventEmitter,
     ee = new EventEmitter(),
+    Garment = require('./garment'),
     Api = require('./api');
 
 require('threejs/examples/js/loaders/OBJLoader');
+require('./loaders/MTLLoader');
+require('./loaders/OBJMTLLoader');
 require('threejs/examples/js/controls/OrbitControls');
 
 //require('threejs/examples/js/shaders/CopyShader');
@@ -30,7 +33,7 @@ var screenWidth = global.innerWidth,
     DPR = global.devicePixelRatio || 1,
     screenWidthDPR = screenWidth * DPR,
     screenHeightDPR = screenHeight * DPR,
-    container, stats, loadingManager, objLoader,
+    container, stats, loadingManager, objLoader, objMtlLoader,
     isFullscreen = false,
     camera, scene, renderer,
     postprocessing = {},
@@ -338,6 +341,7 @@ function loadGarment(garment, params, cb) {
     console.log('garment.assets:', garment.assets);
 
     var objPath = garment.assets.geometry.url,
+        mtlPath = garment.assets.mtl.url,
         normalPath = garment.assets.normal.url,
         diffusePath = garment.assets.diffuse.url,
         specularPath = garment.assets.specular.url,
@@ -378,18 +382,17 @@ function loadGarment(garment, params, cb) {
         }
     }
 
-
     if (params && params.length > 0) {
         objPath += '?' + params.join('&');
     }
 
-    objLoader.load(objPath, function (model) {
-
+    var callback = function (model) {
+        console.log('garment loaded:', arguments);
         model.traverse(function (child) {
             if (child instanceof THREE.Mesh) {
                 child.geometry.computeVertexNormals(true);
                 child.geometry.computeTangents();
-                child.material = material;
+                //child.material = material;
                 child.material.needsUpdate = true;
                 console.log('shader material:', child.material, 'update:' + child.material.needsUpdate);
 
@@ -402,7 +405,19 @@ function loadGarment(garment, params, cb) {
         onLoad();
         scene.remove(models['garment']);
         cb(model);
-    });
+    };
+
+    if (mtlPath) {
+        objMtlLoader.load({
+            objUrl: objPath,
+            mtlUrl: mtlPath,
+            assets: garment.assets,
+            side: THREE.DoubleSide
+        }, callback);
+    }else
+    {
+        objLoader.load(objPath, callback);
+    }
 
 }
 
@@ -584,8 +599,10 @@ function init() {
     };
     loadingManager.onLoad = function () {
         ee.emit('endload');
+        //resolveCollision(models.garment.children[0], models.dummy.children[0]);
     };
     objLoader = new THREE.OBJLoader(loadingManager);
+    objMtlLoader = new THREE.OBJMTLLoader(loadingManager);
 
     renderer = new THREE.WebGLRenderer({
         antialias: true,
@@ -617,13 +634,18 @@ function init() {
     setupEnvironment(scene);
     loadDummy();
 
-    if (global.Dressformer.garment
-        && global.Dressformer.garment.id) {
-        loadGarmentById(global.Dressformer.garment.id, [], function (model) {
+    if (global.Dressformer.garment) {
+        //loadGarment(global.Dressformer.garment, [], function (model) {
+        //    models['garment'] = model;
+        //    scene.add(model);
+        //    render();
+        //});
+        var garment = new Garment(global.Dressformer.garment);
+        garment.load([], function (model) {
             models['garment'] = model;
             scene.add(model);
-            render();
-        });
+            startRender();
+        })
     }
 
 
@@ -725,6 +747,62 @@ function onWindowResize() {
 
     renderer.setSize(screenWidth, screenHeight, true);
 //    postprocessing.composer.setSize(screenWidthDPR, screenHeightDPR);
+    startRender();
+}
+
+
+//TODO: fix this
+function resolveCollision(garment, dummy) {
+    var cache = {};
+    dummyMaterial.side = THREE.BackSide;
+    for (var faceIndex = 0, countFaces = garment.geometry.faces.length; faceIndex < countFaces; ++faceIndex) {
+        var face = garment.geometry.faces[faceIndex],
+            n = face.normal.clone(),
+            vertices = [];
+
+        vertices.push({
+            i: face.a,
+            v: garment.geometry.vertices[face.a]
+        }, {
+            i: face.b,
+            v: garment.geometry.vertices[face.b]
+        }, {
+            i: face.c,
+            v: garment.geometry.vertices[face.c]
+        });
+
+        for (var vi = 0, vl = vertices.length; vi < vl; ++vi) {
+            var vo = vertices[vi];
+
+            if (cache[vo.i]) continue;
+
+            cache[vo.i] = true;
+
+            var ray = new THREE.Raycaster(vo.v, n),
+                collisionResults = ray.intersectObject(dummy);
+
+            //console.log('collision results:', collisionResults);
+
+            if (collisionResults.length > 0 && collisionResults[0].distance < 3) {
+                var collision = collisionResults[0],
+                    length = collision.distance * 3,
+                    nd = n.clone().multiplyScalar(length);
+
+                //scene.add(new THREE.ArrowHelper(n, vo.v, length, 0xFFFF00));
+                vo.v.add(nd);
+            }else {
+                //scene.add(new THREE.ArrowHelper(n, vo.v, 2, 0xFF0000));
+            }
+        }
+        //helper
+        //if (faceIndex % 10 === 0) scene.add(new THREE.ArrowHelper(n, v1, 2, 0xFFFF00));
+
+
+
+    }
+    garment.geometry.dynamic = true;
+    garment.geometry.verticesNeedUpdate = true;
+    dummyMaterial.side = THREE.DoubleSide;
     startRender();
 }
 

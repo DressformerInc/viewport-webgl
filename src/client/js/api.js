@@ -11,6 +11,7 @@ var $ = require('../../../libs/jquery-2.1.1.min'),
     };
 
 var Api = module.exports = {
+    urls: urls,
     getGarment: function (id, cb) {
         $.getJSON(urls.garments + id, cb)
     },
