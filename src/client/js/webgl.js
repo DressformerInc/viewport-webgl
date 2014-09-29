@@ -9,6 +9,7 @@ var THREE = global.THREE = require('threejs/build/three'),
     EventEmitter = require('events').EventEmitter,
     ee = new EventEmitter(),
     Garment = require('./garment'),
+    Dummy = require('./dummy'),
     Api = require('./api');
 
 require('threejs/examples/js/loaders/OBJLoader');
@@ -39,6 +40,7 @@ var screenWidth = global.innerWidth,
     postprocessing = {},
     lights = {},
     models = {},
+    garments = {},
     events = {},
     controls,
     orbitControl,
@@ -46,23 +48,7 @@ var screenWidth = global.innerWidth,
     targetMin = 100,
     targetMax = 200,
     renderStart,
-    dummyMaterial,
-    matcaps = {
-        'silver': THREE.ImageUtils.loadTexture('/img/matcaps/droplet_01.png'),
-        'gold': THREE.ImageUtils.loadTexture('/img/matcaps/test_gold.jpg'),
-        'carbon': THREE.ImageUtils.loadTexture('/img/matcaps/mydarkgreymetal.jpg'),
-        'plastic': THREE.ImageUtils.loadTexture('/img/matcaps/SketchToyPlastic.png')
-    },
-    currentMatcap = matcaps['carbon'];//,
-//    envMap = THREE.ImageUtils.loadTextureCube([
-//        'static/envMap/pos-x.jpg',
-//        'static/envMap/neg-x.jpg',
-//        'static/envMap/pos-y.jpg',
-//        'static/envMap/neg-y.jpg',
-//        'static/envMap/pos-z.jpg',
-//        'static/envMap/neg-z.jpg'
-//    ]);
-
+    dummy;
 
 function showStats(container) {
     // STATS
@@ -75,8 +61,6 @@ function showStats(container) {
 }
 
 function setupLight(scene) {
-
-
     var ambientLight = new THREE.AmbientLight(0x555555);
     ambientLight.position.set(100, 130, 100);
     scene.add(lights['ambientLight'] = ambientLight);
@@ -146,6 +130,7 @@ function reloadDummy() {
     ]);
 }
 
+/*
 function loadDummy(url, params) {
     var loader = new THREE.OBJLoader(loadingManager),
 //        matWithCubeMap = new THREE.MeshPhongMaterial({
@@ -457,6 +442,7 @@ function loadModelWithMTL(name, cb) {
         cb(model);
     });
 }
+*/
 
 function initControls() {
     var Ctrl = require("./controls").init();
@@ -585,6 +571,17 @@ function initPostprocessing() {
 
 }
 
+function onLoadDummy(model) {
+    console.log('this == dummy ?', this == dummy);
+    scene.remove(models['dummy']);
+    scene.add(models['dummy'] = model);
+}
+
+function onLoadGarment(model) {
+    scene.remove(models['garment']);
+    scene.add(models['garment'] = model);
+}
+
 function init() {
     THREE.ImageUtils.crossOrigin = "anonymous";
     initControls();
@@ -632,7 +629,9 @@ function init() {
 
     setupLight(scene);
     setupEnvironment(scene);
-    loadDummy();
+    //loadDummy();
+    dummy = new Dummy(global.Dressformer.user.dummy);
+    dummy.load([], loadingManager, onLoadDummy);
 
     if (global.Dressformer.garment) {
         //loadGarment(global.Dressformer.garment, [], function (model) {
@@ -641,11 +640,7 @@ function init() {
         //    render();
         //});
         var garment = new Garment(global.Dressformer.garment);
-        garment.load([], function (model) {
-            models['garment'] = model;
-            scene.add(model);
-            startRender();
-        })
+        garment.load([], onLoadGarment);
     }
 
 
@@ -886,9 +881,9 @@ module.exports = {
     },
     setParams: function (params) {
         var df = global.Dressformer;
-        loadDummy(df.user.dummy.assets.geometry.url, params);
+        //loadDummy(df.user.dummy.assets.geometry.url, params);
+        dummy.load(params, loadingManager, onLoadDummy);
         if (df.garment) {
-
             this.load(df.garment.id, params);
         }
     },

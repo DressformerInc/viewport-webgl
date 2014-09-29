@@ -5,13 +5,14 @@
 
 var Garment = module.exports = function (config) {
     this.merge(config);
-    console.log('garment this:', this);
+    this.model = null;
 };
 
 require('./mix/merge')(Garment);
 
 Garment.prototype.load = function (params, cb) {
-    var objUrl = this.assets.geometry.url,
+    var me = this,
+        objUrl = this.assets.geometry.url,
         objMtlLoader = new global.THREE.OBJMTLLoader();
 
     params = params || [];
@@ -28,7 +29,6 @@ Garment.prototype.load = function (params, cb) {
     }
 
     var callback = function (model) {
-        console.log('garment loaded:', arguments);
         model.traverse(function (child) {
             if (child instanceof THREE.Mesh) {
                 child.geometry.computeVertexNormals(true);
@@ -43,7 +43,9 @@ Garment.prototype.load = function (params, cb) {
         });
         model.name = this.name;
         model.position.set(0, 0, 0);
-        cb(model);
+
+        me.model = model;
+        cb.call(me, model);
     };
 
 
