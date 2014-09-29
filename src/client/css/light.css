@@ -428,7 +428,6 @@ label {
 	height: 220px;
 	background-color: #fff;
 	margin-top: 10px;
-	background-image: url(../img/g1.png);
 	background-size: cover;
 	background-repeat: no-repeat;
 	background-position: center center;
@@ -814,62 +813,6 @@ label {
 
 .dfd_plastic {
 	background: linear-gradient(#fff, #d0d0d0, #fff);
-}
-
-#dfg_item1 {
-	background-image: url(../img/g1.png);
-	background-size: cover;
-	background-repeat: no-repeat;
-	background-position: center center;
-}
-
-#dfg_item2 {
-	background-image: url(../img/g2.png);
-	background-size: cover;
-	background-repeat: no-repeat;
-	background-position: center center;
-}
-
-#dfg_item3 {
-	background-image: url(../img/g3.png);
-	background-size: cover;
-	background-repeat: no-repeat;
-	background-position: center center;
-}
-
-#dfg_item4 {
-	background-image: url(../img/g4.png);
-	background-size: cover;
-	background-repeat: no-repeat;
-	background-position: center center;
-}
-
-#dfg_item5 {
-	background-image: url(../img/g5.png);
-	background-size: cover;
-	background-repeat: no-repeat;
-	background-position: center center;
-}
-
-#dfg_item6 {
-	background-image: url(../img/g6.png);
-	background-size: cover;
-	background-repeat: no-repeat;
-	background-position: center center;
-}
-
-#dfg_item7 {
-	background-image: url(../img/g7.png);
-	background-size: cover;
-	background-repeat: no-repeat;
-	background-position: center center;
-}
-
-#dfg_item8 {
-	background-image: url(../img/g8.png);
-	background-size: cover;
-	background-repeat: no-repeat;
-	background-position: center center;
 }
 
 .dfp_btn {
