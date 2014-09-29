@@ -13,7 +13,6 @@ THREE.OBJMTLLoader.prototype = {
             mtlurl = options.mtlUrl;
 
 		mtlLoader.load( mtlurl, function ( materials ) {
-            console.log('mtlLoader callback:', materials);
 			var materialsCreator = materials;
 			materialsCreator.preload();
 
@@ -35,6 +34,11 @@ THREE.OBJMTLLoader.prototype = {
 
 						}
 
+                        object.geometry.computeVertexNormals(true);
+                        object.geometry.computeTangents();
+                        object.material.needsUpdate = true;
+                        object.castShadow = true;
+                        object.receiveShadow = true;
 					}
 
 				} );

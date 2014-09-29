@@ -77,7 +77,7 @@ function showStats(container) {
 function setupLight(scene) {
 
 
-    var ambientLight = new THREE.AmbientLight(0x333333);
+    var ambientLight = new THREE.AmbientLight(0x555555);
     ambientLight.position.set(100, 130, 100);
     scene.add(lights['ambientLight'] = ambientLight);
 
@@ -606,13 +606,13 @@ function init() {
 
     renderer = new THREE.WebGLRenderer({
         antialias: true,
-        alpha: false,
+        alpha: true,
         preserveDrawingBuffer: true
     });
     renderer.setClearColor(0xffffff);
     renderer.autoClear = true;
-    renderer.gammaInput = true;
-    renderer.gammaOutput = true;
+    //renderer.gammaInput = true;
+    //renderer.gammaOutput = true;
     renderer.sortObjects = false;
     renderer.shadowMapEnabled = true;
     renderer.shadowMapAutoUpdate = true;

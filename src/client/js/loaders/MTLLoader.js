@@ -339,17 +339,17 @@ THREE.MTLLoader.MaterialCreator.prototype = {
                 case 'map_bump':
                 case 'bump':
                     var p = this.parseTextureParams(value);
-                    console.log('mtlLoader normal map:', p);
+
                     params['normalMap'] = this.loadTexture(p.url);
                     params['normalMap'].wrapS = this.wrap;
                     params['normalMap'].wrapT = this.wrap;
                     params['normalScale'] = params['-bm'];
-
+                    //console.log('mtlLoader normal map:', params['normalMap']);
                     break;
 
                 case 'map_Ns':
                     var p = this.parseTextureParams(value);
-                    console.log('mtlLoader specular map:', p);
+                    //console.log('mtlLoader specular map:', p);
                     params['specularMap'] = this.loadTexture(p.url);
                     params['specularMap'].wrapS = this.wrap;
                     params['specularMap'].wrapT = this.wrap;
