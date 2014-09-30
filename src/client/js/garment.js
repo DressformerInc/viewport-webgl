@@ -31,8 +31,8 @@ Garment.prototype.load = function (params, cb) {
     var callback = function (model) {
         model.traverse(function (child) {
             if (child instanceof THREE.Mesh) {
-                child.geometry.computeVertexNormals(true);
-                child.geometry.computeTangents();
+//                child.geometry.computeVertexNormals(true);
+//                child.geometry.computeTangents();
                 //child.material = material;
                 child.material.needsUpdate = true;
                 console.log('mtl material:', child.material, 'update:' + child.material.needsUpdate);
@@ -43,7 +43,8 @@ Garment.prototype.load = function (params, cb) {
         });
         model.name = this.name;
         model.position.set(0, 0, 0);
-
+        model.castShadow = true;
+        model.reciveShadow = true;
         me.model = model;
         cb.call(me, model);
     };

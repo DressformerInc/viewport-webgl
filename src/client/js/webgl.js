@@ -61,9 +61,20 @@ function showStats(container) {
 }
 
 function setupLight(scene) {
-    var ambientLight = new THREE.AmbientLight(0x555555);
+    var ambientLight = new THREE.AmbientLight(0x404040);
     ambientLight.position.set(100, 130, 100);
     scene.add(lights['ambientLight'] = ambientLight);
+
+
+    var directionalLight = new THREE.DirectionalLight( 0xffeedd);
+    directionalLight.position.set( 0, 0, 1).normalize();
+    scene.add( directionalLight );
+
+
+    var directionalLight2 = new THREE.DirectionalLight( 0xffeedd);
+    directionalLight2.position.set( 0, 0, -300 ).normalize();
+    scene.add( directionalLight2 );
+
 
     var light1 = new THREE.SpotLight(0xffffff, 1);
 //    directionalLight.onlyShadow = true;
@@ -71,10 +82,11 @@ function setupLight(scene) {
     light1.position.z = controls.light1.z;
     light1.position.y = controls.light1.y;
     light1.castShadow = true;
-    light1.shadowBias = 0.0001;
+    light1.shadowBias = -0.0001;
     light1.shadowDarkness = 0.1;
     light1.shadowMapWidth = 2048;
     light1.shadowMapHeight = 2048;
+//    light1.shadowCameraVisible = true;
     scene.add(lights['light1'] = light1);
 
     var light2 = new THREE.SpotLight(0xffffff, 1);
@@ -83,10 +95,11 @@ function setupLight(scene) {
     light2.position.z = 300;
     light2.position.y = 800;
     light2.castShadow = true;
-    light2.shadowBias = 0.0001;
+    light2.shadowBias = -0.0001;
     light2.shadowDarkness = 0.01;
     light2.shadowMapWidth = 2048;
     light2.shadowMapHeight = 2048;
+//    light2.shadowCameraVisible = true;
     scene.add(lights['light2'] = light2);
 
     var light3 = new THREE.SpotLight(0xffffff, 1);
@@ -608,8 +621,8 @@ function init() {
     });
     renderer.setClearColor(0xffffff);
     renderer.autoClear = true;
-    //renderer.gammaInput = true;
-    //renderer.gammaOutput = true;
+//    renderer.gammaInput = true;
+//    renderer.gammaOutput = true;
     renderer.sortObjects = false;
     renderer.shadowMapEnabled = true;
     renderer.shadowMapAutoUpdate = true;
@@ -774,7 +787,7 @@ function resolveCollision(garment, dummy) {
             cache[vo.i] = true;
 
             var ray = new THREE.Raycaster(vo.v, n),
-                collisionResults = ray.intersectObject(dummy);
+                collisionResults = ray.intersectObject(dummy, true);
 
             //console.log('collision results:', collisionResults);
 
@@ -912,7 +925,7 @@ module.exports = {
             };
 
         if (garment && garment.id === id) {
-            loadGarment(garment, params, cb)
+            loadGarment(garment, params, cb);
         } else {
             loadGarmentById(id, params, cb);
         }
