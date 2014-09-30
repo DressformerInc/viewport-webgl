@@ -898,6 +898,15 @@ module.exports = {
         dummy.setMatcap(value);
         startRender();
     },
+    showDummy: function () {
+        console.log('showDummy');
+        this.hideDummy();
+        scene.add(dummy.model);
+    },
+    hideDummy: function () {
+        console.log('hideDummy');
+        scene.remove(dummy.model);
+    },
     load: function (id, params) {
         var garment = global.Dressformer.garment,
             cb = function (model) {
