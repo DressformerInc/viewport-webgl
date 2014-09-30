@@ -71,13 +71,13 @@ function setupLight(scene) {
     scene.add( directionalLight );
 
 
-    var directionalLight2 = new THREE.DirectionalLight( 0xffeedd);
-    directionalLight2.position.set( 0, 0, -300 ).normalize();
-    scene.add( directionalLight2 );
+//    var directionalLight2 = new THREE.DirectionalLight( 0xffeedd, 0.7);
+//    directionalLight2.position.set( 0, 0, -300 ).normalize();
+//    scene.add( directionalLight2 );
 
 
-    var light1 = new THREE.SpotLight(0xffffff, 1);
-//    directionalLight.onlyShadow = true;
+    var light1 = new THREE.SpotLight(0xffffff, 0.7);
+//    light1.onlyShadow = true;
     light1.position.x = controls.light1.x;
     light1.position.z = controls.light1.z;
     light1.position.y = controls.light1.y;
@@ -89,8 +89,8 @@ function setupLight(scene) {
 //    light1.shadowCameraVisible = true;
     scene.add(lights['light1'] = light1);
 
-    var light2 = new THREE.SpotLight(0xffffff, 1);
-//    directionalLight.onlyShadow = true;
+    var light2 = new THREE.SpotLight(0xffffff, 0.7);
+//    light2.onlyShadow = true;
     light2.position.x = -500;
     light2.position.z = 300;
     light2.position.y = 800;
