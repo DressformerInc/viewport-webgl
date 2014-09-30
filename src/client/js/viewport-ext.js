@@ -6,6 +6,7 @@ var $ = require('../../../libs/jquery-2.1.1.min'),
     inherits = require('util').inherits,
     Viewport = require('./viewport'),
     CtrlRadio = require('./controls/CtrlRadio'),
+    CtrlRadioMatcap = require('./controls/CtrlRadioMatcap'),
     CtrlSwitch = require('./controls/CtrlSwitch'),
     CtrlNumber = require('./controls/CtrlNumber'),
     history = require('./history'),
@@ -55,6 +56,8 @@ ViewportExt.prototype.init = function () {
 
     this.$profile = $viewport.find('#profile');
     this.$share = $viewport.find('#share');
+    this.$dummy = $viewport.find('#dummy');
+
     this.$leftSidebar = $viewport.find('.df_left_sidebar');
     this.$rightSidebar = $viewport.find('.df_widget_right_panel');
     this.$garmentInfo = $viewport.find('#df_garment_set');
@@ -62,10 +65,12 @@ ViewportExt.prototype.init = function () {
     //left controls
     $viewport.on('click', '#sb_btn_profile', this.showProfile.bind(this));
     $viewport.on('click', '#sb_btn_share', this.showShare.bind(this));
+    $viewport.on('click', '#sb_btn_dummy', this.showDummy.bind(this));
     $viewport.on('click', '#btnProfileSave', this.saveProfile.bind(this));
     $viewport.on('click', '#btnProfileCancel', this.cancelProfile.bind(this));
 
     this.radioGender = new CtrlRadio('#radioGender', this.genderChanged.bind(this));
+    this.radioMatcaps = new CtrlRadioMatcap('#radioMatcap', this.matcapChanged.bind(this));
     this.radioUnits = new CtrlRadio('#radioUnits', this.unitsChanged.bind(this));
     this.params = {
         height: new CtrlNumber({
@@ -186,8 +191,18 @@ ViewportExt.prototype.showShare = function () {
     this.$share.css('left', '200px');
 };
 
+ViewportExt.prototype.showDummy = function () {
+    this.$leftSidebar.css('left', '0');
+    this.$dummy.css('left', '200px');
+};
+
 ViewportExt.prototype.genderChanged = function (value) {
     console.log('gender changed:', value);
+};
+
+ViewportExt.prototype.matcapChanged = function (value) {
+    console.log('mapcap changed:', value);
+    this.webgl.setDummyMatcap(value);
 };
 
 ViewportExt.prototype.unitsChanged = function (value) {

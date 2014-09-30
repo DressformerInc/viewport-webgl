@@ -799,6 +799,19 @@ label {
 	left: 8px;
 }
 
+.dfp_mat .df_icon {
+    display: none;
+    color: rgba(0, 0, 0, 0.4);
+}
+.dfp_mat.active .df_icon {
+    display: block;
+    color: rgba(0,0,0,1);
+}
+
+.dfp_mat:hover .df_icon {
+    display: block;
+}
+
 .dfd_silver {
 	background: linear-gradient(#f5f5f5, #fff, #606060, #d8d8d8);
 }
@@ -807,12 +820,24 @@ label {
 	background: linear-gradient(#fff9c8, #fff, #525000, #ffff94);
 }
 
+.dfd_gold:hover {
+    color: rgba(0, 0, 0, 0.4);
+}
+
 .dfd_carbon {
 	background: linear-gradient(#b4b4b4, #2c2c2c, #888);
 }
 
+.dfd_carbon:hover {
+    color: rgba(255, 255, 255, 0.4);
+}
+
 .dfd_plastic {
 	background: linear-gradient(#fff, #d0d0d0, #fff);
+}
+
+.dfd_plastic:hover {
+    color: rgba(0, 0, 0, 0.4);
 }
 
 .dfp_btn {
@@ -846,4 +871,80 @@ label {
 
 .mdfr_f12 {
 	
+}
+
+.dfp_mat {
+    display: block;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    box-sizing: border-box;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.dfp_block_mat {
+    position: relative;
+    background-color: #292929;
+    color: #fff;
+    padding: 10px;
+    padding-top: 0px;
+}
+
+.dfp_block_text {
+    text-align: left;
+    line-height: 40px;
+}
+
+.dfd_skin_1 {
+    background-color: #E9DBBE;
+    color: rgba(0, 0, 0, 0);
+}
+.dfd_skin_1:hover {
+    color: rgba(0, 0, 0, 0.4);
+}
+
+.dfd_skin_2 {
+    background-color: #ECCAB1;
+    color: rgba(0, 0, 0, 0);
+}
+.dfd_skin_2:hover {
+    color: rgba(0, 0, 0, 0.4);
+}
+
+.dfd_skin_3 {
+    background-color: #DBB19B;
+    color: rgba(0, 0, 0, 0);
+}
+.dfd_skin_3:hover {
+    color: rgba(0, 0, 0, 0.4);
+}
+
+.dfd_skin_4 {
+    background-color: #D49572;
+    color: rgba(256, 256, 256, 0);
+}
+.dfd_skin_4:hover {
+    color: rgba(256, 256, 256, 0.4);
+}
+
+.dfd_skin_5 {
+    background-color: #B1755D;
+    color: rgba(256, 256, 256, 0);
+}
+.dfd_skin_5:hover {
+    color: rgba(256, 256, 256, 0.4);
+}
+
+.dfwv_notify {
+    display: inline-block;
+    position: absolute;
+    padding: 10px;
+    padding-left: 14px;
+    padding-right: 14px;
+    background-color: rgba(0, 0, 0, 0.4);
+    bottom: 10px;
+    left: 50px;
+    border-radius: 20px;
+    color: #fff;
 }

@@ -21,7 +21,12 @@ Dummy.prototype.initMaterial = function () {
         'silver': THREE.ImageUtils.loadTexture('/img/matcaps/droplet_01.png'),
         'gold': THREE.ImageUtils.loadTexture('/img/matcaps/test_gold.jpg'),
         'carbon': THREE.ImageUtils.loadTexture('/img/matcaps/mydarkgreymetal.jpg'),
-        'plastic': THREE.ImageUtils.loadTexture('/img/matcaps/SketchToyPlastic.png')
+        'plastic': THREE.ImageUtils.loadTexture('/img/matcaps/SketchToyPlastic.png'),
+        'skin1': THREE.ImageUtils.loadTexture('/img/matcaps/skin_matcap1.png'),
+        'skin2': THREE.ImageUtils.loadTexture('/img/matcaps/skin_matcap2.png'),
+        'skin3': THREE.ImageUtils.loadTexture('/img/matcaps/skin_matcap3.png'),
+        'skin4': THREE.ImageUtils.loadTexture('/img/matcaps/skin_matcap4.png'),
+        'skin5': THREE.ImageUtils.loadTexture('/img/matcaps/skin_matcap5.png')
     };
     this.currentMatcap = this.matcaps['carbon'];
 

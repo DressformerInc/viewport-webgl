@@ -22,6 +22,6 @@ body {
     user-select: none;
 }
 
-#profile {
+.df_left_sidebar {
     overflow-y: scroll;
 }
