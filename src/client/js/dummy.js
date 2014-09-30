@@ -41,6 +41,11 @@ Dummy.prototype.initMaterial = function () {
 
 };
 
+Dummy.prototype.setMatcap = function (matcap) {
+    this.currentMatcap = this.matcaps[matcap];
+    this.material.uniforms.tMatCap.value = this.currentMatcap;
+};
+
 Dummy.prototype.load = function (params, loadingManager, cb) {
     var me = this,
         loader = new THREE.OBJLoader(loadingManager),

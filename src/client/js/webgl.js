@@ -893,8 +893,9 @@ module.exports = {
     },
     setDummyMatcap: function (value) {
         //currentMatcap = THREE.ImageUtils.loadTexture('img/matcaps/' + value);
-        currentMatcap = matcaps[value];
-        dummyMaterial.uniforms.tMatCap.value = currentMatcap;
+        //dummy.currentMatcap = matcaps[value];
+        //dummy.material.uniforms.tMatCap.value = currentMatcap;
+        dummy.setMatcap(value);
         startRender();
     },
     load: function (id, params) {
