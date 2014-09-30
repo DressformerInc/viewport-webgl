@@ -71,9 +71,9 @@ function setupLight(scene) {
     scene.add( directionalLight );
 
 
-//    var directionalLight2 = new THREE.DirectionalLight( 0xffeedd, 0.7);
-//    directionalLight2.position.set( 0, 0, -300 ).normalize();
-//    scene.add( directionalLight2 );
+    var directionalLight2 = new THREE.DirectionalLight( 0xffeedd, 0.7);
+    directionalLight2.position.set( 0, 0, -300 ).normalize();
+    scene.add( directionalLight2 );
 
 
     var light1 = new THREE.SpotLight(0xffffff, 0.7);
