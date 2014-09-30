@@ -48,7 +48,8 @@ var screenWidth = global.innerWidth,
     targetMin = 100,
     targetMax = 200,
     renderStart,
-    dummy;
+    dummy,
+    garment;
 
 function showStats(container) {
     // STATS
@@ -132,336 +133,11 @@ function setupEnvironment(scene) {
     scene.add(models['floor'] = floor);
 }
 
-function reloadDummy() {
-
-    loadDummy(global.Dressformer.dummy.assets.geometry.url, [
-        'height=' + controls.sizes.height.toFixed(1),
-        'chest=' + controls.sizes.chest.toFixed(1),
-        'underbust=' + controls.sizes.underbust.toFixed(1),
-        'waist=' + controls.sizes.waist.toFixed(1),
-        'hips=' + controls.sizes.hips.toFixed(1)
-    ]);
-}
-
-/*
-function loadDummy(url, params) {
-    var loader = new THREE.OBJLoader(loadingManager),
-//        matWithCubeMap = new THREE.MeshPhongMaterial({
-//            color: 0xFFFFFF,
-//            shininess: 10,
-//            reflectivity: 0.02,
-//            envMap: envMap
-//        }),
-        matcapShader = glslify({
-            vertex: '../shaders/matcap/vert.glsl',
-            fragment: '../shaders/matcap/frag.glsl',
-            sourceOnly: true
-        });
-
-    dummyMaterial = new THREE.ShaderMaterial({
-        uniforms: {
-            tMatCap: {
-                type: 't',
-                value: currentMatcap
-            }
-        },
-        vertexShader: matcapShader.vertex,
-        fragmentShader: matcapShader.fragment,
-        shading: THREE.SmoothShading
-    });
-
-    dummyMaterial.uniforms.tMatCap.value.wrapS = dummyMaterial.uniforms.tMatCap.value.wrapT = THREE.ClampToEdgeWrapping;
-    url = url || global.Dressformer.user.dummy.assets.geometry.url;
-
-    ee.emit('startload');
-
-
-    if (params && params.length > 0) {
-        url += '?' + params.join('&');
-    }
-
-    loader.load(url, function (dummy) {
-//    loader.load('assets/models/obj/dummy/DummyLP.OBJ', function (dummy) {
-//    loader.load('assets/models/obj/lenin/lenin.obj', function (dummy) {
-
-        dummy.traverse(function (child) {
-            if (child instanceof THREE.Mesh) {
-                child.material = dummyMaterial;
-                child.castShadow = true;
-                child.receiveShadow = true;
-            }
-        });
-
-        scene.remove(models['dummy']);
-        scene.add(models['dummy'] = dummy);
-
-    });
-}
-
-function loadModel(name, cb) {
-    var basePath = "static/models/obj/" + name + "/",
-        objPath = basePath + name + ".obj",
-        normalPath = basePath + name + "_normal.jpg",
-        diffusePath = basePath + name + "_diffuse.jpg",
-        shaderMaterial = makeShaderMaterial(
-            normalPath,
-            diffusePath
-        );
-
-    objLoader.load(objPath, function (model) {
-
-        model.traverse(function (child) {
-            if (child instanceof THREE.Mesh) {
-//                    child.geometry.computeVertexNormals(true);
-//                    child.geometry.computeFaceNormals(true);
-                child.geometry.computeVertexNormals(true);
-                child.geometry.computeTangents();
-                child.material = shaderMaterial;
-                child.material.needsUpdate = true;
-//                    child.material.needsUpdate = true;
-//                    child.geometry.buffersNeedUpdate = true;
-//                    child.geometry.uvsNeedUpdate = true;
-                child.castShadow = true;
-                child.receiveShadow = true;
-            }
-        });
-        model.name = name;
-        model.position.set(0, 0, 0);
-        cb(model);
-    });
-}
-
-function makeShaderMaterial(normal, diffuse, specular, cb) {
-    var shininess = 0.5,
-        shader = THREE.ShaderLib["normalmap"],
-        uniforms = THREE.UniformsUtils.clone(shader.uniforms),
-        count = 0,
-        onLoad = function () {
-            startRender();
-            if (--count === 0) {
-                cb();
-            }
-        };
-
-    uniforms["enableDisplacement"].value = false;
-    uniforms["enableAO"].value = false;
-    uniforms["shininess"].value = shininess;
-//        uniforms[ "uNormalScale" ].value.y = -1;
-    uniforms["enableDiffuse"].value = false;
-    uniforms["enableSpecular"].value = false;
-    uniforms["tNormal"].value = null;
-
-    if (normal) {
-        count++;
-        uniforms["tNormal"].value = THREE.ImageUtils.loadTexture(normal, THREE.UVMapping, onLoad);
-    }
-
-    if (diffuse) {
-        count++;
-        uniforms["enableDiffuse"].value = true;
-        uniforms['tDiffuse'].value = THREE.ImageUtils.loadTexture(diffuse, THREE.UVMapping, onLoad);
-    }
-
-    if (specular) {
-        count++;
-        uniforms["enableSpecular"].value = true;
-        uniforms['tSpecular'].value = THREE.ImageUtils.loadTexture(specular, THREE.UVMapping, onLoad);
-    }
-
-
-//            uniforms[ "tDisplacement" ].value = THREE.ImageUtils.loadTexture("models/obj/sweater/BDM_201404_0006_0005_DISP.png");
-////            uniforms[ "uDisplacementBias" ].value = -0.1; //- 0.428408;;
-////            uniforms[ "uDisplacementScale" ].value = 0.5;
-//            uniforms[ "uDisplacementBias" ].value = - 0.428408;
-//            uniforms[ "uDisplacementScale" ].value = 2.436143;
-
-    //if (normal) {
-    //    return new THREE.ShaderMaterial({
-    //        fragmentShader: shader.fragmentShader,
-    //        vertexShader: shader.vertexShader,
-    //        uniforms: uniforms,
-    //        lights: true,
-    //        fog: false,
-    //        side: THREE.DoubleSide
-    //    });
-    //
-    //} else {
-    //    return new THREE.MeshPhongMaterial({
-    //        map: diffuse && uniforms['tDiffuse'].value,
-    //        specularMap: specular && uniforms['tSpecular'].value,
-    //        normalMap: normal && uniforms['tNormal'].value
-    //    });
-    //}
-
-    return new THREE.MeshPhongMaterial({
-        map: diffuse && uniforms['tDiffuse'].value,
-        specularMap: specular && uniforms['tSpecular'].value,
-        normalMap: normal && uniforms['tNormal'].value
-    });
-}
-
-function makePhongMaterial(normal, diffuse, specular, cb) {
-    var count = 0,
-        params = {
-            side: THREE.DoubleSide
-        },
-        onLoad = function () {
-            startRender();
-            if (--count === 0) {
-                cb();
-            }
-        }, onError = function () {
-            onLoad();
-            console.error('Texture not loaded:', arguments);
-        };
-
-    if (normal) {
-        count++;
-        params.normalMap = THREE.ImageUtils.loadTexture(normal, THREE.UVMapping, onLoad, onError);
-    }
-
-    if (diffuse) {
-        count++;
-        params.map = THREE.ImageUtils.loadTexture(diffuse, THREE.UVMapping, onLoad, onError);
-    }
-
-    if (specular) {
-        count++;
-        params.specularMap = THREE.ImageUtils.loadTexture(specular, THREE.UVMapping, onLoad, onError);
-    }
-
-    return new THREE.MeshPhongMaterial(params);
-}
-
-
-function loadGarment(garment, params, cb) {
-
-    console.log('garment.assets:', garment.assets);
-
-    var objPath = garment.assets.geometry.url,
-        mtlPath = garment.assets.mtl.url,
-        normalPath = garment.assets.normal.url,
-        diffusePath = garment.assets.diffuse.url,
-        specularPath = garment.assets.specular.url,
-        count = 2,
-        onLoad = function () {
-            if (--count === 0) {
-                ee.emit('garmentloaded');
-            }
-        },
-        material = makePhongMaterial(
-            normalPath,
-            diffusePath,
-            specularPath,
-            onLoad
-        );
-    params = params || [];
-
-    ee.emit('startload');
-
-    console.log('garment params:', params);
-    //fix params
-    for (var i = 0, l = params.length; i < l; ++i) {
-        var parts = params[i].split('='),
-            value = +parts[1];
-
-        if ('height' === parts[0]) continue;
-
-        value += +(controls.offset.toFixed(1) || 1);
-
-        params[i] = parts[0] + '=' + value;
-    }
-    console.log('garment fixed params:', params);
-
-    //параметры для библиотеки морфирования
-    for (var param in global.Dressformer.params) {
-        if (global.Dressformer.params.hasOwnProperty(param)) {
-            params.push(param + '=' + global.Dressformer.params[param]);
-        }
-    }
-
-    if (params && params.length > 0) {
-        objPath += '?' + params.join('&');
-    }
-
-    var callback = function (model) {
-        console.log('garment loaded:', arguments);
-        model.traverse(function (child) {
-            if (child instanceof THREE.Mesh) {
-                child.geometry.computeVertexNormals(true);
-                child.geometry.computeTangents();
-                //child.material = material;
-                child.material.needsUpdate = true;
-                console.log('shader material:', child.material, 'update:' + child.material.needsUpdate);
-
-                child.castShadow = true;
-                child.receiveShadow = true;
-            }
-        });
-        model.name = garment.name;
-        model.position.set(0, 0, 0);
-        onLoad();
-        scene.remove(models['garment']);
-        cb(model);
-    };
-
-    if (mtlPath) {
-        objMtlLoader.load({
-            objUrl: objPath,
-            mtlUrl: mtlPath,
-            assets: garment.assets,
-            side: THREE.DoubleSide
-        }, callback);
-    }else
-    {
-        objLoader.load(objPath, callback);
-    }
-
-}
-
-function loadGarmentById(id, params, cb) {
-    ee.emit('startload');
-    Api.getGarment(id, function (data) {
-        global.Dressformer.garment = data;
-        loadGarment(data, params, cb);
-    });
-}
-
-function loadModelWithMTL(name, cb) {
-    var basePath = "static/models/obj/" + name + "/",
-        objPath = basePath + name + ".obj",
-        mtlPath = basePath + name + ".mtl",
-        normalPath = basePath + name + "_normal.jpg",
-        diffusePath = basePath + name + "_diffuse.jpg",
-        loader = new THREE.OBJMTLLoader(loadingManager),
-        shaderMaterial = makeShaderMaterial(
-            normalPath,
-            diffusePath
-        );
-
-    loader.load(objPath, mtlPath, function (model) {
-
-        model.traverse(function (child) {
-            if (child instanceof THREE.Mesh) {
-                child.geometry.computeTangents();
-                child.material = shaderMaterial;
-                child.castShadow = true;
-                child.receiveShadow = true;
-            }
-        });
-        var scale = 0.1023;
-        model.scale.set(scale, scale, scale);
-        model.position.set(0, 0, 0);
-        cb(model);
-    });
-}
-*/
-
 function initControls() {
     var Ctrl = require("./controls").init();
     controls = Ctrl.controls;
 
-    controls.sizes.apply = reloadDummy;
+//    controls.sizes.apply = reloadDummy;
 
     function shadowEnable(light, flag) {
         if (flag) {
@@ -555,35 +231,6 @@ function initControls() {
     });
 }
 
-function initPostprocessing() {
-    var renderPass = new THREE.RenderPass(scene, camera),
-        bokehPass = new THREE.BokehPass(scene, camera, {
-            focus: 1.0,
-            aperture: 0.025,
-            maxblur: 1.0,
-
-            width: screenWidthDPR,
-            height: screenHeightDPR
-        }),
-        FXAA = new THREE.ShaderPass(THREE.FXAAShader),
-        composer = new THREE.EffectComposer(renderer);
-
-    // FXAA
-    FXAA.uniforms['resolution'].value.set(1 / screenHeightDPR, 1 / screenHeightDPR);
-    FXAA.renderToScreen = true;
-
-    bokehPass.renderToScreen = true;
-
-    composer.addPass(renderPass);
-    composer.addPass(bokehPass);
-//    composer.addPass(FXAA);
-
-    postprocessing.composer = composer;
-    postprocessing.bokeh = bokehPass;
-    postprocessing.fxaa = FXAA;
-
-}
-
 function onLoadDummy(model) {
     console.log('this == dummy ?', this == dummy);
     scene.remove(models['dummy']);
@@ -596,7 +243,7 @@ function onLoadGarment(model) {
 }
 
 function init() {
-    THREE.ImageUtils.crossOrigin = "anonymous";
+    THREE.ImageUtils.crossOrigin = "*";
     initControls();
 
     loadingManager = new THREE.LoadingManager();
@@ -605,7 +252,7 @@ function init() {
         if (total > 1 && loaded === total) {
 //            controls.rotate = true;
         }
-        renderStart = Date.now();
+        startRender();
     };
     loadingManager.onLoad = function () {
         ee.emit('endload');
@@ -647,13 +294,8 @@ function init() {
     dummy.load([], loadingManager, onLoadDummy);
 
     if (global.Dressformer.garment) {
-        //loadGarment(global.Dressformer.garment, [], function (model) {
-        //    models['garment'] = model;
-        //    scene.add(model);
-        //    render();
-        //});
-        var garment = new Garment(global.Dressformer.garment);
-        garment.load([], onLoadGarment);
+        garment = new Garment(global.Dressformer.garment);
+        garment.load([], loadingManager, onLoadGarment);
     }
 
 
@@ -747,70 +389,12 @@ function startRender() {
 }
 
 function onWindowResize() {
-    var viewport = global.document.getElementById('viewport');
     screenWidth = viewport.clientWidth;//global.innerWidth;
     screenHeight = viewport.clientHeight;//global.innerHeight;
     camera.aspect = screenWidth / screenHeight;
     camera.updateProjectionMatrix();
 
     renderer.setSize(screenWidth, screenHeight, true);
-//    postprocessing.composer.setSize(screenWidthDPR, screenHeightDPR);
-    startRender();
-}
-
-
-//TODO: fix this
-function resolveCollision(garment, dummy) {
-    var cache = {};
-    dummyMaterial.side = THREE.BackSide;
-    for (var faceIndex = 0, countFaces = garment.geometry.faces.length; faceIndex < countFaces; ++faceIndex) {
-        var face = garment.geometry.faces[faceIndex],
-            n = face.normal.clone(),
-            vertices = [];
-
-        vertices.push({
-            i: face.a,
-            v: garment.geometry.vertices[face.a]
-        }, {
-            i: face.b,
-            v: garment.geometry.vertices[face.b]
-        }, {
-            i: face.c,
-            v: garment.geometry.vertices[face.c]
-        });
-
-        for (var vi = 0, vl = vertices.length; vi < vl; ++vi) {
-            var vo = vertices[vi];
-
-            if (cache[vo.i]) continue;
-
-            cache[vo.i] = true;
-
-            var ray = new THREE.Raycaster(vo.v, n),
-                collisionResults = ray.intersectObject(dummy, true);
-
-            //console.log('collision results:', collisionResults);
-
-            if (collisionResults.length > 0 && collisionResults[0].distance < 3) {
-                var collision = collisionResults[0],
-                    length = collision.distance * 3,
-                    nd = n.clone().multiplyScalar(length);
-
-                //scene.add(new THREE.ArrowHelper(n, vo.v, length, 0xFFFF00));
-                vo.v.add(nd);
-            }else {
-                //scene.add(new THREE.ArrowHelper(n, vo.v, 2, 0xFF0000));
-            }
-        }
-        //helper
-        //if (faceIndex % 10 === 0) scene.add(new THREE.ArrowHelper(n, v1, 2, 0xFFFF00));
-
-
-
-    }
-    garment.geometry.dynamic = true;
-    garment.geometry.verticesNeedUpdate = true;
-    dummyMaterial.side = THREE.DoubleSide;
     startRender();
 }
 
@@ -894,15 +478,15 @@ module.exports = {
     },
     setParams: function (params) {
         var df = global.Dressformer;
+
         //loadDummy(df.user.dummy.assets.geometry.url, params);
         dummy.load(params, loadingManager, onLoadDummy);
         if (df.garment) {
-            this.load(df.garment.id, params);
+//            this.load(df.garment.id, params);
+            garment.load(params, loadingManager, onLoadGarment);
         }
-    },
-    setDummyColor: function (color) {
-        models['dummy'].children[0].material.color.setHex(color);
         startRender();
+        ee.emit('startload');
     },
     setDummyMatcap: function (value) {
         dummy.setMatcap(value);

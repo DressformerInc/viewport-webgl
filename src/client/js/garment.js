@@ -10,10 +10,10 @@ var Garment = module.exports = function (config) {
 
 require('./mix/merge')(Garment);
 
-Garment.prototype.load = function (params, cb) {
+Garment.prototype.load = function (params, loadingManager, cb) {
     var me = this,
         objUrl = this.assets.geometry.url,
-        objMtlLoader = new global.THREE.OBJMTLLoader();
+        objMtlLoader = new global.THREE.OBJMTLLoader(loadingManager);
 
     params = params || [];
 
