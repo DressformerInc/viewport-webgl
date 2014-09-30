@@ -892,20 +892,16 @@ module.exports = {
         startRender();
     },
     setDummyMatcap: function (value) {
-        //currentMatcap = THREE.ImageUtils.loadTexture('img/matcaps/' + value);
-        //dummy.currentMatcap = matcaps[value];
-        //dummy.material.uniforms.tMatCap.value = currentMatcap;
         dummy.setMatcap(value);
         startRender();
     },
     showDummy: function () {
-        console.log('showDummy');
         this.hideDummy();
         scene.add(dummy.model);
     },
     hideDummy: function () {
-        console.log('hideDummy');
         scene.remove(dummy.model);
+        startRender();
     },
     load: function (id, params) {
         var garment = global.Dressformer.garment,
@@ -931,6 +927,4 @@ module.exports = {
     saveGarmentPlaceholder: function (id) {
         Api.saveGarmentPlaceholder(id, this.getScreenshot());
     }
-
-
 };
