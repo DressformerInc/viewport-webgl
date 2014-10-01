@@ -12,44 +12,78 @@ THREE.OBJMTLLoader.prototype = {
 		var scope = this,
             mtlLoader = new THREE.MTLLoader(Api.urls.assets, options, '*'),
             url = options.objUrl,
-            mtlurl = options.mtlUrl;
+            mtlurl = options.mtlUrl,
+            assets = options.assets || {},
+            loader = new THREE.XHRLoader( scope.manager );
 
-		mtlLoader.load( mtlurl, function ( materials ) {
-			var materialsCreator = materials;
-			materialsCreator.preload();
+        loader.setCrossOrigin( scope.crossOrigin );
 
-			var loader = new THREE.XHRLoader( scope.manager );
-			loader.setCrossOrigin( this.crossOrigin );
-			loader.load( url, function ( text ) {
+        if (mtlurl) {
+            mtlLoader.load( mtlurl, function ( materials ) {
+                var materialsCreator = materials;
+                materialsCreator.preload();
 
-				var object = scope.parse( text );
+                loader.load( url, function ( text ) {
 
-				object.traverse( function ( object ) {
+                    var object = scope.parse( text );
 
-					if ( object instanceof THREE.Mesh ) {
+                    object.traverse( function ( object ) {
 
-						if ( object.material.name ) {
+                        if ( object instanceof THREE.Mesh ) {
 
-							var material = materialsCreator.create( object.material.name );
+                            if ( object.material.name ) {
 
-							if ( material ) object.material = material;
+                                var material = materialsCreator.create( object.material.name );
 
-						}
+                                if ( material ) object.material = material;
+
+                            }
+
+                            object.geometry.computeVertexNormals(true);
+                            object.geometry.computeTangents();
+                            object.material.needsUpdate = true;
+                            object.castShadow = true;
+                            object.receiveShadow = true;
+                        }
+
+                    } );
+
+                    onLoad( object );
+
+                } );
+
+            } );
+        }else {
+            var material = new THREE.MeshPhongMaterial({
+                map: assets.diffuse && THREE.ImageUtils.loadTexture(assets.diffuse.url),
+                normalMap: assets.normal && THREE.ImageUtils.loadTexture(assets.normal.url),
+                specularMap: assets.normal && THREE.ImageUtils.loadTexture(assets.specular.url),
+                side: THREE.DoubleSide
+            });
+            loader.load( url, function ( text ) {
+
+                var object = scope.parse( text );
+
+                object.traverse( function ( object ) {
+
+                    if ( object instanceof THREE.Mesh ) {
 
                         object.geometry.computeVertexNormals(true);
                         object.geometry.computeTangents();
+                        object.material = material;
                         object.material.needsUpdate = true;
                         object.castShadow = true;
                         object.receiveShadow = true;
-					}
+                    }
 
-				} );
+                } );
 
-				onLoad( object );
+                onLoad( object );
 
-			} );
+            } );
+        }
 
-		} );
+
 
 	},
 

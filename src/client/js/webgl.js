@@ -62,11 +62,10 @@ function showStats(container) {
 }
 
 function setupLight(scene) {
-    var ambientLight = new THREE.AmbientLight(0x404040);
-    ambientLight.position.set(100, 130, 100);
+    var ambientLight = new THREE.AmbientLight(0xffffff);
     scene.add(lights['ambientLight'] = ambientLight);
 
-
+/*
     var directionalLight = new THREE.DirectionalLight( 0xffeedd);
     directionalLight.position.set( 0, 0, 1).normalize();
     scene.add( directionalLight );
@@ -76,20 +75,20 @@ function setupLight(scene) {
     directionalLight2.position.set( 0, 0, -300 ).normalize();
     scene.add( directionalLight2 );
 
-
-    var light1 = new THREE.SpotLight(0xffffff, 0.7);
-//    light1.onlyShadow = true;
+*/
+    var light1 = new THREE.SpotLight(0xdddddd, 0.5);
+    light1.onlyShadow = true;
     light1.position.x = controls.light1.x;
     light1.position.z = controls.light1.z;
     light1.position.y = controls.light1.y;
     light1.castShadow = true;
     light1.shadowBias = -0.0001;
-    light1.shadowDarkness = 0.1;
+    light1.shadowDarkness = 0.2;
     light1.shadowMapWidth = 2048;
     light1.shadowMapHeight = 2048;
 //    light1.shadowCameraVisible = true;
     scene.add(lights['light1'] = light1);
-
+/*
     var light2 = new THREE.SpotLight(0xffffff, 0.7);
 //    light2.onlyShadow = true;
     light2.position.x = -500;
@@ -114,7 +113,7 @@ function setupLight(scene) {
 //    light3.shadowMapWidth = 2048;
 //    light3.shadowMapHeight = 2048;
     scene.add(lights['light3'] = light3);
-
+*/
 }
 
 function setupEnvironment(scene) {
@@ -232,7 +231,7 @@ function initControls() {
 }
 
 function onLoadDummy(model) {
-    console.log('this == dummy ?', this == dummy);
+//    console.log('this == dummy ?', this == dummy);
     scene.remove(models['dummy']);
     scene.add(models['dummy'] = model);
 }
