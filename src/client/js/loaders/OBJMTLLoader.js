@@ -41,7 +41,7 @@ THREE.OBJMTLLoader.prototype = {
 
                             object.geometry.computeVertexNormals(true);
                             object.geometry.computeTangents();
-                            object.material.needsUpdate = true;
+                            object.material.needsUpdate = false;
                             object.castShadow = true;
                             object.receiveShadow = true;
                         }
@@ -71,7 +71,7 @@ THREE.OBJMTLLoader.prototype = {
                         object.geometry.computeVertexNormals(true);
                         object.geometry.computeTangents();
                         object.material = material;
-                        object.material.needsUpdate = true;
+                        object.material.needsUpdate = false;
                         object.castShadow = true;
                         object.receiveShadow = true;
                     }
