@@ -12,21 +12,10 @@ var THREE = global.THREE = require('threejs/build/three'),
     Dummy = require('./dummy'),
     Api = require('./api');
 
-require('threejs/examples/js/loaders/OBJLoader');
 require('./loaders/MTLLoader');
 require('./loaders/OBJMTLLoader');
 require('threejs/examples/js/controls/OrbitControls');
 
-//require('threejs/examples/js/shaders/CopyShader');
-//require('threejs/examples/js/shaders/BokehShader');
-//require('threejs/examples/js/shaders/FXAAShader');
-//
-//
-//require('threejs/examples/js/postprocessing/EffectComposer');
-//require('threejs/examples/js/postprocessing/RenderPass');
-//require('threejs/examples/js/postprocessing/ShaderPass');
-//require('threejs/examples/js/postprocessing/MaskPass');
-//require('threejs/examples/js/postprocessing/BokehPass');
 
 //private
 var screenWidth = global.innerWidth,
@@ -50,16 +39,6 @@ var screenWidth = global.innerWidth,
     renderStart,
     dummy,
     garment;
-
-function showStats(container) {
-    // STATS
-    var Stats = require('threejs-stats/build/stats.min');
-    stats = new Stats();
-    stats.domElement.style.position = 'absolute';
-    stats.domElement.style.bottom = '0px';
-    stats.domElement.style.zIndex = 100;
-    container.appendChild(stats.domElement);
-}
 
 function setupLight(scene) {
     var ambientLight = new THREE.AmbientLight(0xffffff);
@@ -132,133 +111,10 @@ function setupEnvironment(scene) {
     scene.add(models['floor'] = floor);
 }
 
-function initControls() {
-    var Ctrl = require("./controls").init();
-    controls = Ctrl.controls;
-
-//    controls.sizes.apply = reloadDummy;
-
-    function shadowEnable(light, flag) {
-        if (flag) {
-            renderer.shadowMapAutoUpdate = true;
-        } else {
-            renderer.shadowMapAutoUpdate = false;
-            renderer.clearTarget(light.shadowMap);
-        }
-    }
-
-    function lightChanged(name) {
-        return function () {
-            var ctrl = controls[name],
-                light = lights[name];
-
-            light.visible = ctrl.enable;
-            light.intensity = ctrl.intensity;
-            light.position.x = ctrl.x;
-            light.position.y = ctrl.y;
-            light.position.z = ctrl.z;
-            light.shadowBias = ctrl.bias;
-            light.shadowDarkness = ctrl.darkness;
-
-            if (!light.visible) {
-                shadowEnable(light, false);
-            } else {
-                shadowEnable(light, ctrl.shadow);
-            }
-
-        }
-    }
-
-    function dofChanged() {
-        postprocessing.bokeh.enabled = controls.dof;
-        renderer.autoClear = !controls.dof;
-        renderer.antialias = !controls.dof;
-        postprocessing.bokeh.uniforms["focus"].value = controls.focus;
-        postprocessing.bokeh.uniforms["aperture"].value = controls.aperture;
-        postprocessing.bokeh.uniforms["maxblur"].value = controls.maxblur;
-        startRender();
-    }
-
-    Ctrl.onChange('dummy.color', function (value) {
-        var newColor = '0x' + value.substring(1, value.length);
-        console.log('dummy.color changed:', value, newColor, models['dummy']);
-        models['dummy'].children[0].material.color.setHex(newColor);
-    });
-
-    Ctrl.onChange('dummy.matcap', function (value) {
-        dummyMaterial.uniforms.tMatCap.value = THREE.ImageUtils.loadTexture('img/matcaps/' + value);
-//        dummyMaterial.uniforms.tMatCap.value.needsUpdate = true;
-    });
-
-    Ctrl.onChange('light1.enable', lightChanged('light1'));
-    Ctrl.onChange('light1.intensity', lightChanged('light1'));
-    Ctrl.onChange('light1.x', lightChanged('light1'));
-    Ctrl.onChange('light1.y', lightChanged('light1'));
-    Ctrl.onChange('light1.z', lightChanged('light1'));
-    Ctrl.onChange('light1.shadow', lightChanged('light1'));
-    Ctrl.onChange('light1.bias', lightChanged('light1'));
-    Ctrl.onChange('light1.darkness', lightChanged('light1'));
-
-    Ctrl.onChange('light2.enable', lightChanged('light2'));
-    Ctrl.onChange('light2.intensity', lightChanged('light2'));
-    Ctrl.onChange('light2.x', lightChanged('light2'));
-    Ctrl.onChange('light2.y', lightChanged('light2'));
-    Ctrl.onChange('light2.z', lightChanged('light2'));
-    Ctrl.onChange('light2.shadow', lightChanged('light2'));
-    Ctrl.onChange('light2.bias', lightChanged('light2'));
-    Ctrl.onChange('light2.darkness', lightChanged('light2'));
-
-    Ctrl.onChange('garment', function (value) {
-        scene.remove(models['garment']);
-        controls.rotate = false;
-        var dummyRotation = models['dummy'].rotation;
-        loadModel(value, function (model) {
-            model.rotation.set(dummyRotation.x, dummyRotation.y, dummyRotation.z, 'XYZ');
-            models['garment'] = model;
-            scene.add(model);
-        })
-    });
-
-    Ctrl.onChange('dof', dofChanged);
-    Ctrl.onChange('focus', dofChanged);
-    Ctrl.onChange('aperture', dofChanged);
-    Ctrl.onChange('maxblur', dofChanged);
-
-    Ctrl.onChangeAll(function () {
-        console.log('on change all', arguments);
-        startRender();
-    });
-}
-
-function onLoadDummy(model) {
-//    console.log('this == dummy ?', this == dummy);
-    scene.remove(models['dummy']);
-    scene.add(models['dummy'] = model);
-}
-
-function onLoadGarment(model) {
-    scene.remove(models['garment']);
-    scene.add(models['garment'] = model);
-}
-
 function init() {
     THREE.ImageUtils.crossOrigin = "*";
-    initControls();
 
-    loadingManager = new THREE.LoadingManager();
-    loadingManager.onProgress = function (item, loaded, total) {
-        console.log('loading manager:', item, loaded, total);
-        if (total > 1 && loaded === total) {
-//            controls.rotate = true;
-        }
-        startRender();
-    };
-    loadingManager.onLoad = function () {
-        ee.emit('endload');
-        //resolveCollision(models.garment.children[0], models.dummy.children[0]);
-    };
-    objLoader = new THREE.OBJLoader(loadingManager);
-    objMtlLoader = new THREE.OBJMTLLoader(loadingManager);
+
 
     renderer = new THREE.WebGLRenderer({
         antialias: true,
@@ -283,19 +139,10 @@ function init() {
     scene = new THREE.Scene();
 
     scene.matrixAutoUpdate = false;
-//    initPostprocessing();
-//    renderer.autoClear = false;
 
     setupLight(scene);
     setupEnvironment(scene);
-    //loadDummy();
-    dummy = new Dummy(global.Dressformer.user.dummy);
-    dummy.load([], loadingManager, onLoadDummy);
 
-    if (global.Dressformer.garment) {
-        garment = new Garment(global.Dressformer.garment);
-        garment.load([], loadingManager, onLoadGarment);
-    }
 
 
     container = global.document.getElementById('viewport');
@@ -380,7 +227,6 @@ function update(dt) {
 
 function render() {
     renderer.render(scene, camera);
-//    postprocessing.composer.render(0.1);
 }
 
 function startRender() {
@@ -406,11 +252,15 @@ module.exports = {
         init();
         render();
 
-        window.addEventListener("message", function (event) {
-            me[event.data.method] && me[event.data.method].apply(me, event.data.params);
-        }, false);
+
 
         return this;
+    },
+    add: function (model) {
+        scene.add(model);
+    },
+    remove: function (model) {
+        scene.remove(model);
     },
     //controls
     rotateLeft: function () {
@@ -474,53 +324,5 @@ module.exports = {
                 document.webkitCancelFullScreen();
             }
         }
-    },
-    setParams: function (params) {
-        var df = global.Dressformer;
-
-        //loadDummy(df.user.dummy.assets.geometry.url, params);
-        dummy.load(params, loadingManager, onLoadDummy);
-        if (df.garment) {
-//            this.load(df.garment.id, params);
-            garment.load(params, loadingManager, onLoadGarment);
-        }
-        startRender();
-        ee.emit('startload');
-    },
-    setDummyMatcap: function (value) {
-        dummy.setMatcap(value);
-        startRender();
-    },
-    showDummy: function () {
-        this.hideDummy();
-        scene.add(dummy.model);
-    },
-    hideDummy: function () {
-        scene.remove(dummy.model);
-        startRender();
-    },
-    load: function (id, params) {
-        var garment = global.Dressformer.garment,
-            cb = function (model) {
-                startRender();
-                models['garment'] = model;
-                scene.add(model);
-            };
-
-        if (garment && garment.id === id) {
-            loadGarment(garment, params, cb);
-        } else {
-            loadGarmentById(id, params, cb);
-        }
-    },
-    remove: function (garmentId) {
-        scene.remove(models['garment']);
-        startRender();
-    },
-    getScreenshot: function () {
-        return renderer.domElement.toDataURL()
-    },
-    saveGarmentPlaceholder: function (id) {
-        Api.saveGarmentPlaceholder(id, this.getScreenshot());
     }
 };
