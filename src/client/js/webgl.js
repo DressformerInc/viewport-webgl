@@ -5,13 +5,10 @@
 var THREE = global.THREE = require('threejs/build/three'),
     TWEEN = require('tween.js'),
     glslify = require('glslify'),
-    utils = require('./utils'),
-    EventEmitter = require('events').EventEmitter,
-    ee = new EventEmitter(),
-    Garment = require('./garment'),
-    Dummy = require('./dummy'),
-    Api = require('./api');
+    utils = require('./utils');
 
+require('./loaders/LoadingManager');
+require('./loaders/OBJLoader');
 require('./loaders/MTLLoader');
 require('./loaders/OBJMTLLoader');
 require('threejs/examples/js/controls/OrbitControls');
@@ -29,7 +26,6 @@ var screenWidth = global.innerWidth,
     postprocessing = {},
     lights = {},
     models = {},
-    garments = {},
     events = {},
     controls,
     orbitControl,
@@ -57,9 +53,9 @@ function setupLight(scene) {
 */
     var light1 = new THREE.SpotLight(0xdddddd, 0.5);
     light1.onlyShadow = true;
-    light1.position.x = controls.light1.x;
-    light1.position.z = controls.light1.z;
-    light1.position.y = controls.light1.y;
+    light1.position.x = 300;//controls.light1.x;
+    light1.position.z = 100;//controls.light1.z;
+    light1.position.y = 500;//controls.light1.y;
     light1.castShadow = true;
     light1.shadowBias = -0.0001;
     light1.shadowDarkness = 0.1;
@@ -98,7 +94,6 @@ function setupLight(scene) {
 function setupEnvironment(scene) {
     // FLOOR
     var floorMaterial = new THREE.MeshBasicMaterial({
-            /*map: floorTexture,*/
             color: 0xFFFFFF,
             side: THREE.BackSide
         }),
@@ -113,8 +108,6 @@ function setupEnvironment(scene) {
 
 function init() {
     THREE.ImageUtils.crossOrigin = "*";
-
-
 
     renderer = new THREE.WebGLRenderer({
         antialias: true,
@@ -209,18 +202,11 @@ function update(dt) {
         render();
     }
 
-    //rotate models
-    if (controls && controls.rotate && controls.rotate.auto) {
-        rotate(controls.rotate.speed, true);
-    }
-//
-//    if (stats) stats.update();
-//
     orbitControl.update();
 
     TWEEN.update();
 
-    ee.emit('update');
+//    ee.emit('update');
 
     requestAnimationFrame(update);
 }
@@ -245,22 +231,19 @@ function onWindowResize() {
 
 
 module.exports = {
-    ee: ee,
-    init: function () {
-        var me = this;
-
+    init: function (ee) {
+        this.ee = ee;
         init();
         render();
-
-
-
         return this;
     },
     add: function (model) {
         scene.add(model);
+        startRender();
     },
     remove: function (model) {
         scene.remove(model);
+        startRender();
     },
     //controls
     rotateLeft: function () {

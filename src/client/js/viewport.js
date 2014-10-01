@@ -3,19 +3,38 @@
  */
 
 var DF = global.Dressformer,
+    $ = require('../../../libs/jquery-2.1.1.min'),
     Api = require('./api'),
     Dummy = require('./dummy'),
     Garment = require('./garment'),
     Viewport = module.exports = function (events, webgl) {
         this.events = events;
         this.webgl = webgl;
+        this.$viewport = $('body'); //TODO: выбрать контейнер
+        this.$loader = this.$viewport.find('.df_preloader');
+        this.garments = {};
 //        this.init();
+        this.loadingManager = new THREE.LoadingManager(
+            this.onStartLoading.bind(this),
+            this.onProgressLoading.bind(this),
+            this.onEndLoading.bind(this),
+            this.onErrorLoading.bind(this)
+        );
+
         this.dummy = new Dummy(DF.user.dummy);
-        this.dummy.load([], loadingManager, onLoadDummy);
+        this.dummy.load([], this.loadingManager, this.onLoadDummy.bind(this));
+
+        if (DF.garment) {
+//            this.garments[DF.garment.slot] = {};
+//            this.garments[DF.garment.slot][DF.garment.layer] =
+            var garment = new Garment(DF.garment);
+            garment.load([], this.loadingManager, this.onLoadGarment.bind(this));
+        }
     };
 
 Viewport.prototype.init = function () {
     var webgl = this.webgl;
+
     this.events.on('mousedown', '.dfwvc_up', 'rotateUp');
     this.events.on('mousedown', '.dfwvc_down', 'rotateDown');
     this.events.on('mousedown', '.dfwvc_left', 'rotateLeft');
@@ -42,6 +61,36 @@ Viewport.prototype.init = function () {
         var screenshot = webgl.getScreenshot();
         Api.saveGarmentPlaceholder(global.Dressformer.garment.id, screenshot);
     });
+};
+
+Viewport.prototype.onStartLoading = function (item, loaded, total) {
+    this.$loader.show();
+};
+
+Viewport.prototype.onProgressLoading = function (item, loaded, total) {
+    console.log('on progress loading:', arguments);
+};
+
+Viewport.prototype.onEndLoading = function (item, loaded, total) {
+    this.$loader.hide();
+};
+
+Viewport.prototype.onErrorLoading = function (item, loaded, total) {
+    console.error('on error loading:', arguments);
+};
+
+
+Viewport.prototype.onLoadDummy = function (self, model) {
+    this.webgl.remove(self.model);
+    this.webgl.add(model);
+    self.model = model;
+};
+
+Viewport.prototype.onLoadGarment = function (self, model) {
+    console.log('on load garment:', arguments);
+    this.webgl.remove(self.model);
+    this.webgl.add(model);
+    self.model = model;
 };
 
 /*

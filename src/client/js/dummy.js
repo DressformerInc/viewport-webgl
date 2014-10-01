@@ -6,6 +6,7 @@ var glslify = require('glslify');
 var Dummy = module.exports = function (config) {
     this.merge(config);
     this.initMaterial();
+    this.model = null;
 };
 
 require('./mix/merge')(Dummy);
@@ -69,7 +70,6 @@ Dummy.prototype.load = function (params, loadingManager, cb) {
             }
         });
 
-        me.model = model;
-        cb.call(me, model)
+        cb(me, model);
     });
 };
