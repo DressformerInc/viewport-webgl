@@ -83,7 +83,7 @@ function setupLight(scene) {
     light1.position.y = controls.light1.y;
     light1.castShadow = true;
     light1.shadowBias = -0.0001;
-    light1.shadowDarkness = 0.2;
+    light1.shadowDarkness = 0.1;
     light1.shadowMapWidth = 2048;
     light1.shadowMapHeight = 2048;
 //    light1.shadowCameraVisible = true;
