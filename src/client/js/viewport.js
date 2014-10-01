@@ -30,6 +30,16 @@ var DF = global.Dressformer,
             var garment = new Garment(DF.garment);
             garment.load([], this.loadingManager, this.onLoadGarment.bind(this));
         }
+
+        window.addEventListener("message", function (event) {
+            var allow = {
+                'rotateLeft': true
+            };
+            allow[event.data.method] &&
+            this[event.data.method] &&
+            this[event.data.method].apply(this, event.data.params);
+
+        }.bind(this), false);
     };
 
 Viewport.prototype.init = function () {
