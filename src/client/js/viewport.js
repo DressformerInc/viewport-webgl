@@ -13,7 +13,7 @@ var DF = global.Dressformer,
         this.$viewport = $('body'); //TODO: выбрать контейнер
         this.$loader = this.$viewport.find('.df_preloader');
         this.garments = {};
-//        this.init();
+
         this.loadingManager = new THREE.LoadingManager(
             this.onStartLoading.bind(this),
             this.onProgressLoading.bind(this),
@@ -32,20 +32,22 @@ var DF = global.Dressformer,
         }
 
         window.addEventListener("message", function (event) {
-            var allow = {
-                'rotateLeft': true
-            };
-            allow[event.data.method] &&
-            this[event.data.method] &&
-            this[event.data.method].apply(this, event.data.params);
+            this.webgl[event.data.method] &&
+            this.webgl[event.data.method].apply(this, event.data.params);
 
         }.bind(this), false);
+
+        this.init();
     };
 
 Viewport.prototype.init = function () {
     var webgl = this.webgl;
 
-    this.events.on('mousedown', '.dfwvc_up', 'rotateUp');
+    this.$viewport.on('mousedown', '.dfwvc_up', function () {
+        //'rotateUp'
+        console.log('rotate up');
+        webgl.rotateUp();
+    });
     this.events.on('mousedown', '.dfwvc_down', 'rotateDown');
     this.events.on('mousedown', '.dfwvc_left', 'rotateLeft');
     this.events.on('mousedown', '.dfwvc_right', 'rotateRight');

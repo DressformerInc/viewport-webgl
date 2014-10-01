@@ -34,7 +34,8 @@ var screenWidth = global.innerWidth,
     targetMax = 200,
     renderStart,
     dummy,
-    garment;
+    garment,
+    rotateSpeed = 0.02;
 
 function setupLight(scene) {
     var ambientLight = new THREE.AmbientLight(0xffffff);
@@ -253,11 +254,11 @@ module.exports = {
         rotate(0.09, true);
     },
     rotateUp: function () {
-        rotate(-controls.rotate.speed, false);
+        rotate(-rotateSpeed, false);
         targetOffset(-targetSpeed);
     },
     rotateDown: function () {
-        rotate(controls.rotate.speed, false);
+        rotate(rotateSpeed, false);
         targetOffset(targetSpeed);
     },
     resetRotation: function () {
