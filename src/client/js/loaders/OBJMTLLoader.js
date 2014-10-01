@@ -55,9 +55,9 @@ THREE.OBJMTLLoader.prototype = {
             } );
         }else {
             var material = new THREE.MeshPhongMaterial({
-                map: assets.diffuse && THREE.ImageUtils.loadTexture(assets.diffuse.url),
-                normalMap: assets.normal && THREE.ImageUtils.loadTexture(assets.normal.url),
-                specularMap: assets.normal && THREE.ImageUtils.loadTexture(assets.specular.url),
+                map: assets.diffuse.url && THREE.ImageUtils.loadTexture(assets.diffuse.url),
+                normalMap: assets.normal.url && THREE.ImageUtils.loadTexture(assets.normal.url),
+                specularMap: assets.specular.url && THREE.ImageUtils.loadTexture(assets.specular.url),
                 side: THREE.DoubleSide
             });
             loader.load( url, function ( text ) {
