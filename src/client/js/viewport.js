@@ -59,12 +59,29 @@ Viewport.prototype.init = function () {
 
     });
 
-    this.$viewport.on('mousedown', '.dfwvc_up', function () {
-        //'rotateUp'
-        console.log('rotate up');
-        me.control = webgl.rotateUp;
-    });
     this.$viewport
+        .on('mousedown', '.dfwvc_up', function () {
+            me.control = webgl.rotateUp;
+        })
+        .on('mousedown', '.dfwvc_down', function () {
+            me.control = webgl.rotateDown;
+            console.log('rotate down');
+        })
+        .on('mousedown', '.dfwvc_left', function () {
+            me.control = webgl.rotateLeft;
+        })
+        .on('mousedown', '.dfwvc_right', function () {
+            me.control = webgl.rotateRight;
+        })
+        .on('mousedown', '.dfwvc_zoom_in', function () {
+            me.control = webgl.zoomIn;
+        })
+        .on('mousedown', '.dfwvc_zoom_out', function () {
+            me.control = webgl.zoomOut;
+        })
+        .on('click', '.dfwvc_default', function () {
+            webgl.resetRotation();
+        })
         .on('mousedown', function () {
             me.isMouseUp = false;
         })
@@ -72,25 +89,6 @@ Viewport.prototype.init = function () {
             me.end = Date.now();
             me.isMouseUp = true;
         });
-//    this.events.on('mousedown', '.dfwvc_down', 'rotateDown');
-//    this.events.on('mousedown', '.dfwvc_left', 'rotateLeft');
-//    this.events.on('mousedown', '.dfwvc_right', 'rotateRight');
-//    this.events.on('click', '.dfwvc_default', 'resetRotation');
-//    this.events.on('mousedown', '.dfwvc_zoom_in', 'zoomIn');
-//    this.events.on('mousedown', '.dfwvc_zoom_out', 'zoomOut');
-
-//    this.events.$viewport.on('click', '.dfwvc_d_silver', function () {
-//        webgl.setDummyMatcap('silver');
-//    });
-//    this.events.$viewport.on('click', '.dfwvc_d_gold', function () {
-//        webgl.setDummyMatcap('gold');
-//    });
-//    this.events.$viewport.on('click', '.dfwvc_d_carbon', function () {
-//        webgl.setDummyMatcap('carbon');
-//    });
-//    this.events.$viewport.on('click', '.dfwvc_d_plastic', function () {
-//        webgl.setDummyMatcap('plastic');
-//    });
 
 //    this.events.$viewport.on('click', '.dfwv_screenshot', function () {
 //        console.log('screenshot: ', global.Dressformer.garment.id);

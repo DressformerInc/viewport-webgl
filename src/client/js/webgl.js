@@ -171,17 +171,12 @@ function rotateTo(angle) {
 }
 
 function rotate(speed, horisontal) {
-    var curModel;
     speed = speed || 0.02;
 
-    for (var i= 0, l=models.length; i<l; ++i){
-        curModel = models[i];
-        if (horisontal) {
-            curModel.rotation.y += speed;
-        } else {
-            orbitControl.rotateUp(speed);
-        }
-
+    if (horisontal) {
+        orbitControl.rotateLeft(speed);
+    } else {
+        orbitControl.rotateUp(speed);
     }
 
     startRender();
@@ -224,13 +219,13 @@ module.exports = {
     },
     update: function () {
         if (Date.now() - renderStart < 700) {
-            this.ee.emit('update');
             render();
         }
 
         orbitControl.update();
-
         TWEEN.update();
+
+        this.ee.emit('update');
 
         requestAnimationFrame(this.update.bind(this));
     },
