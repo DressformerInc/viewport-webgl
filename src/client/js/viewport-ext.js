@@ -12,8 +12,8 @@ var $ = require('../../../libs/jquery-2.1.1.min'),
     history = require('./history'),
     DF = global.Dressformer;
 
-var ViewportExt = module.exports = function (events, webgl) {
-    Viewport.call(this, events, webgl);
+var ViewportExt = module.exports = function (ee, webgl) {
+    Viewport.call(this, ee, webgl);
 };
 
 inherits(ViewportExt, Viewport);
@@ -21,7 +21,7 @@ inherits(ViewportExt, Viewport);
 ViewportExt.prototype.init = function () {
     Viewport.prototype.init.call(this);
 
-    var $viewport = this.events.$viewport;
+    var $viewport = this.$viewport;
 
 
     this.baseParams = this.getBaseParams();

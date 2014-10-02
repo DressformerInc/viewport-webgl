@@ -159,15 +159,12 @@ function init() {
 
     global.addEventListener('resize', onWindowResize, false);
     onWindowResize();
-    update();
 }
 
 function rotateTo(angle) {
-    for (var model in models) {
-        if (models.hasOwnProperty(model) && 'floor' !== model) {
-            var curModel = models[model];
-            curModel.rotation.y = angle;
-        }
+    for (var i= 0, l=models.length; i<l; ++i){
+        var model = models[i];
+        model.rotation.y = angle;
     }
 
     startRender();
@@ -198,20 +195,6 @@ function targetOffset(speed) {
     orbitControl.target.y = pos;
 }
 
-function update(dt) {
-    if (Date.now() - renderStart < 700) {
-        render();
-    }
-
-    orbitControl.update();
-
-    TWEEN.update();
-
-//    ee.emit('update');
-
-    requestAnimationFrame(update);
-}
-
 function render() {
     renderer.render(scene, camera);
 }
@@ -235,8 +218,21 @@ module.exports = {
     init: function (ee) {
         this.ee = ee;
         init();
-        render();
+        startRender();
+        this.update();
         return this;
+    },
+    update: function () {
+        if (Date.now() - renderStart < 700) {
+            this.ee.emit('update');
+            render();
+        }
+
+        orbitControl.update();
+
+        TWEEN.update();
+
+        requestAnimationFrame(this.update.bind(this));
     },
     add: function (model) {
         models.push(model);
@@ -266,9 +262,9 @@ module.exports = {
     resetRotation: function () {
         var speed = 300,
             fn = TWEEN.Easing.Cubic.InOut,
-            dummyRotation = models['dummy'].rotation.y % (Math.PI * 2);
+            rotation = models[0].rotation.y % (Math.PI * 2);
 
-        new TWEEN.Tween({angle: dummyRotation, target: orbitControl.target.y})
+        new TWEEN.Tween({angle: rotation, target: orbitControl.target.y})
             .to({angle: 0, target: orbitControl.target0.y}, speed)
             .easing(fn)
             .onUpdate(function () {

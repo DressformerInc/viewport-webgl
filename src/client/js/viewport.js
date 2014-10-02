@@ -7,12 +7,15 @@ var DF = global.Dressformer,
     Api = require('./api'),
     Dummy = require('./dummy'),
     Garment = require('./garment'),
-    Viewport = module.exports = function (events, webgl) {
-        this.events = events;
+    Viewport = module.exports = function (ee, webgl) {
+        this.ee = ee;
         this.webgl = webgl;
         this.$viewport = $('body'); //TODO: выбрать контейнер
         this.$loader = this.$viewport.find('.df_preloader');
         this.garments = {};
+        //for controls
+        this.isMouseUp = true;
+        this.end = Date.now();
 
         this.loadingManager = new THREE.LoadingManager(
             this.onStartLoading.bind(this),
@@ -41,19 +44,40 @@ var DF = global.Dressformer,
     };
 
 Viewport.prototype.init = function () {
-    var webgl = this.webgl;
+    var me = this,
+        webgl = this.webgl;
+
+    this.ee.on('update', function () {
+
+        if (me.control) {
+            me.control();
+        }
+
+        if (me.isMouseUp && (Date.now() - me.end > 100)) {
+            me.control = null;
+        }
+
+    });
 
     this.$viewport.on('mousedown', '.dfwvc_up', function () {
         //'rotateUp'
         console.log('rotate up');
-        webgl.rotateUp();
+        me.control = webgl.rotateUp;
     });
-    this.events.on('mousedown', '.dfwvc_down', 'rotateDown');
-    this.events.on('mousedown', '.dfwvc_left', 'rotateLeft');
-    this.events.on('mousedown', '.dfwvc_right', 'rotateRight');
-    this.events.on('click', '.dfwvc_default', 'resetRotation');
-    this.events.on('mousedown', '.dfwvc_zoom_in', 'zoomIn');
-    this.events.on('mousedown', '.dfwvc_zoom_out', 'zoomOut');
+    this.$viewport
+        .on('mousedown', function () {
+            me.isMouseUp = false;
+        })
+        .on('mouseup', function () {
+            me.end = Date.now();
+            me.isMouseUp = true;
+        });
+//    this.events.on('mousedown', '.dfwvc_down', 'rotateDown');
+//    this.events.on('mousedown', '.dfwvc_left', 'rotateLeft');
+//    this.events.on('mousedown', '.dfwvc_right', 'rotateRight');
+//    this.events.on('click', '.dfwvc_default', 'resetRotation');
+//    this.events.on('mousedown', '.dfwvc_zoom_in', 'zoomIn');
+//    this.events.on('mousedown', '.dfwvc_zoom_out', 'zoomOut');
 
 //    this.events.$viewport.on('click', '.dfwvc_d_silver', function () {
 //        webgl.setDummyMatcap('silver');
@@ -68,11 +92,11 @@ Viewport.prototype.init = function () {
 //        webgl.setDummyMatcap('plastic');
 //    });
 
-    this.events.$viewport.on('click', '.dfwv_screenshot', function () {
-        console.log('screenshot: ', global.Dressformer.garment.id);
-        var screenshot = webgl.getScreenshot();
-        Api.saveGarmentPlaceholder(global.Dressformer.garment.id, screenshot);
-    });
+//    this.events.$viewport.on('click', '.dfwv_screenshot', function () {
+//        console.log('screenshot: ', global.Dressformer.garment.id);
+//        var screenshot = webgl.getScreenshot();
+//        Api.saveGarmentPlaceholder(global.Dressformer.garment.id, screenshot);
+//    });
 };
 
 Viewport.prototype.onStartLoading = function (item, loaded, total) {
