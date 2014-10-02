@@ -235,7 +235,8 @@ ViewportExt.prototype.hipsChanged = function (value) {
 };
 
 ViewportExt.prototype.saveProfile = function () {
-    this.webgl.setParams(this.getParams(true));
+    var params = this.getParams(true);
+    this.loadModels(params);
 };
 
 ViewportExt.prototype.cancelProfile = function () {

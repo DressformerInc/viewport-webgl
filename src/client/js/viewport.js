@@ -25,14 +25,14 @@ var DF = global.Dressformer,
         );
 
         this.dummy = new Dummy(DF.user.dummy);
-        this.dummy.load([], this.loadingManager, this.onLoadDummy.bind(this));
 
         if (DF.garment) {
 //            this.garments[DF.garment.slot] = {};
 //            this.garments[DF.garment.slot][DF.garment.layer] =
-            var garment = new Garment(DF.garment);
-            garment.load([], this.loadingManager, this.onLoadGarment.bind(this));
+            this.garments[DF.garment.id] = new Garment(DF.garment);
         }
+
+        this.loadModels([]);
 
         window.addEventListener("message", function (event) {
             this.webgl[event.data.method] &&
@@ -97,6 +97,10 @@ Viewport.prototype.init = function () {
 //    });
 };
 
+//Viewport.prototype.loadGarment = function (params) {
+//
+//}
+
 Viewport.prototype.onStartLoading = function (item, loaded, total) {
     this.$loader.show();
 };
@@ -113,7 +117,18 @@ Viewport.prototype.onErrorLoading = function (item, loaded, total) {
     console.error('on error loading:', arguments);
 };
 
+Viewport.prototype.loadModels = function (params) {
+    this.dummy.load(params, this.loadingManager, this.onLoadDummy.bind(this));
 
+    for(var id in this.garments){
+        if(this.garments.hasOwnProperty(id)){
+            var garment = this.garments[id];
+            garment.load(params, this.loadingManager, this.onLoadGarment.bind(this));
+        }
+    }
+};
+
+//TODO: merge loaders
 Viewport.prototype.onLoadDummy = function (self, model) {
     this.webgl.remove(self.model);
     this.webgl.add(model);
