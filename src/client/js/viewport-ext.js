@@ -202,7 +202,8 @@ ViewportExt.prototype.genderChanged = function (value) {
 
 ViewportExt.prototype.matcapChanged = function (value) {
     console.log('mapcap changed:', value);
-    this.webgl.setDummyMatcap(value);
+    this.dummy.setMatcap(value);
+    this.webgl.startRender();
 };
 
 ViewportExt.prototype.unitsChanged = function (value) {

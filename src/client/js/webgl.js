@@ -229,6 +229,7 @@ module.exports = {
 
         requestAnimationFrame(this.update.bind(this));
     },
+    startRender: startRender,
     add: function (model) {
         models.push(model);
         scene.add(model);
