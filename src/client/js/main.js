@@ -2,10 +2,11 @@
  * Created by Miha-ha on 01.08.14.
  */
 //Main
-var webgl = require('./webgl').init(),
-    events = require('./events')(webgl),
+var EventEmitter = require('events').EventEmitter,
+    ee = new EventEmitter(),
+    webgl = require('./webgl').init(ee),
+//    events = require('./events')(webgl),
 //    Viewport = require('./viewport'),
     ViewportExt = require('./viewport-ext');
 
-
-new ViewportExt(events, webgl);
+new ViewportExt(ee, webgl);

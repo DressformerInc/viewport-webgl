@@ -45,8 +45,8 @@ Garment.prototype.load = function (params, loadingManager, cb) {
         model.position.set(0, 0, 0);
         model.castShadow = true;
         model.reciveShadow = true;
-        me.model = model;
-        cb.call(me, model);
+
+        cb(me, model);
     };
 
 
