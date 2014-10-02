@@ -25,7 +25,7 @@ var screenWidth = global.innerWidth,
     camera, scene, renderer,
     postprocessing = {},
     lights = {},
-    models = {},
+    models = [],
     events = {},
     controls,
     orbitControl,
@@ -104,7 +104,7 @@ function setupEnvironment(scene) {
     floor.position.y = 0;
     floor.rotation.x = Math.PI / 2;
     floor.receiveShadow = true;
-    scene.add(models['floor'] = floor);
+    scene.add(floor);
 }
 
 function init() {
@@ -176,15 +176,15 @@ function rotateTo(angle) {
 function rotate(speed, horisontal) {
     var curModel;
     speed = speed || 0.02;
-    for (var model in models) {
-        if (models.hasOwnProperty(model) && 'floor' !== model) {
-            curModel = models[model];
-            if (horisontal) {
-                curModel.rotation.y += speed;
-            } else {
-                orbitControl.rotateUp(speed);
-            }
+
+    for (var i= 0, l=models.length; i<l; ++i){
+        curModel = models[i];
+        if (horisontal) {
+            curModel.rotation.y += speed;
+        } else {
+            orbitControl.rotateUp(speed);
         }
+
     }
 
     startRender();
@@ -239,10 +239,12 @@ module.exports = {
         return this;
     },
     add: function (model) {
+        models.push(model);
         scene.add(model);
         startRender();
     },
     remove: function (model) {
+        models.splice(models.indexOf(model), 1);
         scene.remove(model);
         startRender();
     },
