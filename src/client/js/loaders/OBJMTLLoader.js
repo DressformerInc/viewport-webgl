@@ -12,7 +12,7 @@ THREE.OBJMTLLoader.prototype = {
 		var scope = this,
             mtlLoader = new THREE.MTLLoader(Api.urls.assets, options, '*'),
             url = options.objUrl,
-            mtlurl = false,// options.mtlUrl, //TODO: for test
+            mtlurl = options.mtlUrl,
             assets = options.assets || {},
             loader = new THREE.XHRLoader( scope.manager );
 
