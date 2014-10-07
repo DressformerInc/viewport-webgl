@@ -9,10 +9,11 @@
     "ejs-locals": "^1.0.2",
     "express": "~4.0.0",
     "lusca": "^1.0.0",
+    "mediator-js": "^0.9.8",
     "method-override": "~1.0.0",
     "morgan": "~1.0.0",
-    "tween.js": "^0.14.0",
-    "request": "latest"
+    "request": "latest",
+    "tween.js": "^0.14.0"
   },
   "devDependencies": {
     "gulp": "^3.8.6",

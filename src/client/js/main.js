@@ -4,9 +4,11 @@
 //Main
 var EventEmitter = require('events').EventEmitter,
     ee = new EventEmitter(),
+//    core = require('./core'),
     webgl = require('./webgl').init(ee),
 //    events = require('./events')(webgl),
 //    Viewport = require('./viewport'),
     ViewportExt = require('./viewport-ext');
+
 
 new ViewportExt(ee, webgl);

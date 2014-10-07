@@ -4,7 +4,6 @@
 
 var DF = global.Dressformer,
     $ = require('../../../libs/jquery-2.1.1.min'),
-    Api = require('./api'),
     Dummy = require('./dummy'),
     Garment = require('./garment'),
     Viewport = module.exports = function (ee, webgl) {
@@ -141,82 +140,3 @@ Viewport.prototype.onLoadGarment = function (self, model) {
     this.webgl.add(model);
     self.model = model;
 };
-
-/*
- loadingManager = new THREE.LoadingManager();
- loadingManager.onProgress = function (item, loaded, total) {
- console.log('loading manager:', item, loaded, total);
- if (total > 1 && loaded === total) {
- //            controls.rotate = true;
- }
- startRender();
- };
- loadingManager.onLoad = function () {
- ee.emit('endload');
- //resolveCollision(models.garment.children[0], models.dummy.children[0]);
- };
- objLoader = new THREE.OBJLoader(loadingManager);
- objMtlLoader = new THREE.OBJMTLLoader(loadingManager);
-
- //loadDummy();
- dummy = new Dummy(global.Dressformer.user.dummy);
- dummy.load([], loadingManager, onLoadDummy);
-
- if (global.Dressformer.garment) {
- garment = new Garment(global.Dressformer.garment);
- garment.load([], loadingManager, onLoadGarment);
- }
-
- window.addEventListener("message", function (event) {
- me[event.data.method] && me[event.data.method].apply(me, event.data.params);
- }, false);
-
- setParams: function (params) {
- var df = global.Dressformer;
-
- //loadDummy(df.user.dummy.assets.geometry.url, params);
- dummy.load(params, loadingManager, onLoadDummy);
- if (df.garment) {
- //            this.load(df.garment.id, params);
- garment.load(params, loadingManager, onLoadGarment);
- }
- startRender();
- ee.emit('startload');
- },
- setDummyMatcap: function (value) {
- dummy.setMatcap(value);
- startRender();
- },
- showDummy: function () {
- this.hideDummy();
- scene.add(dummy.model);
- },
- hideDummy: function () {
- scene.remove(dummy.model);
- startRender();
- },
- load: function (id, params) {
- var garment = global.Dressformer.garment,
- cb = function (model) {
- startRender();
- models['garment'] = model;
- scene.add(model);
- };
-
- if (garment && garment.id === id) {
- loadGarment(garment, params, cb);
- } else {
- loadGarmentById(id, params, cb);
- }
- },
- remove: function (garmentId) {
- scene.remove(models['garment']);
- startRender();
- },
- getScreenshot: function () {
- return renderer.domElement.toDataURL()
- },
- saveGarmentPlaceholder: function (id) {
- Api.saveGarmentPlaceholder(id, this.getScreenshot());
- }
- */
