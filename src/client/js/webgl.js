@@ -137,8 +137,6 @@ function init() {
     setupLight(scene);
     setupEnvironment(scene);
 
-
-
     container = global.document.getElementById('viewport');
     container.appendChild(renderer.domElement);
 
@@ -210,8 +208,8 @@ function onWindowResize() {
 
 
 module.exports = {
-    init: function (ee) {
-        this.ee = ee;
+    init: function (mediator) {
+        this.mediator = mediator;
         init();
         startRender();
         this.update();
@@ -225,37 +223,37 @@ module.exports = {
         orbitControl.update();
         TWEEN.update();
 
-        this.ee.emit('update');
+        this.mediator.emit('update');
 
         requestAnimationFrame(this.update.bind(this));
     },
-    startRender: startRender,
-    add: function (model) {
+    onStartRender: startRender,
+    onAdd: function (model) {
         models.push(model);
         scene.add(model);
         startRender();
     },
-    remove: function (model) {
+    onRemove: function (model) {
         models.splice(models.indexOf(model), 1);
         scene.remove(model);
         startRender();
     },
     //controls
-    rotateLeft: function () {
+    onRotateLeft: function () {
         rotate(-0.09, true);
     },
-    rotateRight: function () {
+    onRotateRight: function () {
         rotate(0.09, true);
     },
-    rotateUp: function () {
+    onRotateUp: function () {
         rotate(-rotateSpeed, false);
         targetOffset(-targetSpeed);
     },
-    rotateDown: function () {
+    onRotateDown: function () {
         rotate(rotateSpeed, false);
         targetOffset(targetSpeed);
     },
-    resetRotation: function () {
+    onResetRotation: function () {
         var speed = 300,
             fn = TWEEN.Easing.Cubic.InOut,
             rotation = models[0].rotation.y % (Math.PI * 2);
@@ -277,13 +275,13 @@ module.exports = {
             })
             .start();
     },
-    zoomIn: function () {
+    onZoomIn: function () {
         orbitControl.dollyOut();
     },
-    zoomOut: function () {
+    onZoomOut: function () {
         orbitControl.dollyIn();
     },
-    toggleFullscreen: function () {
+    onToggleFullscreen: function () {
         if (!document.fullscreenElement &&    // alternative standard method
             !document.mozFullScreenElement && !document.webkitFullscreenElement) {  // current working methods
             if (document.documentElement.requestFullscreen) {

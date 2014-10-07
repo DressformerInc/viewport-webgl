@@ -12,8 +12,8 @@ var $ = require('../../../libs/jquery-2.1.1.min'),
     history = require('./history'),
     DF = global.Dressformer;
 
-var ViewportExt = module.exports = function (ee, webgl) {
-    Viewport.call(this, ee, webgl);
+var ViewportExt = module.exports = function (mediator) {
+    Viewport.call(this, mediator);
 };
 
 inherits(ViewportExt, Viewport);
@@ -203,7 +203,7 @@ ViewportExt.prototype.genderChanged = function (value) {
 ViewportExt.prototype.matcapChanged = function (value) {
     console.log('mapcap changed:', value);
     this.dummy.setMatcap(value);
-    this.webgl.startRender();
+    this.mediator.emit('StartRender');
 };
 
 ViewportExt.prototype.unitsChanged = function (value) {
@@ -248,7 +248,7 @@ ViewportExt.prototype.cancelProfile = function () {
         }
     }
 
-    this.webgl.setParams(this.getParams());
+//    this.webgl.setParams(this.getParams());
 };
 
 ViewportExt.prototype.unSelectAll = function () {

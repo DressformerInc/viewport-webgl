@@ -6,9 +6,8 @@ var DF = global.Dressformer,
     $ = require('../../../libs/jquery-2.1.1.min'),
     Dummy = require('./dummy'),
     Garment = require('./garment'),
-    Viewport = module.exports = function (ee, webgl) {
-        this.ee = ee;
-        this.webgl = webgl;
+    Viewport = module.exports = function (mediator) {
+        this.mediator = mediator;
         this.$viewport = $('body'); //TODO: выбрать контейнер
         this.$loader = this.$viewport.find('.df_preloader');
         this.garments = {};
@@ -17,10 +16,10 @@ var DF = global.Dressformer,
         this.end = Date.now();
 
         this.loadingManager = new THREE.LoadingManager(
-            this.onStartLoading.bind(this),
-            this.onProgressLoading.bind(this),
-            this.onEndLoading.bind(this),
-            this.onErrorLoading.bind(this)
+            this._onStartLoading.bind(this),
+            this._onProgressLoading.bind(this),
+            this._onEndLoading.bind(this),
+            this._onErrorLoading.bind(this)
         );
 
         this.dummy = new Dummy(DF.user.dummy);
@@ -34,22 +33,21 @@ var DF = global.Dressformer,
         this.loadModels([]);
 
         window.addEventListener("message", function (event) {
-            this.webgl[event.data.method] &&
-            this.webgl[event.data.method].apply(this, event.data.params);
-
+//            this.webgl[event.data.method] &&
+//            this.webgl[event.data.method].apply(this, event.data.params);
+            this.mediator.emit.apply(this.mediator, event.data.params.unshift(event.data.method));
         }.bind(this), false);
 
         this.init();
     };
 
 Viewport.prototype.init = function () {
-    var me = this,
-        webgl = this.webgl;
+    var me = this;
 
-    this.ee.on('update', function () {
+    this.mediator.on('update', function () {
 
         if (me.control) {
-            me.control();
+            me.mediator.emit(me.control);
         }
 
         if (me.isMouseUp && (Date.now() - me.end > 100)) {
@@ -60,26 +58,26 @@ Viewport.prototype.init = function () {
 
     this.$viewport
         .on('mousedown', '.dfwvc_up', function () {
-            me.control = webgl.rotateUp;
+            me.control = 'RotateUp';
         })
         .on('mousedown', '.dfwvc_down', function () {
-            me.control = webgl.rotateDown;
+            me.control = 'RotateDown';
             console.log('rotate down');
         })
         .on('mousedown', '.dfwvc_left', function () {
-            me.control = webgl.rotateLeft;
+            me.control = 'RotateLeft';
         })
         .on('mousedown', '.dfwvc_right', function () {
-            me.control = webgl.rotateRight;
+            me.control = 'RotateRight';
         })
         .on('mousedown', '.dfwvc_zoom_in', function () {
-            me.control = webgl.zoomIn;
+            me.control = 'ZoomIn';
         })
         .on('mousedown', '.dfwvc_zoom_out', function () {
-            me.control = webgl.zoomOut;
+            me.control = 'ZoomOut';
         })
         .on('click', '.dfwvc_default', function () {
-            webgl.resetRotation();
+            me.mediator.emit('ResetRotation');
         })
         .on('mousedown', function () {
             me.isMouseUp = false;
@@ -100,19 +98,19 @@ Viewport.prototype.init = function () {
 //
 //}
 
-Viewport.prototype.onStartLoading = function (item, loaded, total) {
+Viewport.prototype._onStartLoading = function (item, loaded, total) {
     this.$loader.show();
 };
 
-Viewport.prototype.onProgressLoading = function (item, loaded, total) {
+Viewport.prototype._onProgressLoading = function (item, loaded, total) {
     console.log('on progress loading:', arguments);
 };
 
-Viewport.prototype.onEndLoading = function (item, loaded, total) {
+Viewport.prototype._onEndLoading = function (item, loaded, total) {
     this.$loader.hide();
 };
 
-Viewport.prototype.onErrorLoading = function (item, loaded, total) {
+Viewport.prototype._onErrorLoading = function (item, loaded, total) {
     console.error('on error loading:', arguments);
 };
 
@@ -129,14 +127,13 @@ Viewport.prototype.loadModels = function (params) {
 
 //TODO: merge loaders
 Viewport.prototype.onLoadDummy = function (self, model) {
-    this.webgl.remove(self.model);
-    this.webgl.add(model);
+    this.mediator.emit('Remove', self.model);
+    this.mediator.emit('Add', model);
     self.model = model;
 };
 
 Viewport.prototype.onLoadGarment = function (self, model) {
-    console.log('on load garment:', arguments);
-    this.webgl.remove(self.model);
-    this.webgl.add(model);
+    this.mediator.emit('Remove', self.model);
+    this.mediator.emit('Add', model);
     self.model = model;
 };

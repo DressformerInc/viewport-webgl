@@ -6,13 +6,20 @@ var Mediator = require('mediator-js').Mediator;
 module.exports = {
     mediator: new Mediator(),
     add: function (m) {
-        m.init(this.mediator);
-        for (var prop in m) {
-            if (m.hasOwnProperty(prop)
-                && typeof m[prop] === 'function'
+        var comp = m;
+
+        if( typeof m === 'function'){
+            comp = new m(this.mediator);
+        }else{
+            comp.init(this.mediator);
+        }
+
+        for (var prop in comp) {
+            if (comp.hasOwnProperty(prop)
+                && typeof comp[prop] === 'function'
                 && prop.substring(0, 2) === 'on') {
                 var event = prop.substring(2);
-                this.mediator.on(event, m[prop], {}, m);
+                this.mediator.on(event, comp[prop], {}, comp);
             }
         }
     }

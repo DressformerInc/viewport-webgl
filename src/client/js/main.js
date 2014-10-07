@@ -2,13 +2,7 @@
  * Created by Miha-ha on 01.08.14.
  */
 //Main
-var EventEmitter = require('events').EventEmitter,
-    ee = new EventEmitter(),
-//    core = require('./core'),
-    webgl = require('./webgl').init(ee),
-//    events = require('./events')(webgl),
-//    Viewport = require('./viewport'),
-    ViewportExt = require('./viewport-ext');
+var core = require('./core');
 
-
-new ViewportExt(ee, webgl);
+core.add(require('./webgl'));
+core.add(require('./viewport-ext'));
