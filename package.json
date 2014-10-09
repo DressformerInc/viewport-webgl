@@ -5,6 +5,7 @@
   "main": "",
   "dependencies": {
     "body-parser": "~1.0.0",
+    "domready": "^1.0.7",
     "ejs": "*",
     "ejs-locals": "^1.0.2",
     "express": "~4.0.0",
