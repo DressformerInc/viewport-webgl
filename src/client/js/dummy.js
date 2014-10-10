@@ -29,7 +29,7 @@ Dummy.prototype.initMaterial = function () {
         'skin4': THREE.ImageUtils.loadTexture('/img/matcaps/skin_matcap4.png'),
         'skin5': THREE.ImageUtils.loadTexture('/img/matcaps/skin_matcap5.png')
     };
-    this.currentMatcap = this.matcaps['carbon'];
+    this.currentMatcap = this.matcaps['silver'];
 
     this.material = new THREE.ShaderMaterial({
         uniforms: {
