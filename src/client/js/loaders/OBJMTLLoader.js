@@ -54,12 +54,24 @@ THREE.OBJMTLLoader.prototype = {
 
             } );
         }else {
-            var material = new THREE.MeshPhongMaterial({
-                map: assets.diffuse.url && THREE.ImageUtils.loadTexture(assets.diffuse.url),
-                normalMap: assets.normal.url && THREE.ImageUtils.loadTexture(assets.normal.url),
-                specularMap: assets.specular.url && THREE.ImageUtils.loadTexture(assets.specular.url),
+            var lod = '?scale=0.3',
+                reload = function (texture) {
+                    var loader = new THREE.ImageLoader(),
+                        url =  texture.image.src.replace(lod, '');
+
+                    loader.crossOrigin = '*';
+                    loader.load(url, function (image) {
+                        texture.image = image;
+                        texture.needsUpdate = true;
+                    })
+                },
+                material = new THREE.MeshPhongMaterial({
+                map: assets.diffuse.url && THREE.ImageUtils.loadTexture(assets.diffuse.url+lod, null, reload),
+                normalMap: assets.normal.url && THREE.ImageUtils.loadTexture(assets.normal.url+lod, null, reload),
+                specularMap: assets.specular.url && THREE.ImageUtils.loadTexture(assets.specular.url+lod, null, reload),
                 side: THREE.DoubleSide
             });
+            console.log('phong material:', material);
             loader.load( url, function ( text ) {
 
                 var object = scope.parse( text );
