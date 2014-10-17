@@ -39,7 +39,7 @@ Garment.prototype.createMaterial = function (name) {
             name: name,
             side: global.THREE.DoubleSide
         },
-        url = this.prefix_url;
+        url = this.url_prefix;
 
     //find material source
     for(var i= 0, l=materials.length; i<l; ++i){
@@ -166,8 +166,6 @@ Garment.prototype.load = function (params, loadingManager, cb) {
         model.position.set(0, 0, 0);
         model.castShadow = true;
         model.reciveShadow = true;
-        var xScale = 50;
-        model.scale.set(xScale, xScale, xScale);
 
         cb(me, model);
     });
