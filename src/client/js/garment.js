@@ -6,6 +6,7 @@
 var Garment = module.exports = function (config) {
     this.merge(config);
     this.model = null;
+    this.wrap = global.THREE.RepeatWrapping;
 };
 
 require('./mix/merge')(Garment);
@@ -34,10 +35,10 @@ Garment.prototype.createMaterial = function (name) {
     var material,
         space = /\s+/,
         params = {
+            name: name,
             side: global.THREE.DoubleSide
         },
-    //TODO: change to this.prefix_url
-        url = '//v2.dressformer.com/assets/v2/';
+        url = this.prefix_url;
 
     //find material source
     for(var i= 0, l=this.materials.length; i<l; ++i){
@@ -56,7 +57,7 @@ Garment.prototype.createMaterial = function (name) {
                 // Ns is material specular exponent
                 case 'kd':
                     // Diffuse color (color under white light) using RGB values
-                    params['diffuse'] = new THREE.Color().fromArray(value.split(space));
+                    params['color'] = new THREE.Color().fromArray(value.split(space));
                     break;
 
                 case 'ka':
@@ -130,8 +131,8 @@ Garment.prototype.createMaterial = function (name) {
 
 Garment.prototype.load = function (params, loadingManager, cb) {
     var me = this,
-//        objUrl = this.url_prefix+this.assets.geometry.id,
-        objUrl = '//v2.dressformer.com/assets/v2/'+this.assets.geometry.id,
+        objUrl = this.url_prefix+this.assets.geometry.id,
+//        objUrl = '//v2.dressformer.com/assets/v2/'+this.assets.geometry.id,
         objLoader = new global.THREE.OBJLoader(loadingManager);
 
     params = params || [];
@@ -151,10 +152,10 @@ Garment.prototype.load = function (params, loadingManager, cb) {
         model.traverse(function (child) {
             if (child instanceof THREE.Mesh) {
                 child.geometry.computeVertexNormals(true);
-                child.geometry.computeTangents();
+//                child.geometry.computeTangents();
                 child.material = me.createMaterial(child.material.name);
                 child.material.needsUpdate = true;
-//                console.log('mtl material:', child.material, 'update:' + child.material.needsUpdate);
+                console.log('mtl material:', child.material, 'name:' + child.material.name);
 
                 child.castShadow = true;
                 child.receiveShadow = true;
@@ -164,6 +165,8 @@ Garment.prototype.load = function (params, loadingManager, cb) {
         model.position.set(0, 0, 0);
         model.castShadow = true;
         model.reciveShadow = true;
+        var xScale = 50;
+        model.scale.set(xScale, xScale, xScale);
 
         cb(me, model);
     });
