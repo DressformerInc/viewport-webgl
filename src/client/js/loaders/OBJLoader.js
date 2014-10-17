@@ -112,15 +112,15 @@ THREE.OBJLoader.prototype = {
                 ib = parseUVIndex(b),
                 ic = parseUVIndex(c);
 
-            uvsMap[ia] = uvsMap[ia] || geometry.faceVertexUvs[0].push(uvs[ia].clone());
-            uvsMap[ib] = uvsMap[ib] || geometry.faceVertexUvs[0].push(uvs[ib].clone());
-            uvsMap[ic] = uvsMap[ic] || geometry.faceVertexUvs[0].push(uvs[ic].clone());
+//            uvsMap[ia] = uvsMap[ia] || geometry.faceVertexUvs[0].push(uvs[ia].clone());
+//            uvsMap[ib] = uvsMap[ib] || geometry.faceVertexUvs[0].push(uvs[ib].clone());
+//            uvsMap[ic] = uvsMap[ic] || geometry.faceVertexUvs[0].push(uvs[ic].clone());
 
-//            geometry.faceVertexUvs[ 0 ].push([
-//                uvs[ parseUVIndex(a) ].clone(),
-//                uvs[ parseUVIndex(b) ].clone(),
-//                uvs[ parseUVIndex(c) ].clone()
-//            ]);
+            geometry.faceVertexUvs[ 0 ].push([
+                uvs[ parseUVIndex(a) ].clone(),
+                uvs[ parseUVIndex(b) ].clone(),
+                uvs[ parseUVIndex(c) ].clone()
+            ]);
         }
 
         function handle_face_line(faces, uvs, normals_inds) {
@@ -161,7 +161,6 @@ THREE.OBJLoader.prototype = {
         }
 
         // create mesh if no objects and groups in text
-
         if (/^o /gm.test(text) === false &&
             /^g /gm.test(text) === false) {
             addMesh();

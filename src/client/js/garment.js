@@ -32,7 +32,8 @@ Garment.prototype.loadTexture = function (url, mapping, onLoad, onError) {
 };
 
 Garment.prototype.createMaterial = function (name) {
-    var material,
+    var material = {},
+        materials = this.materials || [],
         space = /\s+/,
         params = {
             name: name,
@@ -41,9 +42,9 @@ Garment.prototype.createMaterial = function (name) {
         url = this.prefix_url;
 
     //find material source
-    for(var i= 0, l=this.materials.length; i<l; ++i){
-        if(this.materials[i].name === name){
-            material = this.materials[i];
+    for(var i= 0, l=materials.length; i<l; ++i){
+        if(materials[i].name === name){
+            material = materials[i];
             break;
         }
     }

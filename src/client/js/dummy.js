@@ -55,7 +55,7 @@ Dummy.prototype.setMatcap = function (matcap) {
 Dummy.prototype.load = function (params, loadingManager, cb) {
     var me = this,
         loader = new THREE.OBJLoader(loadingManager),
-        url = this.assets.geometry.url;
+        url = this.url_prefix+this.assets.geometry.id;
 
     if (params && params.length > 0) {
         url += '?' + params.join('&');
