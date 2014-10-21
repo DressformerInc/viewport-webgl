@@ -171,7 +171,7 @@ Viewport.prototype._onErrorLoading = function (item, loaded, total) {
 };
 
 Viewport.prototype.loadModels = function (params) {
-//    this.dummy.load(params, this.loadingManager, this.onLoadDummy.bind(this));
+    this.dummy.load(params, this.loadingManager, this.onLoadDummy.bind(this));
 
     for(var id in this.garments){
         if(this.garments.hasOwnProperty(id)){
