@@ -130,13 +130,6 @@ Garment.prototype.createMaterial = function (name) {
     }
 
     return new THREE.MeshPhongMaterial(params);
-//    return new THREE.MeshPhongMaterial({
-//        ambient: 0xaaaaaa,
-//        color: 0xff0000,
-//        specular: 0x009900,
-//        shininess: 30,
-//        shading: THREE.FlatShading
-//    });
 };
 
 Garment.prototype.load = function (params, loadingManager, cb) {
