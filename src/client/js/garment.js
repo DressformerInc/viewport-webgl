@@ -42,39 +42,43 @@ Garment.prototype.createMaterial = function (name) {
         url = this.url_prefix;
 
     //find material source
-    for(var i= 0, l=materials.length; i<l; ++i){
-        if(materials[i].name === name){
+    for (var i = 0, l = materials.length; i < l; ++i) {
+        if (materials[i].name === name) {
             material = materials[i];
             break;
         }
     }
 
-    for(var prop in material){
-        if(material.hasOwnProperty(prop)){
-            var value = material[prop];
+    for (var prop in material) {
+        if (material.hasOwnProperty(prop)) {
+            var value = material[prop],
+                c;
 
             switch (prop.toLowerCase()) {
 
                 // Ns is material specular exponent
                 case 'kd':
+                    c = value.split(space);
                     // Diffuse color (color under white light) using RGB values
-                    params['color'] = new THREE.Color().fromArray(value.split(space));
+                    params['color'] = new THREE.Color(+c[0], +c[1], +c[2]);
                     break;
 
                 case 'ka':
+                    c = value.split(space);
                     // Ambient color (color under shadow) using RGB values
-                    params['ambient'] = new THREE.Color().fromArray(value.split(space));
+                    params['ambient'] = new THREE.Color(+c[0], +c[1], +c[2]);
                     break;
 
                 case 'ks':
+                    c = value.split(space);
                     // Specular color (color when light is reflected from shiny surface) using RGB values
-                    params['specular'] = new THREE.Color().fromArray(value.split(space));
+                    params['specular'] = new THREE.Color(+c[0], +c[1], +c[2]);
                     break;
 
                 case 'map_kd':
                     // Diffuse texture map
 
-                    params['map'] = this.loadTexture(url+value.id);
+                    params['map'] = this.loadTexture(url + value.id);
                     params['map'].wrapS = this.wrap;
                     params['map'].wrapT = this.wrap;
 
@@ -83,7 +87,7 @@ Garment.prototype.createMaterial = function (name) {
                 case 'map_bump':
                 case 'bump':
 
-                    params['normalMap'] = this.loadTexture(url+value.id);
+                    params['normalMap'] = this.loadTexture(url + value.id);
                     params['normalMap'].wrapS = this.wrap;
                     params['normalMap'].wrapT = this.wrap;
 //                    params['normalScale'] = params['-bm'];
@@ -91,7 +95,7 @@ Garment.prototype.createMaterial = function (name) {
                     break;
 
                 case 'map_Ns':
-                    params['specularMap'] = this.loadTexture(url+value.id);
+                    params['specularMap'] = this.loadTexture(url + value.id);
                     params['specularMap'].wrapS = this.wrap;
                     params['specularMap'].wrapT = this.wrap;
                     break;
@@ -112,10 +116,8 @@ Garment.prototype.createMaterial = function (name) {
                     //   factor of 1.0 is fully opaque, a factor of 0 is fully dissolved (completely transparent)
 
                     if (value < 1) {
-
                         params['transparent'] = true;
                         params['opacity'] = value;
-
                     }
 
                     break;
@@ -128,11 +130,18 @@ Garment.prototype.createMaterial = function (name) {
     }
 
     return new THREE.MeshPhongMaterial(params);
+//    return new THREE.MeshPhongMaterial({
+//        ambient: 0xaaaaaa,
+//        color: 0xff0000,
+//        specular: 0x009900,
+//        shininess: 30,
+//        shading: THREE.FlatShading
+//    });
 };
 
 Garment.prototype.load = function (params, loadingManager, cb) {
     var me = this,
-        objUrl = this.url_prefix+this.assets.geometry.id,
+        objUrl = this.url_prefix + this.assets.geometry.id,
 //        objUrl = '//v2.dressformer.com/assets/v2/'+this.assets.geometry.id,
         objLoader = new global.THREE.OBJLoader(loadingManager);
 
