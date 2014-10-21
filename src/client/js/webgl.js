@@ -121,7 +121,7 @@ function init() {
 //    renderer.gammaOutput = true;
     renderer.sortObjects = false;
     renderer.shadowMapEnabled = true;
-    renderer.shadowMapAutoUpdate = true;
+    renderer.shadowMapAutoUpdate = false;
     renderer.shadowMapType = THREE.PCFSoftShadowMap;
     renderer.shadowMapCullFace = THREE.CullFaceBack;
 
