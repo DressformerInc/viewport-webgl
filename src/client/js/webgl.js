@@ -41,17 +41,17 @@ function setupLight(scene) {
     var ambientLight = new THREE.AmbientLight(0xffffff);
     scene.add(lights['ambientLight'] = ambientLight);
 
-/*
-    var directionalLight = new THREE.DirectionalLight( 0xffeedd);
-    directionalLight.position.set( 0, 0, 1).normalize();
-    scene.add( directionalLight );
+    /*
+     var directionalLight = new THREE.DirectionalLight( 0xffeedd);
+     directionalLight.position.set( 0, 0, 1).normalize();
+     scene.add( directionalLight );
 
 
-    var directionalLight2 = new THREE.DirectionalLight( 0xffeedd, 0.7);
-    directionalLight2.position.set( 0, 0, -300 ).normalize();
-    scene.add( directionalLight2 );
+     var directionalLight2 = new THREE.DirectionalLight( 0xffeedd, 0.7);
+     directionalLight2.position.set( 0, 0, -300 ).normalize();
+     scene.add( directionalLight2 );
 
-*/
+     */
     var light1 = new THREE.SpotLight(0xdddddd, 0.5);
     light1.onlyShadow = true;
     light1.position.x = 300;//controls.light1.x;
@@ -64,32 +64,32 @@ function setupLight(scene) {
     light1.shadowMapHeight = 2048;
 //    light1.shadowCameraVisible = true;
     scene.add(lights['light1'] = light1);
-/*
-    var light2 = new THREE.SpotLight(0xffffff, 0.7);
-//    light2.onlyShadow = true;
-    light2.position.x = -500;
-    light2.position.z = 300;
-    light2.position.y = 800;
-    light2.castShadow = true;
-    light2.shadowBias = -0.0001;
-    light2.shadowDarkness = 0.01;
-    light2.shadowMapWidth = 2048;
-    light2.shadowMapHeight = 2048;
-//    light2.shadowCameraVisible = true;
-    scene.add(lights['light2'] = light2);
+    /*
+     var light2 = new THREE.SpotLight(0xffffff, 0.7);
+     //    light2.onlyShadow = true;
+     light2.position.x = -500;
+     light2.position.z = 300;
+     light2.position.y = 800;
+     light2.castShadow = true;
+     light2.shadowBias = -0.0001;
+     light2.shadowDarkness = 0.01;
+     light2.shadowMapWidth = 2048;
+     light2.shadowMapHeight = 2048;
+     //    light2.shadowCameraVisible = true;
+     scene.add(lights['light2'] = light2);
 
-    var light3 = new THREE.SpotLight(0xffffff, 1);
-//    directionalLight.onlyShadow = true;
-    light3.position.x = 0;
-    light3.position.z = -300;
-    light3.position.y = 600;
-    light3.castShadow = false;
-//    light3.shadowBias = 0.0001;
-//    light3.shadowDarkness = 0.01;
-//    light3.shadowMapWidth = 2048;
-//    light3.shadowMapHeight = 2048;
-    scene.add(lights['light3'] = light3);
-*/
+     var light3 = new THREE.SpotLight(0xffffff, 1);
+     //    directionalLight.onlyShadow = true;
+     light3.position.x = 0;
+     light3.position.z = -300;
+     light3.position.y = 600;
+     light3.castShadow = false;
+     //    light3.shadowBias = 0.0001;
+     //    light3.shadowDarkness = 0.01;
+     //    light3.shadowMapWidth = 2048;
+     //    light3.shadowMapHeight = 2048;
+     scene.add(lights['light3'] = light3);
+     */
 }
 
 function setupEnvironment(scene) {
@@ -160,7 +160,7 @@ function init() {
 }
 
 function rotateTo(angle) {
-    for (var i= 0, l=models.length; i<l; ++i){
+    for (var i = 0, l = models.length; i < l; ++i) {
         var model = models[i];
         model.rotation.y = angle;
     }
@@ -300,5 +300,10 @@ module.exports = {
                 document.webkitCancelFullScreen();
             }
         }
+    },
+    onMakeScreenshot: function (params) {
+        params = params || {};
+        params.screenshot = renderer.domElement.toDataURL();
+        this.mediator.emit('Screenshot', params);
     }
 };

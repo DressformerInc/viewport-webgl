@@ -4,6 +4,7 @@
 
 var DF = global.Dressformer,
     $ = require('../../../libs/jquery-2.1.1.min'),
+    Api = require('./api'),
     Dummy = require('./dummy'),
     Garment = require('./garment'),
     Viewport = module.exports = function (mediator) {
@@ -91,7 +92,9 @@ var DF = global.Dressformer,
         window.addEventListener("message", function (event) {
 //            this.webgl[event.data.method] &&
 //            this.webgl[event.data.method].apply(this, event.data.params);
-            this.mediator.emit.apply(this.mediator, event.data.params.unshift(event.data.method));
+            console.log('mediator:', this.mediator, 'event:', event);
+            event.data.params.unshift(event.data.method);
+            this.mediator.emit.apply(this.mediator, event.data.params);
         }.bind(this), false);
 
         this.init();
@@ -173,8 +176,8 @@ Viewport.prototype._onErrorLoading = function (item, loaded, total) {
 Viewport.prototype.loadModels = function (params) {
     this.dummy.load(params, this.loadingManager, this.onLoadDummy.bind(this));
 
-    for(var id in this.garments){
-        if(this.garments.hasOwnProperty(id)){
+    for (var id in this.garments) {
+        if (this.garments.hasOwnProperty(id)) {
             var garment = this.garments[id];
             garment.load(params, this.loadingManager, this.onLoadGarment.bind(this));
         }
@@ -193,3 +196,19 @@ Viewport.prototype.onLoadGarment = function (self, model) {
     this.mediator.emit('Add', model);
     self.model = model;
 };
+
+Viewport.prototype.onShowDummy = function () {
+    console.log('show dummy:', this.dummy.model);
+    this.mediator.emit('Add', this.dummy.model);
+};
+
+Viewport.prototype.onHideDummy = function () {
+    console.log('hide dummy:', this.dummy.model);
+    this.mediator.emit('Remove', this.dummy.model);
+};
+
+Viewport.prototype.onScreenshot = function (params) {
+    console.log('garment params:', params);
+    Api.saveGarmentPlaceholder(params.garmentId, params.screenshot);
+};
+
