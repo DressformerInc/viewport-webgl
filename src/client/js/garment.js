@@ -3,8 +3,9 @@
  */
 
 
-var Garment = module.exports = function (config) {
+var Garment = module.exports = function (config, mediator) {
     this.merge(config);
+    this.mediator = mediator;
     this.model = null;
     this.wrap = global.THREE.RepeatWrapping;
 };
@@ -152,6 +153,7 @@ Garment.prototype.load = function (params, loadingManager, cb) {
     }
 
     objLoader.load(objUrl, function (model) {
+        var materials = [];
         model.traverse(function (child) {
             if (child instanceof THREE.Mesh) {
                 child.geometry.computeVertexNormals(true);
@@ -162,12 +164,17 @@ Garment.prototype.load = function (params, loadingManager, cb) {
 
                 child.castShadow = true;
                 child.receiveShadow = true;
+
+                materials.push(child.material);
             }
         });
         model.name = this.name;
         model.position.set(0, 0, 0);
         model.castShadow = true;
         model.reciveShadow = true;
+
+        //hack
+        window.parent && window.parent.postMessage({method: 'Materials', params: materials}, '*');
 
         cb(me, model);
     });

@@ -103,7 +103,7 @@ function setupEnvironment(scene) {
 
     floor.position.y = 0;
     floor.rotation.x = Math.PI / 2;
-    floor.receiveShadow = true;
+    floor.receiveShadow = false;
     scene.add(floor);
 }
 
@@ -213,7 +213,6 @@ module.exports = {
         init();
         startRender();
         this.update();
-        renderer.shadowMapAutoUpdate = false;
         return this;
     },
     update: function () {

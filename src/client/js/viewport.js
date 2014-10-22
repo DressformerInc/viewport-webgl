@@ -28,7 +28,7 @@ var DF = global.Dressformer,
         if (DF.garment) {
 //            this.garments[DF.garment.slot] = {};
 //            this.garments[DF.garment.slot][DF.garment.layer] =
-            this.garments[DF.garment.id] = new Garment(DF.garment);
+            this.garments[DF.garment.id] = new Garment(DF.garment, this.mediator);
 //            this.garments[DF.garment.id] = new Garment({
 //                "id": "004d745f-d0cb-4e82-a1c3-fa617acc6548",
 //                "gid": "5feb7208-e5d2-4978-814d-8a902d32bbae",
@@ -195,6 +195,20 @@ Viewport.prototype.onLoadGarment = function (self, model) {
     this.mediator.emit('Remove', self.model);
     this.mediator.emit('Add', model);
     self.model = model;
+};
+
+Viewport.prototype.onGarmentMaterialUpdate = function (garmentId, materialName, materialProperty, materialValue) {
+    console.log('garment material update arguments:', arguments);
+    var me = this,
+        garment = this.garments[garmentId];
+
+    garment.model && garment.model.traverse(function (child) {
+        if (child instanceof THREE.Mesh && child.material.name === materialName) {
+            child.material[materialProperty] = materialValue;
+            child.material.needsUpdate = true;
+            me.mediator.emit('StartRender');
+        }
+    });
 };
 
 Viewport.prototype.onShowDummy = function () {
