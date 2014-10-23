@@ -20,7 +20,8 @@ var screenWidth = global.innerWidth,
     DPR = global.devicePixelRatio || 1,
     screenWidthDPR = screenWidth * DPR,
     screenHeightDPR = screenHeight * DPR,
-    container, stats, loadingManager, objLoader, objMtlLoader,
+    container,
+    stats,
     isFullscreen = false,
     camera, scene, renderer,
     postprocessing = {},
@@ -97,13 +98,13 @@ function setupEnvironment(scene) {
     var floorMaterial = new THREE.MeshBasicMaterial({
             color: 0xFFFFFF,
             side: THREE.FrontSide,
-            map: THREE.ImageUtils.loadTexture('/img/imgo.jpeg')
+            map: THREE.ImageUtils.loadTexture('/img/imgo.jpeg', null, function () {
+                floorMaterial.opacity = 1;
+            }),
+            opacity: 0
         }),
         floorGeometry = new THREE.PlaneGeometry(300, 300, 10, 10),
         floor = new THREE.Mesh(floorGeometry, floorMaterial);
-
-    //floorMaterial.map.offset.x = 0.5; // 0.0 - 1.0
-    //floorMaterial.map.offset.y = 0.5; // 0.0 - 1.0
 
     floor.position.y = 0;
     floor.rotation.x = -Math.PI / 2;
