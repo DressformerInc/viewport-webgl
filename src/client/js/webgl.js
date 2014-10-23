@@ -210,6 +210,8 @@ function onWindowResize() {
 module.exports = {
     init: function (mediator) {
         this.mediator = mediator;
+        this.cameraPosIndex = 2;
+        this.cameraPositions = [0, 45, 100, 135, 180];
         init();
         startRender();
         this.update();
@@ -246,12 +248,42 @@ module.exports = {
         rotate(0.09, true);
     },
     onRotateUp: function () {
-        rotate(-rotateSpeed, false);
-        targetOffset(-targetSpeed);
+        //rotate(-rotateSpeed, false);
+        //targetOffset(-targetSpeed);
+        var speed = 300,
+            fn = TWEEN.Easing.Cubic.InOut,
+            cur = this.cameraPositions[this.cameraPosIndex],
+            next = this.cameraPosIndex < this.cameraPositions.length-1 ? this.cameraPositions[++this.cameraPosIndex]: cur;
+
+        //console.log('index:', this.cameraPosIndex, 'cur:', cur, 'next:', next);
+
+        new TWEEN.Tween({target: cur})
+            .stop()
+            .to({target: next}, speed)
+            .easing(fn)
+            .onUpdate(function () {
+                camera.position.y = orbitControl.target.y = Math.round(this.target);
+            })
+            .start();
     },
     onRotateDown: function () {
-        rotate(rotateSpeed, false);
-        targetOffset(targetSpeed);
+        //rotate(rotateSpeed, false);
+        //targetOffset(targetSpeed);
+        var speed = 300,
+            fn = TWEEN.Easing.Cubic.InOut,
+            cur = this.cameraPositions[this.cameraPosIndex],
+            next = this.cameraPosIndex > 0 ? this.cameraPositions[--this.cameraPosIndex]: cur;
+
+        //console.log('index:', this.cameraPosIndex, 'cur:', cur, 'next:', next);
+
+        new TWEEN.Tween({target: cur})
+            .stop()
+            .to({target: next}, speed)
+            .easing(fn)
+            .onUpdate(function () {
+                camera.position.y = orbitControl.target.y = Math.round(this.target);
+            })
+            .start();
     },
     onResetRotation: function () {
         var speed = 300,

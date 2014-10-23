@@ -117,11 +117,12 @@ Viewport.prototype.init = function () {
 
     this.$viewport
         .on('mousedown', '.dfwvc_up', function () {
-            me.control = 'RotateUp';
+            //me.control = 'RotateUp';
+            me.mediator.emit('RotateUp');
         })
         .on('mousedown', '.dfwvc_down', function () {
-            me.control = 'RotateDown';
-            console.log('rotate down');
+            //me.control = 'RotateDown';
+            me.mediator.emit('RotateDown');
         })
         .on('mousedown', '.dfwvc_left', function () {
             me.control = 'RotateLeft';
