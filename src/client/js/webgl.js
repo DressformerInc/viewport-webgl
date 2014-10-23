@@ -211,7 +211,7 @@ module.exports = {
     init: function (mediator) {
         this.mediator = mediator;
         this.cameraPosIndex = 2;
-        this.cameraPositions = [0, 45, 100, 135, 180];
+        this.cameraPositions = [5, 45, 100, 135, 170];
         init();
         startRender();
         this.update();
