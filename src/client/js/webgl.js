@@ -52,7 +52,7 @@ function setupLight(scene) {
      scene.add( directionalLight2 );
 
      */
-    var light1 = new THREE.SpotLight(0xdddddd, 0.5);
+    var light1 = new THREE.DirectionalLight(0xdddddd, 0.5);
     light1.onlyShadow = true;
     light1.position.x = 300;//controls.light1.x;
     light1.position.z = 100;//controls.light1.z;
@@ -96,14 +96,14 @@ function setupEnvironment(scene) {
     // FLOOR
     var floorMaterial = new THREE.MeshBasicMaterial({
             color: 0xFFFFFF,
-            side: THREE.BackSide
+            side: THREE.FrontSide
         }),
         floorGeometry = new THREE.PlaneGeometry(1000, 1000, 10, 10),
         floor = new THREE.Mesh(floorGeometry, floorMaterial);
 
     floor.position.y = 0;
-    floor.rotation.x = Math.PI / 2;
-    floor.receiveShadow = false;
+    floor.rotation.x = -Math.PI / 2;
+    floor.receiveShadow = true;
     scene.add(floor);
 }
 
