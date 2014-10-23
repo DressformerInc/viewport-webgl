@@ -42,6 +42,75 @@ Garment.prototype.createMaterial = function (name) {
         },
         url = this.url_prefix;
 
+    function parseOptions(str) {
+        if (!str) return;
+        var options = null,
+            isParam = false,
+            param = '',
+            value = '',
+            values = [];
+
+        //нормализую пробелы и добавляю два заключающих шага
+        str = str.replace(/\s+/g, ' ') + ' -';
+
+        for (var i = 0, l = str.length; i < l; ++i) {
+            var ch = str[i];
+            //debugger;
+            switch (ch) {
+                case ' ':
+                    if (!isParam && value) {
+                        values.push(+value);
+                        value = '';
+                    }
+
+                    isParam = false;
+
+                    break;
+                case '-':
+                    if (param) {
+                        options = options || {};
+                        options[param] = values;
+                        isParam = false;
+                        values = [];
+                    }
+
+                    isParam = true;
+                    param = '';
+                    break;
+                default :
+                    if (isParam) {
+                        param += ch;
+                    } else {
+                        value += ch;
+                    }
+                    break;
+            }
+        }
+
+        return options;
+    }
+
+    function applyOptions(texture, options) {
+        if (!options) return;
+
+        for (var o in options) {
+            if (options.hasOwnProperty(o)){
+                var value = options[o];
+                switch(o){
+                    /*
+                     The -s option scales the size of the texture pattern on the textured
+                     surface by expanding or shrinking the pattern.  The default is 1, 1, 1.
+                     */
+                    case 's':
+                        value.length >1 && texture.repeat.set(1/value[0], 1/value[1]);
+                        break;
+                }
+            }
+        }
+
+        console.log('texture:', texture,'options:', options);
+    }
+
     //find material source
     for (var i = 0, l = materials.length; i < l; ++i) {
         if (materials[i].name === name) {
@@ -53,7 +122,10 @@ Garment.prototype.createMaterial = function (name) {
     for (var prop in material) {
         if (material.hasOwnProperty(prop)) {
             var value = material[prop],
-                c;
+                c,
+                options;
+
+            console.log('material:', material.name, 'property:', prop, 'value:', value);
 
             switch (prop.toLowerCase()) {
 
@@ -82,6 +154,8 @@ Garment.prototype.createMaterial = function (name) {
                     params['map'] = this.loadTexture(url + value.id);
                     params['map'].wrapS = this.wrap;
                     params['map'].wrapT = this.wrap;
+                    //options
+                    applyOptions(params['map'], parseOptions(value.options));
 
                     break;
 
@@ -92,6 +166,8 @@ Garment.prototype.createMaterial = function (name) {
                     params['normalMap'].wrapS = this.wrap;
                     params['normalMap'].wrapT = this.wrap;
 //                    params['normalScale'] = params['-bm'];
+                    //options
+                    applyOptions(params['normalMap'], parseOptions(value.options));
 
                     break;
 
@@ -99,6 +175,9 @@ Garment.prototype.createMaterial = function (name) {
                     params['specularMap'] = this.loadTexture(url + value.id);
                     params['specularMap'].wrapS = this.wrap;
                     params['specularMap'].wrapT = this.wrap;
+                    //options
+                    applyOptions(params['specularMap'], parseOptions(value.options));
+
                     break;
 
                 case 'ns':

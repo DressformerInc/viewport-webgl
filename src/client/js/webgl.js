@@ -96,10 +96,14 @@ function setupEnvironment(scene) {
     // FLOOR
     var floorMaterial = new THREE.MeshBasicMaterial({
             color: 0xFFFFFF,
-            side: THREE.FrontSide
+            side: THREE.FrontSide,
+            map: THREE.ImageUtils.loadTexture('/img/imgo.jpeg')
         }),
-        floorGeometry = new THREE.PlaneGeometry(1000, 1000, 10, 10),
+        floorGeometry = new THREE.PlaneGeometry(300, 300, 10, 10),
         floor = new THREE.Mesh(floorGeometry, floorMaterial);
+
+    //floorMaterial.map.offset.x = 0.5; // 0.0 - 1.0
+    //floorMaterial.map.offset.y = 0.5; // 0.0 - 1.0
 
     floor.position.y = 0;
     floor.rotation.x = -Math.PI / 2;
