@@ -19,7 +19,6 @@ module.exports = {
                 &&*/ typeof comp[prop] === 'function'
                 && prop.substring(0, 2) === 'on') {
                 var event = prop.substring(2);
-                console.log('bind event:', event, 'on', prop);
                 this.mediator.on(event, comp[prop], {}, comp);
             }
         }

@@ -90,9 +90,6 @@ var DF = global.Dressformer,
         this.loadModels([]);
 
         window.addEventListener("message", function (event) {
-//            this.webgl[event.data.method] &&
-//            this.webgl[event.data.method].apply(this, event.data.params);
-            console.log('mediator:', this.mediator, 'event:', event);
             event.data.params.unshift(event.data.method);
             this.mediator.emit.apply(this.mediator, event.data.params);
         }.bind(this), false);
@@ -170,7 +167,7 @@ Viewport.prototype._onStartLoading = function (item, loaded, total) {
 };
 
 Viewport.prototype._onProgressLoading = function (item, loaded, total) {
-    console.log('on progress loading:', arguments);
+    //console.log('on progress loading:', arguments);
 };
 
 Viewport.prototype._onEndLoading = function (item, loaded, total) {

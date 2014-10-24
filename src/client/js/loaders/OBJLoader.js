@@ -257,16 +257,13 @@ THREE.OBJLoader.prototype = {
 
             } else if (/^o /.test(line)) {
                 //object
-                console.log('parse obj - object find:', line);
                 addMesh(line.substring(2).trim());
             } else if (/^g /.test(line)) {
                 // group
-                console.log('parse obj - group find:', line);
                 addMesh(line.substring(2).trim());
             } else if (/^usemtl /.test(line)) {
                 // material
                 material.name = line.substring(7).trim();
-                console.log('material found:', material.name, line);
             } else if (/^mtllib /.test(line)) {
                 // mtl file
             } else if (/^s /.test(line)) {
@@ -284,8 +281,6 @@ THREE.OBJLoader.prototype = {
         var children = object.children;
         for (var i = 0, l = children.length; i < l; i++) {
             var g = children[ i ].geometry;
-            console.log('mesh name:', children[i].name);
-//            debugger;
             g.computeFaceNormals();
             g.computeBoundingSphere();
         }

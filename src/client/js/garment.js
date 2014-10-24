@@ -13,7 +13,6 @@ var Garment = module.exports = function (config, mediator) {
 require('./mix/merge')(Garment);
 
 Garment.prototype.loadTexture = function (url, mapping, onLoad, onError) {
-
     var texture = new THREE.Texture(),
         loader = new THREE.ImageLoader();
 
@@ -94,21 +93,23 @@ Garment.prototype.createMaterial = function (name) {
         if (!options) return;
 
         for (var o in options) {
-            if (options.hasOwnProperty(o)){
+            if (options.hasOwnProperty(o)) {
                 var value = options[o];
-                switch(o){
+                switch (o) {
                     /*
                      The -s option scales the size of the texture pattern on the textured
                      surface by expanding or shrinking the pattern.  The default is 1, 1, 1.
                      */
                     case 's':
-                        value.length >1 && texture.repeat.set(1/value[0], 1/value[1]);
+                        value.length > 1
+                        && value[0] != 0
+                        && value[1] != 0
+                        && texture.repeat.set(1 / value[0], 1 / value[1]);
                         break;
+                    //TODO: add other options from spec http://paulbourke.net/dataformats/mtl/
                 }
             }
         }
-
-        console.log('texture:', texture,'options:', options);
     }
 
     //find material source
@@ -124,8 +125,6 @@ Garment.prototype.createMaterial = function (name) {
             var value = material[prop],
                 c,
                 options;
-
-            console.log('material:', material.name, 'property:', prop, 'value:', value);
 
             switch (prop.toLowerCase()) {
 
@@ -239,7 +238,6 @@ Garment.prototype.load = function (params, loadingManager, cb) {
 //                child.geometry.computeTangents();
                 child.material = me.createMaterial(child.material.name);
                 child.material.needsUpdate = true;
-                console.log('mtl material:', child.material, 'name:' + child.material.name);
 
                 child.castShadow = true;
                 child.receiveShadow = true;
