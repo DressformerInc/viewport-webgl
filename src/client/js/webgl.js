@@ -34,9 +34,8 @@ var screenWidth = global.innerWidth,
     targetMin = 100,
     targetMax = 200,
     renderStart,
-    dummy,
-    garment,
-    rotateSpeed = 0.02;
+    rotateSpeed = 0.02,
+    floorMaterial;
 
 function setupLight(scene) {
     var ambientLight = new THREE.AmbientLight(0xffffff);
@@ -95,7 +94,7 @@ function setupLight(scene) {
 
 function setupEnvironment(scene) {
     // FLOOR
-    var floorMaterial = new THREE.MeshBasicMaterial({
+    floorMaterial = new THREE.MeshBasicMaterial({
             color: 0xFFFFFF,
             side: THREE.FrontSide,
             map: THREE.ImageUtils.loadTexture('/img/imgo.jpeg', null, function () {
@@ -342,7 +341,11 @@ module.exports = {
     },
     onMakeScreenshot: function (params) {
         params = params || {};
+        floorMaterial.visible = false;
+        render();
         params.screenshot = renderer.domElement.toDataURL();
+        floorMaterial.visible = true;
         this.mediator.emit('Screenshot', params);
+        render();
     }
 };
