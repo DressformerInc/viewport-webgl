@@ -139,12 +139,16 @@ Viewport.prototype.init = function () {
             me.mediator.emit('ResetRotation');
         })
         .on('keydown', function (e) {
-            37 === e.which && (me.control = 'RotateLeft');
-            39 === e.which && (me.control = 'RotateRight');
-            38 === e.which && me.mediator.emit('RotateUp');
-            40 === e.which && me.mediator.emit('RotateDown');
+            var codes = [37, 39, 38, 40];
+
+            codes[0] === e.which && (me.control = 'RotateLeft');
+            codes[1] === e.which && (me.control = 'RotateRight');
+            codes[2] === e.which && me.mediator.emit('RotateUp');
+            codes[3] === e.which && me.mediator.emit('RotateDown');
+
+            ~codes.indexOf(e.which) && e.preventDefault();
+
             me.isMouseUp = false;
-            e.preventDefault();
         })
         .on('mousedown', function () {
             me.isMouseUp = false;
