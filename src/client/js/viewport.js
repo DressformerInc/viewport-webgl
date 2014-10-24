@@ -25,10 +25,12 @@ var DF = global.Dressformer,
 
         this.dummy = new Dummy(DF.user.dummy);
 
-        if (DF.garment) {
+        if (DF.garments) {
 //            this.garments[DF.garment.slot] = {};
 //            this.garments[DF.garment.slot][DF.garment.layer] =
-            this.garments[DF.garment.id] = new Garment(DF.garment, this.mediator);
+            for(var i= 0, l=DF.garments.length; i<l; ++i) {
+                this.garments[DF.garments[i].id] = new Garment(DF.garments[i], this.mediator);
+            }
 //            this.garments[DF.garment.id] = new Garment({
 //                "id": "004d745f-d0cb-4e82-a1c3-fa617acc6548",
 //                "gid": "5feb7208-e5d2-4978-814d-8a902d32bbae",
@@ -142,6 +144,7 @@ Viewport.prototype.init = function () {
             38 === e.which && me.mediator.emit('RotateUp');
             40 === e.which && me.mediator.emit('RotateDown');
             me.isMouseUp = false;
+            e.preventDefault();
         })
         .on('mousedown', function () {
             me.isMouseUp = false;
