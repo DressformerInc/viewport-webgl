@@ -139,10 +139,17 @@ Viewport.prototype.init = function () {
         .on('click', '.dfwvc_default', function () {
             me.mediator.emit('ResetRotation');
         })
+        .on('keydown', function (e) {
+            37 === e.which && (me.control = 'RotateLeft');
+            39 === e.which && (me.control = 'RotateRight');
+            38 === e.which && me.mediator.emit('RotateUp');
+            40 === e.which && me.mediator.emit('RotateDown');
+            me.isMouseUp = false;
+        })
         .on('mousedown', function () {
             me.isMouseUp = false;
         })
-        .on('mouseup', function () {
+        .on('mouseup keyup', function () {
             me.end = Date.now();
             me.isMouseUp = true;
         });

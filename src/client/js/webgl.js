@@ -146,8 +146,8 @@ function init() {
     container.appendChild(renderer.domElement);
 
     orbitControl = new THREE.OrbitControls(camera, container);
-//    orbitControl.noPan = false;
-//    orbitControl.noKeys = false;
+    orbitControl.noPan = true;
+    orbitControl.noKeys = true;
     orbitControl.target.y = 100;
     orbitControl.target0.y = 100;
     orbitControl.minPolarAngle = Math.PI / 6; // radians
@@ -294,6 +294,8 @@ module.exports = {
         var speed = 300,
             fn = TWEEN.Easing.Cubic.InOut,
             rotation = models[0].rotation.y % (Math.PI * 2);
+
+        this.cameraPosIndex = 2;
 
         new TWEEN.Tween({angle: rotation, target: orbitControl.target.y})
             .to({angle: 0, target: orbitControl.target0.y}, speed)
