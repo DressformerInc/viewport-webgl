@@ -41,6 +41,12 @@ function setupLight(scene) {
     var ambientLight = new THREE.AmbientLight(0xffffff);
     scene.add(lights['ambientLight'] = ambientLight);
 
+    //var pl1 = new THREE.PointLight( 0xffffff, 1, 0 );
+    //pl1.position.set( 50, 200, 50 );
+    //scene.add( pl1 );
+    //var pointLightHelper = new THREE.PointLightHelper( pl1, 10 );
+    //scene.add( pointLightHelper );
+
     /*
      var directionalLight = new THREE.DirectionalLight( 0xffeedd);
      directionalLight.position.set( 0, 0, 1).normalize();
@@ -52,7 +58,8 @@ function setupLight(scene) {
      scene.add( directionalLight2 );
 
      */
-    var light1 = new THREE.DirectionalLight(0xffffff, 1);
+
+    var light1 = new THREE.DirectionalLight(0xffffff, 0.7);
     light1.onlyShadow = false;
     light1.position.x = 100;//controls.light1.x;
     light1.position.z = 200;//controls.light1.z;
@@ -65,16 +72,17 @@ function setupLight(scene) {
 //    light1.shadowCameraVisible = true;
     scene.add(lights['light1'] = light1);
 
-     var light2 = new THREE.SpotLight(0xffffff, 0.7);
+
+     var light2 = new THREE.DirectionalLight(0xffffff, 0.7);
      //    light2.onlyShadow = true;
      light2.position.x = -500;
      light2.position.z = 300;
-     light2.position.y = 800;
-     light2.castShadow = true;
-     light2.shadowBias = -0.0001;
-     light2.shadowDarkness = 0.01;
-     light2.shadowMapWidth = 2048;
-     light2.shadowMapHeight = 2048;
+     light2.position.y = 150;
+     light2.castShadow = false;
+     //light2.shadowBias = -0.0001;
+     //light2.shadowDarkness = 0.01;
+     //light2.shadowMapWidth = 2048;
+     //light2.shadowMapHeight = 2048;
      //    light2.shadowCameraVisible = true;
      scene.add(lights['light2'] = light2);
 
@@ -82,7 +90,7 @@ function setupLight(scene) {
      //    directionalLight.onlyShadow = true;
      light3.position.x = 0;
      light3.position.z = -300;
-     light3.position.y = 600;
+     light3.position.y = 150;
      light3.castShadow = false;
      //    light3.shadowBias = 0.0001;
      //    light3.shadowDarkness = 0.01;

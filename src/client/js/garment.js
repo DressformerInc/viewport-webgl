@@ -172,7 +172,8 @@ Garment.prototype.createMaterial = function (name) {
 
                     break;
 
-                case 'map_Ns':
+                case 'map_ks':
+
                     params['specularMap'] = this.loadTexture(url + value.id);
                     params['specularMap'].wrapS = this.wrap;
                     params['specularMap'].wrapT = this.wrap;
