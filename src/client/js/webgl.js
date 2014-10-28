@@ -64,7 +64,7 @@ function setupLight(scene) {
     light1.shadowMapHeight = 2048;
 //    light1.shadowCameraVisible = true;
     scene.add(lights['light1'] = light1);
-    /*
+
      var light2 = new THREE.SpotLight(0xffffff, 0.7);
      //    light2.onlyShadow = true;
      light2.position.x = -500;
@@ -89,7 +89,7 @@ function setupLight(scene) {
      //    light3.shadowMapWidth = 2048;
      //    light3.shadowMapHeight = 2048;
      scene.add(lights['light3'] = light3);
-     */
+
 }
 
 function setupEnvironment(scene) {
