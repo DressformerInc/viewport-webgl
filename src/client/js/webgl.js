@@ -38,7 +38,7 @@ var screenWidth = global.innerWidth,
     floorMaterial;
 
 function setupLight(scene) {
-    var ambientLight = new THREE.AmbientLight(0xdddddd);
+    var ambientLight = new THREE.AmbientLight(0xffffff);
     scene.add(lights['ambientLight'] = ambientLight);
 
     /*
@@ -52,10 +52,10 @@ function setupLight(scene) {
      scene.add( directionalLight2 );
 
      */
-    var light1 = new THREE.DirectionalLight(0xdddddd, 0.7);
+    var light1 = new THREE.DirectionalLight(0xffffff, 1);
     light1.onlyShadow = false;
-    light1.position.x = 300;//controls.light1.x;
-    light1.position.z = 100;//controls.light1.z;
+    light1.position.x = 100;//controls.light1.x;
+    light1.position.z = 200;//controls.light1.z;
     light1.position.y = 500;//controls.light1.y;
     light1.castShadow = true;
     light1.shadowBias = -0.0001;
