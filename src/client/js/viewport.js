@@ -31,67 +31,12 @@ var DF = global.Dressformer,
             for(var i= 0, l=DF.garments.length; i<l; ++i) {
                 this.garments[DF.garments[i].id] = new Garment(DF.garments[i], this.mediator);
             }
-//            this.garments[DF.garment.id] = new Garment({
-//                "id": "004d745f-d0cb-4e82-a1c3-fa617acc6548",
-//                "gid": "5feb7208-e5d2-4978-814d-8a902d32bbae",
-//                "name": "test obj",
-//                "size_name": "M",
-//                "dummy_id": "f0990c98-b437-47af-a506-4bd23879c6b1",
-//                "slot": "1",
-//                "layer": 1,
-//                "url_prefix": "//v2.dressformer.com/assets/v2/",
-//                "assets": {
-//                    "geometry": {
-//                        "id": "b88f040e-5b30-46a8-b835-392f0d026f78"
-//                    },
-//                    "placeholder": {},
-//                    "mtl_src": {
-//                        "id": "543fd0530000000000000029"
-//                    }
-//                },
-//                "materials": [
-//                    {
-//                        "id": "cb68a7bb-2cba-430b-9dba-84b6fd7609af",
-//                        "name": "white",
-//                        "ka": "0 0 0",
-//                        "kd": "1 1 1",
-//                        "ks": "0 0 0"
-//                    },
-//                    {
-//                        "id": "472327b0-ec25-489a-981c-11feffb62cac",
-//                        "name": "red",
-//                        "ka": "0 0 0",
-//                        "kd": "1 0 0",
-//                        "ks": "0 0 0"
-//                    },
-//                    {
-//                        "id": "80362fa6-3882-4024-995e-c5e9f58b97b6",
-//                        "name": "green",
-//                        "ka": "0 0 0",
-//                        "kd": "0 1 0",
-//                        "ks": "0 0 0"
-//                    },
-//                    {
-//                        "id": "a034ad32-5c75-4e99-8a7b-3b9946dac8e3",
-//                        "name": "blue",
-//                        "ka": "0 0 0",
-//                        "kd": "0 0 1",
-//                        "ks": "0 0 0"
-//                    },
-//                    {
-//                        "id": "b337d711-f382-481e-bbaf-682e3ecf0e5a",
-//                        "name": "light",
-//                        "ka": "20 20 20",
-//                        "kd": "1 1 1",
-//                        "ks": "0 0 0"
-//                    }
-//                ]
-//            });
+
         }
 
         this.loadModels([]);
 
-        window.addEventListener("message", function (event) {
+        global.addEventListener("message", function (event) {
             event.data.params.unshift(event.data.method);
             this.mediator.emit.apply(this.mediator, event.data.params);
         }.bind(this), false);
@@ -158,11 +103,6 @@ Viewport.prototype.init = function () {
             me.isMouseUp = true;
         });
 
-//    this.events.$viewport.on('click', '.dfwv_screenshot', function () {
-//        console.log('screenshot: ', global.Dressformer.garment.id);
-//        var screenshot = webgl.getScreenshot();
-//        Api.saveGarmentPlaceholder(global.Dressformer.garment.id, screenshot);
-//    });
 };
 
 //Viewport.prototype.loadGarment = function (params) {
@@ -207,6 +147,7 @@ Viewport.prototype.onLoadGarment = function (self, model) {
     this.mediator.emit('Remove', self.model);
     this.mediator.emit('Add', model);
     self.model = model;
+    this.mediator.emit('GarmentAdded', self);
 };
 
 Viewport.prototype.onGarmentMaterialUpdate = function (garmentId, materialName, materialProperty, materialValue) {

@@ -3,12 +3,14 @@
  */
 
 
-var Garment = module.exports = function (config, mediator) {
+var Garment = function (config, mediator) {
     this.merge(config);
     this.mediator = mediator;
     this.model = null;
     this.wrap = global.THREE.RepeatWrapping;
 };
+
+module.exports = Garment;
 
 require('./mix/merge')(Garment);
 

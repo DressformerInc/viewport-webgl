@@ -23,7 +23,6 @@ ViewportExt.prototype.init = function () {
 
     var $viewport = this.$viewport;
 
-
     this.baseParams = this.getBaseParams();
     /*
      this.params = {
@@ -120,9 +119,7 @@ ViewportExt.prototype.init = function () {
     });
     this.$preview = $viewport.find('.df_garment_preview');
     $viewport.on('click', '.dfw_close', function () {
-        if (global.parent) {
-            global.parent.postMessage({method: 'closeWidget', params: []}, '*');
-        }
+        global.parent && global.parent.postMessage({method: 'closeWidget', params: []}, '*');
     });
 
     //history controls
@@ -145,7 +142,7 @@ ViewportExt.prototype.init = function () {
     //ui init
     this.showProfile();
     if (DF.garment && DF.garment.id) {
-        var $button = $('.dfrp_garment[data-garment="'+DF.garment.id+'"]').first();
+        var $button = $('.dfrp_garment[data-garment="' + DF.garment.id + '"]').first();
         $button.data('selected', true);
         $button.find('.dfrpg_select').show();
         this._selectGarment(DF.garment.id, $button, true);
@@ -299,13 +296,8 @@ ViewportExt.prototype.selectGarment = function (e) {
 };
 
 ViewportExt.prototype.putChanged = function (value, noHistory) {
-    if (!value) {
-        this.webgl.load(this.selected.id, this.getParams(true));
-
-        this.unSelectAll();
-
-        this.selected.button.find('.dfrpg_select').show();
-        this.selected.button.data('selected', true);
+    if (!value) {   //put on garment
+        this.mediator.emit('GarmentAdd', this.garments[this.selected.id]);
 
         if (!noHistory) {
             history.push({
@@ -314,12 +306,8 @@ ViewportExt.prototype.putChanged = function (value, noHistory) {
             });
         }
 
-    } else {
-        this.webgl.remove(this.selected.id);
-        DF.garment = null;
-
-        this.unSelectAll();
-//        this.switchPut.setValue(false, true);
+    } else {    //put off garment
+        this.mediator.emit('GarmentRemove', this.garments[this.selected.id]);
 
         if (!noHistory) {
             history.push({
@@ -356,6 +344,46 @@ ViewportExt.prototype.historyForward = function () {
         this.putChanged(state.mode, true);
     }
 };
+
+ViewportExt.prototype.onGarmentAdded = function (garment) {
+    var $button = $('.dfrp_garment[data-garment="' + garment.id + '"]');
+    if ($button) {
+        $button
+            .first()
+            .data('selected', true)
+            .find('.dfrpg_select')
+            .show();
+    }
+};
+
+ViewportExt.prototype.onGarmentRemoved = function (garment) {
+    var $button = $('.dfrp_garment[data-garment="' + garment.id + '"]');
+    if ($button) {
+        $button
+            .first()
+            .data('selected', false)
+            .find('.dfrpg_select')
+            .hide();
+    }
+
+    //TODO: update location.href
+    var url = global.location.href.replace()
+    global.history.pushState("garment removed", "Dressformer", url);
+};
+
+ViewportExt.prototype.onGarmentAdd = function (garment) {
+    this.mediator.emit('Add', garment.model);
+    this.mediator.emit('GarmentAdded', garment);
+};
+
+ViewportExt.prototype.onGarmentRemove = function (garment) {
+    this.mediator.emit('Remove', garment.model);
+    this.mediator.emit('GarmentRemoved', garment);
+};
+
+
+
+
 
 
 
