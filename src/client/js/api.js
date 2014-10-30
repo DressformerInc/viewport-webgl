@@ -15,8 +15,13 @@ var Api = module.exports = {
     getGarment: function (id, cb) {
         $.getJSON(urls.garments + id, cb)
     },
-    getGeometries: function (ids, cb) {
-        var url = urls.assets + '?geom_ids=' + ids.join(',')+'&'+Date.now();
+    getGeometries: function (ids, params, cb) {
+        var url = urls.assets + '?geom_ids=' + ids.join(',');
+
+        if (params && params.length > 0) {
+            url += '&' + params.join('&');
+        }
+
         $.ajax({
             url: url,
             type: 'GET',

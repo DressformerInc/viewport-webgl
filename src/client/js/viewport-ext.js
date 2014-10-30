@@ -297,7 +297,9 @@ ViewportExt.prototype.selectGarment = function (e) {
 
 ViewportExt.prototype.putChanged = function (value, noHistory) {
     if (!value) {   //put on garment
-        this.mediator.emit('GarmentAdd', this.garments[this.selected.id]);
+
+        this.mediator.emit('GarmentAdd', this.garmentsHistory[this.selected.id]);
+
 
         if (!noHistory) {
             history.push({
@@ -307,7 +309,7 @@ ViewportExt.prototype.putChanged = function (value, noHistory) {
         }
 
     } else {    //put off garment
-        this.mediator.emit('GarmentRemove', this.garments[this.selected.id]);
+        this.mediator.emit('GarmentRemove', this.garmentsHistory[this.selected.id]);
 
         if (!noHistory) {
             history.push({
@@ -367,18 +369,27 @@ ViewportExt.prototype.onGarmentRemoved = function (garment) {
     }
 
     //TODO: update location.href
-    var url = global.location.href.replace()
-    global.history.pushState("garment removed", "Dressformer", url);
+    //var url = global.location.href.replace();
+    //global.history.pushState("garment removed", "Dressformer", url);
 };
 
 ViewportExt.prototype.onGarmentAdd = function (garment) {
-    this.mediator.emit('Add', garment.model);
-    this.mediator.emit('GarmentAdded', garment);
+    //this.mediator.emit('Add', garment.model);
+    //this.mediator.emit('GarmentAdded', garment);
+    console.log('on garment add:', garment);
+    this.garments[garment.id] = garment;
+    this.loadModels(this.getParams(true), true);
 };
 
 ViewportExt.prototype.onGarmentRemove = function (garment) {
-    this.mediator.emit('Remove', garment.model);
+    //put off all garments
+    for(var id in this.garments){
+        this.mediator.emit('Remove', this.garments[id].model);
+    }
     this.mediator.emit('GarmentRemoved', garment);
+
+    delete this.garments[garment.id];
+    this.loadModels(this.getParams(true), true);
 };
 
 

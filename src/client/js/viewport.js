@@ -12,6 +12,7 @@ var DF = global.Dressformer,
         this.$viewport = $('body'); //TODO: выбрать контейнер
         this.$loader = this.$viewport.find('.df_preloader');
         this.garments = {};
+        this.garmentsHistory = {};
         //for controls
         this.isMouseUp = true;
         this.end = Date.now();
@@ -32,6 +33,14 @@ var DF = global.Dressformer,
                 this.garments[DF.garments[i].id] = new Garment(DF.garments[i], this.mediator);
             }
 
+        }
+
+        if (DF.user && DF.user.history) {
+            var gh = DF.user.history;
+            for(var i= 0, l=gh.length; i<l; ++i){
+                var garment = gh[i];
+                this.garmentsHistory[garment.id] = new Garment(garment, this.mediator);
+            }
         }
 
         this.loadModels([]);
@@ -125,11 +134,11 @@ Viewport.prototype._onErrorLoading = function (item, loaded, total) {
     console.error('on error loading:', arguments);
 };
 
-Viewport.prototype.loadModels = function (params) {
+Viewport.prototype.loadModels = function (params, noDummy) {
     var me = this,
         map = {}; //geometry.id => garment.id
 
-    this.dummy.load(params, this.loadingManager, this.onLoadDummy.bind(this));
+    if (!noDummy) this.dummy.load(params, this.loadingManager, this.onLoadDummy.bind(this));
 
     var ids = [];
     for (var id in this.garments) {
@@ -141,9 +150,9 @@ Viewport.prototype.loadModels = function (params) {
         }
     }
 
-    Api.getGeometries(ids, function (err, data) {
+    Api.getGeometries(ids, params, function (err, data) {
         for(var geometryId in data){
-            //console.log('id:', geometryId, 'data:', data[geometryId].substring(0,100));
+            //console.log('id:', geometryId, 'data:', data[geometryId].substring(0,100), 'last chars:', data[geometryId].substring(data[geometryId].length-100,data[geometryId].length));
             var garmentId = map[geometryId],
                 garment = me.garments[garmentId].parse(data[geometryId]);
             me.onLoadGarment(garment, garment.model);

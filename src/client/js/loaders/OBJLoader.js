@@ -78,7 +78,6 @@ THREE.OBJLoader.prototype = {
         }
 
         function add_face(a, b, c, normals_inds) {
-//            debugger;
             var ia = parseVertexIndex(a),
                 ib = parseVertexIndex(b),
                 ic = parseVertexIndex(c);
@@ -257,9 +256,11 @@ THREE.OBJLoader.prototype = {
 
             } else if (/^o /.test(line)) {
                 //object
+                //console.log('object:', line);
                 addMesh(line.substring(2).trim());
             } else if (/^g /.test(line)) {
                 // group
+                //console.log('group:', line);
                 addMesh(line.substring(2).trim());
             } else if (/^usemtl /.test(line)) {
                 // material
