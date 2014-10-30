@@ -240,8 +240,8 @@ Garment.prototype.load = function (params, loadingManager, cb) {
                 child.geometry.computeVertexNormals(true);
 //                child.geometry.computeTangents();
                 child.material = me.createMaterial(child.material.name);
-                child.material.needsUpdate = true;
-
+                //child.material.needsUpdate = true;
+                console.log('material:', child.material.name, child.material);
                 child.castShadow = true;
                 child.receiveShadow = true;
 
@@ -260,4 +260,36 @@ Garment.prototype.load = function (params, loadingManager, cb) {
     });
 
 
+};
+
+Garment.prototype.parse = function (obj) {
+    var me = this,
+        materials = [],
+        loader = new global.THREE.OBJLoader();
+
+    this.model = loader.parse(obj);
+
+    this.model.traverse(function (child) {
+        if (child instanceof THREE.Mesh) {
+            child.geometry.computeVertexNormals(true);
+//                child.geometry.computeTangents();
+            child.material = me.createMaterial(child.material.name);
+            //child.material.needsUpdate = true;
+            //console.log('material:', child.material.name, child.material);
+            child.castShadow = true;
+            child.receiveShadow = true;
+
+            materials.push(child.material);
+        }
+    });
+    this.model.name = this.name;
+    this.model.position.set(0, 0, 0);
+    this.model.castShadow = true;
+    this.model.reciveShadow = true;
+
+    //hack
+    window.parent && window.parent.postMessage({method: 'Materials', params: materials}, '*');
+
+    //cb(me, model);
+    return this;
 };

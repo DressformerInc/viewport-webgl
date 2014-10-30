@@ -126,14 +126,31 @@ Viewport.prototype._onErrorLoading = function (item, loaded, total) {
 };
 
 Viewport.prototype.loadModels = function (params) {
+    var me = this,
+        map = {}; //geometry.id => garment.id
+
     this.dummy.load(params, this.loadingManager, this.onLoadDummy.bind(this));
 
+    var ids = [];
     for (var id in this.garments) {
         if (this.garments.hasOwnProperty(id)) {
             var garment = this.garments[id];
-            garment.load(params, this.loadingManager, this.onLoadGarment.bind(this));
+            //garment.load(params, this.loadingManager, this.onLoadGarment.bind(this));
+            map[garment.assets.geometry.id] = id;
+            ids.push(garment.assets.geometry.id);
         }
     }
+
+    Api.getGeometries(ids, function (err, data) {
+        for(var geometryId in data){
+            //console.log('id:', geometryId, 'data:', data[geometryId].substring(0,100));
+            var garmentId = map[geometryId],
+                garment = me.garments[garmentId].parse(data[geometryId]);
+            me.onLoadGarment(garment, garment.model);
+        }
+
+    });
+
 };
 
 //TODO: merge loaders

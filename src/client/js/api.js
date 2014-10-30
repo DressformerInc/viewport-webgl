@@ -15,13 +15,38 @@ var Api = module.exports = {
     getGarment: function (id, cb) {
         $.getJSON(urls.garments + id, cb)
     },
+    getGeometries: function (ids, cb) {
+        var url = urls.assets + '?geom_ids=' + ids.join(',')+'&'+Date.now();
+        $.ajax({
+            url: url,
+            type: 'GET',
+            processData: false,
+            crossDomain: true,
+            success: function(data, status, xhr) {
+                var sizes = xhr.getResponseHeader('Df-Sizes').split(','),
+                    result = {},
+                    start = 0;
+
+                for(var i= 0, l=ids.length; i<l; ++i){
+                    var id = ids[i],
+                        size = +sizes[i];
+
+                    result[id] = data.substring(start, start+size);
+                    start = size;
+                }
+
+                cb(null, result);
+            }
+        });
+
+    },
     updateGarment: function (garment, cb) {
         $.ajax({
             type: "PUT",
-            url: urls.garments+garment.id,
+            url: urls.garments + garment.id,
             data: JSON.stringify(garment),
             success: cb,
-            processData : false,
+            processData: false,
             contentType: 'application/json',
             dataType: 'json'
         });
@@ -63,9 +88,9 @@ var Api = module.exports = {
                     };
 
                     Api.updateGarment(garment, function (response) {
-                       console.log('update garment response:', response);
+                        console.log('update garment response:', response);
                     });
-                }else {
+                } else {
                     console.error('create asset error:', response);
                 }
 
