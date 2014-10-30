@@ -138,6 +138,8 @@ Viewport.prototype.loadModels = function (params, noDummy) {
     var me = this,
         map = {}; //geometry.id => garment.id
 
+    this.mediator.emit('StartLoading');
+
     if (!noDummy) this.dummy.load(params, this.onLoadDummy.bind(this));
 
     var ids = [];

@@ -16,32 +16,30 @@ var Api = module.exports = {
         $.getJSON(urls.garments + id, cb)
     },
     getGeometries: function (ids, params, cb) {
-        var url = urls.assets + '?geom_ids=' + ids.join(',');
+        var url = urls.assets + '?geom_ids=' + ids.join(','),
+            loader = new global.THREE.XHRLoader();
 
         if (params && params.length > 0) {
             url += '&' + params.join('&');
         }
 
-        $.ajax({
-            url: url,
-            type: 'GET',
-            processData: false,
-            crossDomain: true,
-            success: function(data, status, xhr) {
-                var sizes = xhr.getResponseHeader('Df-Sizes').split(','),
-                    result = {},
-                    start = 0;
+        loader.setCrossOrigin('*');
+        loader.load(url, function (data, xhr) {
 
-                for(var i= 0, l=ids.length; i<l; ++i){
-                    var id = ids[i],
-                        size = +sizes[i];
+            var sizes = xhr.getResponseHeader('Df-Sizes').split(','),
+                result = {},
+                start = 0;
 
-                    result[id] = data.substring(start, start+size);
-                    start = size;
-                }
+            for(var i= 0, l=ids.length; i<l; ++i){
+                var id = ids[i],
+                    size = +sizes[i];
 
-                cb(null, result);
+                result[id] = data.substring(start, start+size);
+                start = size;
             }
+
+            cb(null, result);
+
         });
 
     },

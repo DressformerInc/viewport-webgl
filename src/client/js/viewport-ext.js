@@ -233,6 +233,7 @@ ViewportExt.prototype.hipsChanged = function (value) {
 };
 
 ViewportExt.prototype.saveProfile = function () {
+    this.removeGarments();
     var params = this.getParams(true);
     this.loadModels(params);
 };
@@ -382,7 +383,6 @@ ViewportExt.prototype.removeGarments = function () {
 ViewportExt.prototype.onGarmentAdd = function (garment) {
     //this.mediator.emit('Add', garment.model);
     //this.mediator.emit('GarmentAdded', garment);
-    this.mediator.emit('StartLoading');
 
     //put off all garments
     this.removeGarments();

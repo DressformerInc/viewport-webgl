@@ -7,6 +7,7 @@ var THREE = global.THREE = require('threejs/build/three'),
     glslify = require('glslify'),
     utils = require('./utils');
 
+require('./loaders/XHRLoader');
 require('./loaders/LoadingManager');
 require('./loaders/OBJLoader');
 require('./loaders/MTLLoader');

@@ -254,14 +254,14 @@ THREE.OBJLoader.prototype = {
                     [ result[ 3 ], result[ 6 ], result[ 9 ], result[ 12 ] ] //normal
                 );
 
-            } else if (/^o /.test(line)) {
+            } else if (/^o/.test(line)) {
                 //object
                 //console.log('object:', line);
-                addMesh(line.substring(2).trim());
-            } else if (/^g /.test(line)) {
+                addMesh(line.split(/\s+/).pop().trim());
+            } else if (/^g/.test(line)) {
                 // group
                 //console.log('group:', line);
-                addMesh(line.substring(2).trim());
+                addMesh(line.split(/\s+/).pop().trim());
             } else if (/^usemtl /.test(line)) {
                 // material
                 material.name = line.substring(7).trim();
