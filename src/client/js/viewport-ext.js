@@ -384,7 +384,6 @@ ViewportExt.prototype.onGarmentAdd = function (garment) {
     //put off all garments
     this.removeGarments();
 
-    console.log('on garment add:', garment);
     this.garments[garment.id] = garment;
     this.loadModels(this.getParams(true), true);
 };
