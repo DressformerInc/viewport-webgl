@@ -376,6 +376,10 @@ ViewportExt.prototype.onGarmentRemoved = function (garment) {
 ViewportExt.prototype.onGarmentAdd = function (garment) {
     //this.mediator.emit('Add', garment.model);
     //this.mediator.emit('GarmentAdded', garment);
+    //put off all garments
+    for(var id in this.garments){
+        this.mediator.emit('Remove', this.garments[id].model);
+    }
     console.log('on garment add:', garment);
     this.garments[garment.id] = garment;
     this.loadModels(this.getParams(true), true);
