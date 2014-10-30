@@ -17,10 +17,10 @@ var DF = global.Dressformer,
         this.isMouseUp = true;
         this.end = Date.now();
 
-        this.loadingManager = new THREE.LoadingManager(
-            this._onStartLoading.bind(this),
+        global.THREE.DefaultLoadingManager = new global.THREE.LoadingManager(
+            this.onStartLoading.bind(this),
             this._onProgressLoading.bind(this),
-            this._onEndLoading.bind(this),
+            this.onEndLoading.bind(this),
             this._onErrorLoading.bind(this)
         );
 
@@ -118,7 +118,7 @@ Viewport.prototype.init = function () {
 //
 //}
 
-Viewport.prototype._onStartLoading = function (item, loaded, total) {
+Viewport.prototype.onStartLoading = function (item, loaded, total) {
     this.$loader.show();
 };
 
@@ -126,7 +126,7 @@ Viewport.prototype._onProgressLoading = function (item, loaded, total) {
     //console.log('on progress loading:', arguments);
 };
 
-Viewport.prototype._onEndLoading = function (item, loaded, total) {
+Viewport.prototype.onEndLoading = function (item, loaded, total) {
     this.$loader.hide();
 };
 
@@ -138,7 +138,7 @@ Viewport.prototype.loadModels = function (params, noDummy) {
     var me = this,
         map = {}; //geometry.id => garment.id
 
-    if (!noDummy) this.dummy.load(params, this.loadingManager, this.onLoadDummy.bind(this));
+    if (!noDummy) this.dummy.load(params, this.onLoadDummy.bind(this));
 
     var ids = [];
     for (var id in this.garments) {

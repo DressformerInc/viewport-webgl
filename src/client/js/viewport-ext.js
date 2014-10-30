@@ -373,23 +373,30 @@ ViewportExt.prototype.onGarmentRemoved = function (garment) {
     //global.history.pushState("garment removed", "Dressformer", url);
 };
 
-ViewportExt.prototype.onGarmentAdd = function (garment) {
-    //this.mediator.emit('Add', garment.model);
-    //this.mediator.emit('GarmentAdded', garment);
-    //put off all garments
+ViewportExt.prototype.removeGarments = function () {
     for(var id in this.garments){
         this.mediator.emit('Remove', this.garments[id].model);
     }
+};
+
+ViewportExt.prototype.onGarmentAdd = function (garment) {
+    //this.mediator.emit('Add', garment.model);
+    //this.mediator.emit('GarmentAdded', garment);
+    this.mediator.emit('StartLoading');
+
+    //put off all garments
+    this.removeGarments();
+
     console.log('on garment add:', garment);
     this.garments[garment.id] = garment;
     this.loadModels(this.getParams(true), true);
 };
 
 ViewportExt.prototype.onGarmentRemove = function (garment) {
+    this.mediator.emit('StartLoading');
     //put off all garments
-    for(var id in this.garments){
-        this.mediator.emit('Remove', this.garments[id].model);
-    }
+    this.removeGarments();
+
     this.mediator.emit('GarmentRemoved', garment);
 
     delete this.garments[garment.id];

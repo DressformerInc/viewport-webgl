@@ -52,9 +52,9 @@ Dummy.prototype.setMatcap = function (matcap) {
     this.material.uniforms.tMatCap.value = this.currentMatcap;
 };
 
-Dummy.prototype.load = function (params, loadingManager, cb) {
+Dummy.prototype.load = function (params, cb) {
     var me = this,
-        loader = new THREE.OBJLoader(loadingManager),
+        loader = new THREE.OBJLoader(),
         url = this.url_prefix+this.assets.geometry.id;
 
     if (params && params.length > 0) {
