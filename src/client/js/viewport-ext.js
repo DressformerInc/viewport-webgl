@@ -381,9 +381,6 @@ ViewportExt.prototype.removeGarments = function () {
 };
 
 ViewportExt.prototype.onGarmentAdd = function (garment) {
-    //this.mediator.emit('Add', garment.model);
-    //this.mediator.emit('GarmentAdded', garment);
-
     //put off all garments
     this.removeGarments();
 
@@ -393,7 +390,6 @@ ViewportExt.prototype.onGarmentAdd = function (garment) {
 };
 
 ViewportExt.prototype.onGarmentRemove = function (garment) {
-    this.mediator.emit('StartLoading');
     //put off all garments
     this.removeGarments();
 
@@ -402,13 +398,3 @@ ViewportExt.prototype.onGarmentRemove = function (garment) {
     delete this.garments[garment.id];
     this.loadModels(this.getParams(true), true);
 };
-
-
-
-
-
-
-
-
-
-

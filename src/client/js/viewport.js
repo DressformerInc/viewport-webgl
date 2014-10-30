@@ -138,8 +138,6 @@ Viewport.prototype.loadModels = function (params, noDummy) {
     var me = this,
         map = {}; //geometry.id => garment.id
 
-    this.mediator.emit('StartLoading');
-
     if (!noDummy) this.dummy.load(params, this.onLoadDummy.bind(this));
 
     var ids = [];
@@ -152,7 +150,7 @@ Viewport.prototype.loadModels = function (params, noDummy) {
         }
     }
 
-    Api.getGeometries(ids, params, function (err, data) {
+    ids.length > 0 && Api.getGeometries(ids, params, function (err, data) {
         for(var geometryId in data){
             //console.log('id:', geometryId, 'data:', data[geometryId].substring(0,100), 'last chars:', data[geometryId].substring(data[geometryId].length-100,data[geometryId].length));
             var garmentId = map[geometryId],
